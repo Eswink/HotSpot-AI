@@ -1,0 +1,451 @@
+.hotspot-settings-container {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: -10px -10px 30px #ffffff, 10px 10px 30px #c4c4c4;
+  padding: 30px;
+}
+
+.hotspot-settings-container h1 {
+  font-size: 32px;
+  margin-top: 0;
+}
+
+.hotspot-filters-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.hotspot-filters-container label {
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 20px;
+}
+
+.hotspot-filters-container select,
+.hotspot-filters-container input[type='text'],
+.hotspot-filters-container button {
+  background: #f5f5f5;
+  border: none;
+  border-radius: 20px;
+  box-shadow: -5px -5px 15px #ffffff, 5px 5px 15px #c4c4c4;
+  font-size: 16px;
+  padding: 10px 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+.hotspot-filters-container select:focus,
+.hotspot-filters-container input[type='text']:focus,
+.hotspot-filters-container button:hover {
+  outline: none;
+  box-shadow: -5px -5px 15px #ffffff, 5px 5px 15px #c4c4c4,
+    inset -5px -5px 15px #ffffff, inset 5px 5px 15px #c4c4c4;
+}
+
+.hotspot-filters-container select {
+  max-width: 200px;
+  flex-grow: 1;
+  margin-right: 20px;
+}
+
+.hotspot-filters-container input[type='text'] {
+  max-width: 300px;
+  flex-grow: 2;
+  margin-right: 20px;
+}
+
+.hotspot-filters-container button {
+  color: #ffffff;
+  background: #0073aa;
+  border-radius: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.hotspot-filters-container button:hover {
+  background: #003145;
+}
+
+.hotspot-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.hotspot-table th,
+.hotspot-table td {
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+}
+
+.hotspot-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-in-out;
+}
+.hotspot-table td:hover {
+  background-color: #f7f7f7;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.hotspot-table th {
+  text-align: left;
+  width: 30%;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.hotspot-table td {
+  font-size: 16px;
+}
+
+.hotspot-table td {
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+  text-align: center;
+  vertical-align: middle;
+  height: 120px;
+}
+
+.hotspot-table td:first-child {
+  border-right: none;
+}
+
+.hotspot-input-container {
+  margin-top: 20px;
+}
+
+.hotspot-input-container label {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.hotspot-input-container input[type='text'] {
+  background: #f5f5f5;
+  border: none;
+  border-radius: 20px;
+  box-shadow: -5px -5px 15px #ffffff, 5px 5px 15px #c4c4c4;
+  font-size: 16px;
+  padding: 10px 20px;
+  width: 100%;
+  transition: all 0.3s ease-in-out;
+}
+
+.hotspot-input-container input[type='text']:focus {
+  outline: none;
+  box-shadow: -5px -5px 15px #ffffff, 5px 5px 15px #c4c4c4,
+    inset -5px -5px 15px #ffffff, inset 5px 5px 15px #c4c4c4;
+}
+
+.hotspot-cell {
+  position: relative;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-in-out;
+}
+
+.hotspot-ranking {
+  font-weight: bold;
+  font-size: 24px;
+  display: flex;
+}
+
+.hotspot-title {
+  margin-left: 30px;
+  font-weight: bold;
+  display: flex;
+}
+
+.hotspot-date {
+  color: #999;
+}
+
+.hotspot-cell .cell-box {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 0 30px;
+}
+
+.hotspot-cell {
+  display: flex;
+  align-items: center;
+}
+
+.hotspot-cell .up-line {
+  align-items: center;
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.num-tag {
+  align-items: center;
+  display: flex;
+  height: 16px;
+  justify-content: flex-start;
+  margin-right: 8px;
+}
+.up-line {
+  display: flex;
+}
+
+.down-line {
+  align-items: center;
+  display: flex;
+  margin-top: 20px;
+}
+
+tr {
+  display: flex;
+  margin: 0 auto;
+}
+td {
+  min-width: 660px;
+}
+
+#hotspot-posts-table-body {
+  display: grid;
+}
+
+.cell-box-right {
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+}
+
+.task-publish {
+  background: #f6f8f9;
+  border-radius: 5px;
+  color: #3855d5;
+  cursor: pointer;
+  font-family: PingFangSC-Regular;
+  font-size: 18px;
+  line-height: 1;
+  margin-top: 4px;
+  padding: 11px 24px;
+  text-align: center;
+  width: 100px;
+  font-weight: bold;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:focus{
+  box-shadow: none!important;
+}
+
+@media (max-width: 767px) {
+  .hotspot-table {
+    display: flex !important;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+  tr {
+    display: contents !important;
+  }
+  td {
+    max-width: 330px !important;
+    min-width: auto !important;
+  }
+
+  .hotspot-title {
+    max-width: 170px;
+    font-size: 12px!important;
+    overflow: hidden; /*内容会被修剪，并且其余内容是不可见的*/
+    text-overflow: ellipsis; /*显示省略符号来代表被修剪的文本。*/
+    white-space: nowrap; /*文本不换行*/
+    margin-left: 0;
+    display: block;
+  }
+
+  .hotspot-title:hover{
+    overflow: visible;
+    word-wrap:break-word!important;
+    white-space:break-spaces!important
+  }
+
+  .hotspot-cell .up-line{
+    margin-bottom: 0;
+  }
+
+  .cell-box-right {
+    padding: 0 !important;
+  }
+  .task-publish {
+    font-size: 12px !important;
+    width: 40px !important;
+  }
+
+  .hotspot-date {
+    font-size: 12px;
+  }
+  .hotspot-ranking {
+    font-size: 20px;
+  }
+  .hotspot-cell .cell-box{
+    padding:0 16px!important
+  }
+}
+
+
+.down-line .split-point-box {
+  background-color: #666;
+  border-radius: 10px;
+  height: 2px;
+  margin: 0 8px;
+  width: 2px;
+}
+
+.down-line .hotspot-level{
+  color: #e80c18;
+}
+
+.down-line{
+  font-size: 14px;
+}
+
+
+
+
+
+
+/* 加载动画  */
+
+
+:root {
+  --loader-color: #3498db;
+}
+
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+}
+
+.loader {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.loader::before,
+.loader::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: loader-fade 2s infinite ease-in-out both;
+}
+
+.loader::before {
+  background-color: var(--loader-color);
+  animation-delay: -1s;
+}
+
+.loader::after {
+  background-color: #e74c3c;
+}
+
+@keyframes loader-fade {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.loading-text {
+  font-family: "Inter", sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--loader-color);
+  text-shadow: 1px 1px 0 #fff,
+               -1px -1px 0 #fff,
+               1px -1px 0 #fff,
+               -1px 1px 0 #fff;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out, color 0.5s ease-in-out;
+}
+
+.loader-container:hover .loading-text {
+  opacity: 1;
+}
+
+
+/* 分页按钮 优化*/
+
+/* 分页容器 */
+.hotspot-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+/* 分页按钮 */
+.hotspot-page-btn {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  border-radius: 50%;
+  color: #fff;
+  background-color: #04c2c9;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+  margin: 0 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 激活状态的分页按钮 */
+.hotspot-active-btn {
+  background-color: #fff;
+  color: #04c2c9;
+  box-shadow: 0px 0px 0px 4px #04c2c9 inset;
+}
+
+/* 上一页和下一页按钮 */
+.hotspot-prev-btn,
+.hotspot-next-btn {
+  font-size: 16px;
+  padding: 0 6px;
+  margin: 0 10px;
+  background: none;
+  border: none;
+  color: #999;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 鼠标悬停效果 */
+.hotspot-page-btn:hover,
+.hotspot-prev-btn:hover,
+.hotspot-next-btn:hover {
+  cursor: pointer;
+  background-color: #fff;
+  color: #04c2c9;
+  box-shadow: 0px 0px 0px 4px #04c2c9 inset;
+}
