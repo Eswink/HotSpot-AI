@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* 定义输入框获取焦点时的样式 */
 .hotspot-editor-input:focus {
   border-color: #0073aa;
@@ -27,3 +28,34 @@
     width: 100%;
   }
 }
+=======
+/* 定义输入框获取焦点时的样式 */
+.hotspot-editor-input:focus {
+  border-color: #0073aa;
+  box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.3);
+}
+
+
+.hotspot-editor-input{
+  height: 400px;
+  max-width: 800px;
+  min-width: 780px!important;
+  overflow-y: scroll;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  background-color: #f5f5f5;
+  padding: 12px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 针对移动设备 */
+@media screen and (max-width: 767px) {
+  .hotspot-editor-input {
+    height: 400px;
+    max-width: none;
+    min-width: 0 !important;
+    width: 100%;
+  }
+}
+>>>>>>> remotes/origin/main
