@@ -20,6 +20,8 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 插件教程：https://blog.eswlnk.com/hotpost-ai
 
+QQ群：689155556
+
 基于AI技术的WordPress插件，旨在帮助您分析获取全网热词并帮助构思和写作，提高您网站的整体权重
 
 == Description ==
