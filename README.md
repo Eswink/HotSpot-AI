@@ -18,7 +18,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 作者博客：https://blog.eswlnk.com
 
-插件教程：https://blog.eswlnk.com/hotpost-ai
+插件教程：https://blog.eswlnk.com/hotspot-ai
 
 QQ群：689155556
 
