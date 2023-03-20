@@ -1,4 +1,5 @@
 === 插件名称 ===
+
 Contributors: ersanwu
 
 Tags: hotspot,writer
