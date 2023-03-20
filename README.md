@@ -16,6 +16,9 @@ License: GNU General Public License v2.0 or later
 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
+作者博客：https://blog.eswlnk.com
+
+插件教程：https://blog.eswlnk.com/hotpost-ai
 
 基于AI技术的WordPress插件，旨在帮助您分析获取全网热词并帮助构思和写作，提高您网站的整体权重
 
@@ -55,3 +58,4 @@ Hotspot使用机器学习算法来分析全网热词，自动生成观点、标�
 
 1. 优化插件目录结构
 3. 使用更安全的WP REST API
+
