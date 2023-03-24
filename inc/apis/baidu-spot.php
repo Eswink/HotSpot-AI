@@ -1,19 +1,16 @@
 <?php
-/*
- * @Descripttion: js
- * @Version: 1.0
- * @Author: name
- * @Date: 2023-03-12 13:01:22
- * @LastEditors: name
- * @LastEditTime: 2023-03-13 03:24:19
- */
-class My_Api
+
+namespace HotSpot\Baidu;
+
+use WP_Http_Cookie;
+
+class Baidu_V1
 {
-    public $post_url = "https://baijiahao.baidu.com/pcui/wordbag/getlists";
+    private $__post_url = "https://baijiahao.baidu.com/pcui/wordbag/getlists";
 
     public function getPostUrl()
     {
-        return $this->post_url;
+        return $this->__post_url;
     }
     public function get_baidu_hotspot($page_no = 1, $page_size = 10, $se_pv = 1, $se_headline = '', $cookies = '')
     {
@@ -48,6 +45,12 @@ class My_Api
         if ($response_code == 200) {
 
             if (sizeof($datas->data->lists) == 0) {
+                if ($datas->errno) {
+                    wp_send_json(array(
+                        "error" => true,
+                        "msg"   => "未填写正确的Cookies",
+                    ));
+                }
                 wp_send_json(array(
                     "error" => true,
                     "msg"   => "无更多文章",

@@ -1,8 +1,17 @@
 <?php
 
+require plugin_dir_path(__FILE__) . 'apis/vendor/autoload.php';
+
 require_once plugin_dir_path(__FILE__) . 'apis/baidu-spot.php'; //引用 百度热点
 require_once plugin_dir_path(__FILE__) . 'apis/proxy-hotspot.php'; //引用 HotSpot AI Proxy
-require_once plugin_dir_path(__FILE__) . 'apis/proxy-domestic.php'; //引用 HotSpot AI Proxy
+require_once plugin_dir_path(__FILE__) . 'apis/proxy-domestic.php'; //引用 HotSpot AI Free
+require_once plugin_dir_path(__FILE__) . 'apis/check-credit.php'; // 引用 检查信用
+
+use GuzzleHttp\Psr7;
+use HotSpot\Baidu\Baidu_V1;
+use HotSpot\Check\Check_Credit;
+use HotSpot\Free\HotSpot_Domestic_AI_Proxy;
+use HotSpot\Porxy\HotSpot_AI_Proxy;
 
 class Hotspot_Api
 {
@@ -30,15 +39,39 @@ class Hotspot_Api
         add_action('rest_api_init', array($this, 'register_load_more_posts_route'));
         add_action('rest_api_init', array($this, 'register_proxy_hotspot_route'));
         add_action('rest_api_init', array($this, 'register_proxy_domestic_route'));
+        add_action('rest_api_init', array($this, 'register_check_credit_route'));
     }
 
+    // 验证 API 接口
+    public function register_check_credit_route()
+    {
+        register_rest_route("hotspot/{$this->__version}", '/check/credit', array(
+            'methods'             => 'POST',
+            'callback'            => array($this, 'check_credit'),
+            'permission_callback' => function () {
+                return current_user_can('edit_posts');
+            },
+        ));
+    }
+
+    public function check_credit($request)
+    {
+        $params = $request->get_params();
+        $key    = $params['key'];
+
+        $check_credit = new Check_Credit($key);
+        return rest_ensure_response($check_credit->getCredit());
+
+    }
+
+    // 不需要填写key的接口
     public function register_proxy_domestic_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/proxy/domestic', array(
             'methods'             => 'POST',
             'callback'            => array($this, 'proxy_domestic'),
             'permission_callback' => function () {
-                return true;
+                return current_user_can('edit_posts');
             },
         ));
     }
@@ -50,10 +83,8 @@ class Hotspot_Api
 
         $prompt = isset($params['prompt']) ? $params['prompt'] : '';
 
-        $Domestic_AI_Proxy = new Domestic_AI_Proxy();
-        ob_clean(); // 清除之前的所有输出缓冲区内容
-        header('Content-Type: application/octet-stream'); // 指定响应类型为二进制流
-        $Domestic_AI_Proxy->handleRequest($prompt);
+        $HotSpot_Domestic_AI_Proxy = new HotSpot_Domestic_AI_Proxy();
+        $HotSpot_Domestic_AI_Proxy->handleRequest($prompt);
         exit();
 
     }
@@ -78,11 +109,52 @@ class Hotspot_Api
 
         $prompt = isset($params['prompt']) ? $params['prompt'] : '';
 
-        $key = get_option('APPSECRET', '');
+        $request_text = 'Please write a 1,000-character article in Chinese with the title "' . $prompt . '", requiring subtitles for each paragraph and no H1 headings. Paragraphs need to be wrapped with <p> tags, and subheadings are wrapped with <h2>. In addition, the first paragraph must be an introduction, no subheadings, packaging labels and symbols need to be included in the character count, and the article must be complete without truncation';
 
-        $hotspot_proxy = new HotSpot_AI_Proxy();
+        $key = get_option('openai_key', '');
 
-        $hotspot_proxy->generate_text($prompt, $key);
+        $HotSpot_AI_Proxy = new HotSpot_AI_Proxy(get_option('openai_key', '') ?? null);
+
+        try {
+            $answer = $HotSpot_AI_Proxy->ask($request_text, null, true);
+        } catch (RequestException $e) {
+            $error = $e->getMessage();
+            echo esc_html($error);
+        }
+
+        header('Content-type: application/octet-stream');
+        header('Cache-Control: no-cache');
+
+        ob_end_clean();
+        $temp       = '';
+        $message_id = '';
+        $first      = true;
+        while (!$answer->eof()) {
+            $raw  = Psr7\Utils::readLine($answer);
+            $line = $HotSpot_AI_Proxy->formatStreamMessage($raw);
+            if ($HotSpot_AI_Proxy->checkStreamFields($line)) {
+                if (!$first) {
+                    echo esc_html("\n");
+                }
+                $first = false;
+                $temp .= $line['choices'][0]['delta']['content'];
+                $single     = $line['choices'][0]['delta']['content'];
+                $message_id = $line['message_id'];
+
+                // 转义字符 避免出现问题
+                echo esc_html(json_encode([
+                    "role"            => "assistant",
+                    "id"              => uniqid(),
+                    'conversationId'  => $line['id'],
+                    "parentMessageId" => uniqid(),
+                    "text"            => $temp,
+                    "delta"           => $single,
+                ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS));
+            }
+            unset($raw, $line);
+            ob_flush();
+            flush();
+        }
 
         exit;
 
@@ -110,6 +182,7 @@ class Hotspot_Api
             'post_status' => 'draft',
             'meta_input'  => array(
                 'created_by_hotspot' => true,
+                'se_pv'              => $params['se_pv'],
             ),
         ));
 
@@ -146,9 +219,9 @@ class Hotspot_Api
         $page_size   = isset($params['page_size']) ? $params['page_size'] : 10;
         $se_pv       = isset($params['se_pv']) ? $params['se_pv'] : 1;
         $se_headline = isset($params['se_headline']) ? $params['se_headline'] : '';
-        $cookie      = get_option('hot_cookie');
+        $cookie      = get_option('baijiahao_hotspot_cookies', '');
 
-        $api   = new My_Api();
+        $api   = new Baidu_V1();
         $datas = $api->get_baidu_hotspot($page_no, $page_size, $se_pv, $se_headline, $cookie);
 
         return rest_ensure_response($datas);

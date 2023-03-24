@@ -13,23 +13,27 @@ function hotspot_add_menu_item()
     );
 
     add_submenu_page(
-        'hotspot', // parent slug
+        'hotspot', //parent slug
         __('设置', 'hotspot'), // page title
         __('设置', 'hotspot'), // menu title
          'manage_options', // capability
          'hotspot-settings', // menu slug
-         'hotspot_display_page' // callback function
+         'hotspot_settings_page' // callback function
     );
 
     // Add sub-menu items under Hotspot
-    add_submenu_page(
-        'hotspot', // parent slug
-        __('热词挑选', 'hotspot'), // page title
-        __('热词挑选', 'hotspot'), // menu title
-         'manage_options', // capability
-         'hotspot-choices', // menu slug
-         'hotspot_choices_page' // callback function
-    );
+
+    if (get_option('hotspot-switch') == 'on' || get_option('hospot-switch') == '') {
+
+        add_submenu_page(
+            'hotspot', // parent slug
+            __('热词筛选', 'hotspot'), // page title
+            __('热词筛选', 'hotspot'), // menu title
+             'manage_options', // capability
+             'hotspot-choices', // menu slug
+             'hotspot_choices_page' // callback function
+        );
+    }
 
     add_submenu_page(
         'hotspot', // parent slug

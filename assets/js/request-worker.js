@@ -2,11 +2,20 @@
 const abortController = new AbortController();
 let isAborted = false;
 
+
 // 监听来自主线程的消息
 self.addEventListener('message', function(event) {
   const apiUrl = event.data.url;
   const requestData = event.data.data;
   const nonce = event.data.nonce
+
+  const he_js = event.data.js_add
+
+  if (typeof self.importScripts !== "undefined" && !self.he_js_loaded) {
+    self.he_js_loaded = true;
+    importScripts(he_js);
+  }
+  
 
   // 发送fetch请求获取响应数据
   fetch(apiUrl, {
@@ -27,11 +36,13 @@ self.addEventListener('message', function(event) {
     // 循环读取数据并解析完整的JSON字符串
     const readChunk = () => {
       reader.read().then(({ done, value }) => {
-
+        // 转义！
         const text = new TextDecoder().decode(value); // 将二进制数据转换为文本
         buffer += text; // 将文本添加到字符串缓冲区中
 
         while (true) { // 在缓冲区中查找完整的JSON字符串并解析它
+          buffer = he.decode(buffer)
+
           const index = buffer.indexOf('\n');
         
           if (index === -1) {
