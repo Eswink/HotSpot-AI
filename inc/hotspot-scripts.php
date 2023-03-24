@@ -5,29 +5,129 @@
 add_action('admin_enqueue_scripts', 'hotspot_admin_enqueue_scripts');
 function hotspot_admin_enqueue_scripts()
 {
+
+    if (isset($_GET['page']) && $_GET['page'] == 'hotspot-settings') {
+        // 通用js
+
+        $general_js = array(
+            'hotspot-settings-feather-js'      => 'assets/js/icons/feather-icon/feather.min.js',
+            'hotspot-settings-feather-icon-js' => 'assets/js/icons/feather-icon/feather-icon.js',
+            'hotspot-settings-config-js'       => 'assets/js/config.js',
+            'hotspot-settings-slick-js'        => 'assets/js/slick/slick.js',
+            'hotspot-settings-header-slick-js' => 'assets/js/header-slick.js',
+            'hotspot-settings-sweetalert-js'   => 'assets/js/sweet-alert/sweetalert.min.js',
+            'hotspot-settings-settings-js'     => 'assets/js/admin-hotspot-settings.js"',
+            'hotspot-settings-script-js'       => 'assets/js/script.js',
+        );
+
+        //由于依赖于 jquery 且需要固定版本 本页面替换自带juqery
+        wp_deregister_script("jquery");
+
+        wp_register_script('jquery', HOTSPOT_AI_URL_PATH . 'assets/js/jquery-3.6.0.min.js', array(), '1.0', 'all');
+        wp_enqueue_script('jquery');
+
+        foreach ($general_js as $name => $src) {
+            wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
+            wp_enqueue_script($name);
+        }
+        wp_localize_script('hotspot-settings-settings-js', 'check_credit', array(
+            "url"      => rest_url('hotspot/v1/check/credit'),
+            "wp_nonce" => wp_create_nonce('wp_rest'),
+        ));
+
+    }
+
+    // 统计分析页面
+    if (isset($_GET['page']) && $_GET['page'] == 'hotspot-statistics') {
+
+        $general_js = array(
+            'hotspot-settings-bootstrap-js'         => 'assets/js/bootstrap/bootstrap.bundle.min.js',
+            'hotspot-settings-feather-js'           => 'assets/js/icons/feather-icon/feather.min.js',
+            'hotspot-settings-feather-icon-js'      => 'assets/js/icons/feather-icon/feather-icon.js',
+            'hotspot-settings-config-js'            => 'assets/js/config.js',
+            'hotspot-settings-apex-chart-js'        => 'assets/js/chart/apex-chart/apex-chart.js',
+            'hotspot-settings-stock-prices-js'      => 'assets/js/chart/apex-chart/stock-prices.js',
+            'hotspot-settings-chart-custom-2-js'    => 'assets/js/chart/apex-chart/chart-custom-2.js',
+            'hotspot-settings-moment-js'            => 'assets/js/chart/apex-chart/moment.min.js',
+            'hotspot-settings-datepicker-js'        => 'assets/js/datepicker/date-picker/datepicker.js',
+            'hotspot-settings-datepicker-zh-js'     => 'assets/js/datepicker/date-picker/datepicker.zh.js',
+            'hotspot-settings-datepicker-custom-js' => 'assets/js/datepicker/date-picker/datepicker.custom.js',
+            'hotspot-settings-dashboard_3-js'       => 'assets/js/dashboard/dashboard_3.js',
+            'hotspot-settings-slick-js'             => 'assets/js/slick/slick.js',
+            'hotspot-settings-header-slick-js'      => 'assets/js/header-slick.js',
+            'hotspot-settings-script-js'            => 'assets/js/script.js',
+        );
+
+        //由于依赖于 jquery 且需要固定版本 本页面替换自带juqery
+        wp_deregister_script("jquery");
+
+        wp_register_script('jquery', HOTSPOT_AI_URL_PATH . 'assets/js/jquery-3.6.0.min.js', array(), '1.0', 'all');
+
+        // 额外的 js
+        wp_enqueue_script('jquery');
+
+        foreach ($general_js as $name => $src) {
+            wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
+            wp_enqueue_script($name);
+        }
+
+        // 显示一个当前的目录
+        wp_localize_script('hotspot-settings-dashboard_3-js', 'hotspot_url', array(
+            "plugin_url" => HOTSPOT_AI_URL_PATH,
+        ));
+    }
+
+    // 热词筛选配置界面
+
     if (isset($_GET['page']) && $_GET['page'] == 'hotspot-choices') {
-        wp_register_script('admin-hot-spot-handler', HOTSPOT_AI_URL_PATH . 'assets/js/admin-hot-spot-handler.js', array('jquery'), '1.0', true);
-        // 将myAjaxObject对象添加到JavaScript脚本中
-        wp_localize_script('admin-hot-spot-handler', 'hotSpotObject', array(
-            'ajax_url' => esc_url(rest_url('hotspot/v1/baidu_hot_pot')),
-            'nonce'    => wp_create_nonce('wp_rest'),
-        ));
-        $hotspot_api = Hotspot_Api::get_instance();
+        $general_js = array(
+            'hotspot-settings-bootstrap-js'    => 'assets/js/bootstrap/bootstrap.bundle.min.js',
+            'hotspot-settings-feather-js'      => 'assets/js/icons/feather-icon/feather.min.js',
+            'hotspot-settings-feather-icon-js' => 'assets/js/icons/feather-icon/feather-icon.js',
+            'hotspot-settings-config-js'       => 'assets/js/config.js',
+            'hotspot-settings-slick-js'        => 'assets/js/slick/slick.js',
+            'hotspot-settings-header-slick-js' => 'assets/js/header-slick.js',
+            'hotspot-settings-sweetalert-js'   => 'assets/js/sweet-alert/sweetalert.min.js',
+            'hotspot-settings-script-js'       => 'assets/js/script.js',
+            'hotspot-settings-choices-js'      => 'assets/js/admin-hotspot-choices.js',
+        );
+        //由于依赖于 jquery 且需要固定版本 本页面替换自带juqery
+        wp_deregister_script("jquery");
 
-        $create_post_url = $hotspot_api->get_create_post_url();
+        wp_register_script('jquery', HOTSPOT_AI_URL_PATH . 'assets/js/jquery-3.6.0.min.js', array(), '1.0', 'all');
+        wp_enqueue_script('jquery');
+        foreach ($general_js as $name => $src) {
+            wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
+            wp_enqueue_script($name);
+        }
 
-        // 将变量传递到JavaScript文件中
-        wp_localize_script('admin-hot-spot-handler', 'hotspot_vars', array(
-            'create_post_url' => $create_post_url,
+        wp_localize_script('hotspot-settings-choices-js', 'access_choices', array(
+            "baidu_hotspot" => rest_url('hotspot/v1/baidu_hot_pot'),
+            "create_post"   => rest_url('hotspot/v1/create_post'),
+            "wp_nonce"      => wp_create_nonce('wp_rest'),
         ));
-        wp_enqueue_script('admin-hot-spot-handler');
-    } elseif (isset($_GET['page']) && $_GET['page'] == 'hotspot-statistics') {
-        wp_register_script('admin-hotspot-statistics', HOTSPOT_AI_URL_PATH . 'assets/js/admin-hotspot-statistics.js', array('jquery'), '1.0', true);
-        wp_localize_script('admin-hotspot-statistics', 'hotSpotObject', array(
-            'ajax_url' => esc_url(rest_url('hotspot/v1/load_more_posts')),
-            'nonce'    => wp_create_nonce('wp_rest'),
-        ));
-        wp_enqueue_script('admin-hotspot-statistics');
+    }
+
+    if (isset($_GET['page']) && $_GET['page'] == 'hotspot-about') {
+        $general_js = array(
+            'hotspot-settings-feather-js'      => 'assets/js/icons/feather-icon/feather.min.js',
+            'hotspot-settings-feather-icon-js' => 'assets/js/icons/feather-icon/feather-icon.js',
+            'hotspot-settings-config-js'       => 'assets/js/config.js',
+            'hotspot-settings-slick-js'        => 'assets/js/slick/slick.js',
+            'hotspot-settings-header-slick-js' => 'assets/js/header-slick.js',
+            'hotspot-settings-script-js'       => 'assets/js/script.js',
+        );
+        //由于依赖于 jquery 且需要固定版本 本页面替换自带juqery
+        wp_deregister_script("jquery");
+
+        wp_register_script('jquery', HOTSPOT_AI_URL_PATH . 'assets/js/jquery-3.6.0.min.js', array(), '1.0', 'all');
+        wp_enqueue_script('jquery');
+
+        foreach ($general_js as $name => $src) {
+            wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
+            wp_enqueue_script($name);
+        }
+
     }
 
 }
@@ -39,13 +139,14 @@ function add_hotspot_admin_script()
     if ($post_type === 'post') {
         echo '<script>window.request_worker_url = "' . HOTSPOT_AI_URL_PATH . 'assets/js/request-worker.js' . '";</script>';
         echo '<script>hotspot_nonce="' . wp_create_nonce('wp_rest') . '";</script>';
-        $AI_select_option = get_option('AI_select_option');
+        echo '<script>window.he_js_url = "' . HOTSPOT_AI_URL_PATH . 'assets/js/he.min.js' . '";</script>';
+        $AI_select_option = get_option('ai_select');
 
         $request_proxy_url = '';
 
-        if ($AI_select_option == 'domestic_interface') {
+        if ($AI_select_option == "Open_AI_Free") {
             echo '<script>window.request_proxy_url = "' . rest_url('hotspot/v1/proxy/domestic') . '";</script>';
-        } elseif ($AI_select_option == 'exclusive_interface') {
+        } elseif ($AI_select_option == 'Open_AI_Domestic') {
             echo '<script>window.request_proxy_url = "' . rest_url('hotspot/v1/proxy/hotspot') . '";</script>';
         }
 
@@ -65,6 +166,7 @@ function sidebar_plugin_register()
             'wp-components',
         )
     );
+
 }
 add_action('init', 'sidebar_plugin_register');
 

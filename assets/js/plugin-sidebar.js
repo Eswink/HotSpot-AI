@@ -29,7 +29,7 @@
       // 如果 Worker 实例不存在，则创建一个新实例并保存到 _worker 变量中
       if (!_worker) {
         var workerUrl = URL.createObjectURL(
-          new Blob(['importScripts("' + window.request_worker_url + '");'], {
+          new Blob(['importScripts("' + window.request_worker_url + '")'], {
             type: 'text/javascript',
           })
         )
@@ -110,10 +110,11 @@
       _worker.postMessage({
         url: window.request_proxy_url,
         data: {
-          prompt: wp.data.select('core/editor').getEditedPostAttribute('title'),
+          prompt: _title,
           options: {},
         },
         nonce: hotspot_nonce,
+        js_add:he_js_url
       })
 
       // 在 Worker 接收到消息时执行的函数，处理 Worker 传回的数据并设置为 state 变量
