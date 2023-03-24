@@ -10,7 +10,7 @@ Tested up to:6.1
 
 Requires PHP: 7.4 or later
 
-Stable tag: 1.0
+Stable tag: 1.1
 
 License: GNU General Public License v2.0 or later
 
@@ -18,7 +18,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 作者博客：https://blog.eswlnk.com
 
-插件教程：https://blog.eswlnk.com/hotspot-ai
+插件教程：https://docs.eswlnk.com
 
 QQ群：689155556
 
@@ -43,19 +43,27 @@ Hotspot使用机器学习算法来分析全网热词，自动生成观点、标�
 
 == Screenshots ==
 
-1. ![热词筛选](assets/img/screenshot-1.png)
+1. ![热词筛选](assets/images/screenshot-1.png)
 
-2. ![设置界面](assets/img/screenshot-2.png)
+2. ![设置界面](assets/images/screenshot-2.png)
 
-3. ![统计分析](assets/img/screenshot-3.png)
+3. ![统计分析](assets/images/screenshot-3.png)
 
-4. ![关于](assets/img/screenshot-4.png)
+4. ![关于](assets/images/screenshot-4.png)
 
-5. ![Sidebar](assets/img/screenshot-5.png)
+5. ![Sidebar](assets/images/screenshot-5.png)
 
    
 
 == Changelog ==
+
+=== 1.1 ===
+
+1. 优化文件结构
+2. 优化相关函数
+3. 优化命名空间
+4. 优化输出方式
+5. 优化界面，全新UI
 
 === 1.0 ===
 
