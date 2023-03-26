@@ -4,6 +4,7 @@
   })
 
   $('#check_credit').on('click', function () {
+    var timestamp = new Date().getTime();
 
     swal({
       title: '提示',
@@ -16,7 +17,7 @@
       if (sbumit_true) {
         $.ajax({
           method: 'POST',
-          url: check_credit.url,
+          url: check_credit.url ,
           data: {
             key: $('#openai_key')[0].value,
           },
