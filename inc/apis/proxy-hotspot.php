@@ -92,7 +92,7 @@ class HotSpot_AI_Proxy
 
         try {
             $response = $this->__http->post(
-                'v1/chat/completions',
+                'v1/chat/completions?timestamp=' . time(),
                 [
                     'json'    => $data,
                     'headers' => [

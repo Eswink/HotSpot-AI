@@ -36,8 +36,8 @@ class Check_Credit
                 'Content-Type'  => 'application/json',
             ];
 
-            // 发送 GET 请求并获取响应
-            $response = $client->get('/dashboard/billing/credit_grants', [
+            // 发送 GET 请求并获取响应 添加时间戳防止缓存
+            $response = $client->get('/dashboard/billing/credit_grants?timestamp=' . time(), [
                 'headers' => $headers, // 设置请求 Headers
             ]);
 
