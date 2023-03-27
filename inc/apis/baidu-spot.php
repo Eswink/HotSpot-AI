@@ -47,6 +47,13 @@ class Baidu_V1
 
         if ($response_code == 200) {
 
+            if (!isset($datas->data->lists)) {
+                wp_send_json(array(
+                    "error" => true,
+                    "msg"   => "未填写正确的Cookies",
+                ));
+            }
+
             if (sizeof($datas->data->lists) == 0) {
                 if ($datas->errno) {
                     wp_send_json(array(

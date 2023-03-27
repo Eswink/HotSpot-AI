@@ -2,6 +2,7 @@
 // Enqueue scripts
 
 // 注册并加载JavaScript脚本
+// 去除第三方jquery
 add_action('admin_enqueue_scripts', 'hotspot_admin_enqueue_scripts');
 function hotspot_admin_enqueue_scripts()
 {
