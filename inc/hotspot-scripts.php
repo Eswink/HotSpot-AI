@@ -20,11 +20,6 @@ function hotspot_admin_enqueue_scripts()
             'hotspot-settings-script-js'       => 'assets/js/script.js',
         );
 
-        //由于依赖于 jquery 且需要固定版本 本页面替换自带juqery
-        //wp_deregister_script("jquery");
-
-        //wp_register_script('jquery', HOTSPOT_AI_URL_PATH . 'assets/js/jquery-3.6.0.min.js', array(), '1.0', 'all');
-        //wp_enqueue_script('jquery');
 
         foreach ($general_js as $name => $src) {
             wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
@@ -62,13 +57,6 @@ function hotspot_admin_enqueue_scripts()
             'hotspot-settings-script-js'            => 'assets/js/script.js',
         );
 
-        //由于依赖于 jquery 且需要固定版本 本页面替换自带juqery
-        wp_deregister_script("jquery");
-
-        wp_register_script('jquery', HOTSPOT_AI_URL_PATH . 'assets/js/jquery-3.6.0.min.js', array(), '1.0', 'all');
-
-        // 额外的 js
-        wp_enqueue_script('jquery');
 
         foreach ($general_js as $name => $src) {
             wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
@@ -95,11 +83,7 @@ function hotspot_admin_enqueue_scripts()
             'hotspot-settings-script-js'       => 'assets/js/script.js',
             'hotspot-settings-choices-js'      => 'assets/js/admin-hotspot-choices.js',
         );
-        //由于依赖于 jquery 且需要固定版本 本页面替换自带juqery
-        wp_deregister_script("jquery");
 
-        wp_register_script('jquery', HOTSPOT_AI_URL_PATH . 'assets/js/jquery-3.6.0.min.js', array(), '1.0', 'all');
-        wp_enqueue_script('jquery');
         foreach ($general_js as $name => $src) {
             wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
             wp_enqueue_script($name);
@@ -121,11 +105,6 @@ function hotspot_admin_enqueue_scripts()
             'hotspot-settings-header-slick-js' => 'assets/js/header-slick.js',
             'hotspot-settings-script-js'       => 'assets/js/script.js',
         );
-        //由于依赖于 jquery 且需要固定版本 本页面替换自带juqery
-        wp_deregister_script("jquery");
-
-        wp_register_script('jquery', HOTSPOT_AI_URL_PATH . 'assets/js/jquery-3.6.0.min.js', array(), '1.0', 'all');
-        wp_enqueue_script('jquery');
 
         foreach ($general_js as $name => $src) {
             wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
