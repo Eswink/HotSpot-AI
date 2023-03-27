@@ -21,10 +21,10 @@ function hotspot_admin_enqueue_scripts()
         );
 
         //由于依赖于 jquery 且需要固定版本 本页面替换自带juqery
-        wp_deregister_script("jquery");
+        //wp_deregister_script("jquery");
 
-        wp_register_script('jquery', HOTSPOT_AI_URL_PATH . 'assets/js/jquery-3.6.0.min.js', array(), '1.0', 'all');
-        wp_enqueue_script('jquery');
+        //wp_register_script('jquery', HOTSPOT_AI_URL_PATH . 'assets/js/jquery-3.6.0.min.js', array(), '1.0', 'all');
+        //wp_enqueue_script('jquery');
 
         foreach ($general_js as $name => $src) {
             wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
