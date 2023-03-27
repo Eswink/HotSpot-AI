@@ -34,6 +34,10 @@ function hotspot_admin_enqueue_scripts()
             "url"      => rest_url('hotspot/v1/check/credit'),
             "wp_nonce" => wp_create_nonce('wp_rest'),
         ));
+        wp_localize_script('hotspot-settings-settings-js', 'check_delay', array(
+            "url"      => rest_url('hotspot/v1/proxy/check_delay'),
+            "wp_nonce" => wp_create_nonce('wp_rest'),
+        ));
 
     }
 
