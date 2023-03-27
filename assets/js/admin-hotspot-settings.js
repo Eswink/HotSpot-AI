@@ -39,7 +39,7 @@
             swal({
               title: '查询结果',
               icon: 'success',
-              text: `到期时间${data.expires_at}\n总额度:${data.grant_amount} 刀\n可用余额:${data.total_available} 刀\n已使用:${data.used_amount} 刀`,
+              text: `到期时间:${data.expires_at}\n总额度:${data.grant_amount} 刀\n可用余额:${data.total_available} 刀\n已使用:${data.used_amount} 刀`,
               button: '了解',
             })
             $('#check_credit').text('验证秘钥')
@@ -59,6 +59,67 @@
         })
       }else{
         $('#check_credit').text('验证秘钥')
+      }
+    })
+  })
+
+
+  $('#check_delay').on('click',function(e){
+    e.preventDefault()
+    swal({
+      title: '提示',
+      text: '确认是否需要检测延迟，这将会消耗一点时间',
+      icon: 'warning',
+      buttons: ['取消', '确定'],
+      dangerMode: true,
+    }).then((sbumit_true)=>{
+      $('#check_delay').text("正在检测...请耐心等待")
+      if(sbumit_true){
+
+        $.ajax({
+          method: 'GET',
+          url: check_delay.url ,
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-WP-Nonce', check_delay.wp_nonce)
+          },
+          success:function(data){
+
+            if(data.error){
+              swal({
+                title:"失败",
+                icon:"warning",
+                text:`${data.msg}`
+              })
+              $('#check_delay').text("检测延迟")
+              return 
+            }
+
+
+
+
+            swal({
+              title:"检测成功",
+              icon:"success",
+              text:`当前线路:${data.server}\n延迟:${data.delay}`,
+              button:"确定"
+            })
+            $('#check_delay').text("检测延迟")
+            return 
+          },
+          error:function(data){
+            swal({
+              title:"失败",
+              icon:"warning",
+              text:`${data.msg}`,
+              button:"确定"
+            })
+            $('#check_delay').text("检测延迟")
+            return 
+          }
+        })
+
+      }else{
+        $('#check_delay').text("检测延迟")
       }
     })
   })
@@ -95,6 +156,13 @@
         form['openai_key'].value === ''
       ) {
         swal('您未填写相关的Key', {
+          icon: 'error',
+        })
+        return
+      }
+
+      if(form['ai_select'].selectedOptions[0].value === 'Open_AI_Custom' && (form['openai_key'].value === '' || form['custom_proxy'].value === '')){
+        swal('您未正确填写自定义代理或API秘钥', {
           icon: 'error',
         })
         return

@@ -1,8 +1,11 @@
 <?php
-
 namespace HotSpot\Baidu;
 
 use WP_Http_Cookie;
+
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 class Baidu_V1
 {

@@ -6,6 +6,10 @@ require_once 'vendor/autoload.php';
 use Exception;
 use GuzzleHttp\Client;
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 class Check_Credit
 {
     // 定义 API 请求的基础 URL
@@ -14,9 +18,13 @@ class Check_Credit
     // 定义授权信息中的 Bearer Token
     private $__key;
 
-    public function __construct($key)
+    public function __construct($key, $base_url)
     {
         $this->__key = $key;
+        if ($base_url) {
+            $this->__base_url = $base_url;
+        }
+
     }
 
     // 获取用户的信用额度
@@ -52,10 +60,10 @@ class Check_Credit
                 return $result;
             }
             if (isset($data['grants'])) {
-                $grant_amount    = $data['grants']['data'][0]['grant_amount'];
-                $used_amount     = $data['grants']['data'][0]['used_amount'];
+                $grant_amount    = number_format($data['grants']['data'][0]['grant_amount'], 2);
+                $used_amount     = number_format($data['grants']['data'][0]['used_amount'], 2);
                 $expires_at      = date('Y-m-d H:i:s', $data['grants']['data'][0]['expires_at']); // 每个授权的过期时间
-                $total_available = $data['total_available'];
+                $total_available = number_format($data['total_available'], 2);
 
                 $result = array(
                     "grant_amount"    => $grant_amount,

@@ -6,12 +6,14 @@ require_once plugin_dir_path(__FILE__) . 'apis/baidu-spot.php'; //引用 百度�
 require_once plugin_dir_path(__FILE__) . 'apis/proxy-hotspot.php'; //引用 HotSpot AI Proxy
 require_once plugin_dir_path(__FILE__) . 'apis/proxy-domestic.php'; //引用 HotSpot AI Free
 require_once plugin_dir_path(__FILE__) . 'apis/check-credit.php'; // 引用 检查信用
+require_once plugin_dir_path(__FILE__) . 'apis/check-proxy-delay.php'; //引用 服务器延迟检测
 
 use GuzzleHttp\Psr7;
 use HotSpot\Baidu\Baidu_V1;
 use HotSpot\Check\Check_Credit;
 use HotSpot\Free\HotSpot_Domestic_AI_Proxy;
 use HotSpot\Porxy\HotSpot_AI_Proxy;
+use HotSpot\Proxy\UrlLatencyChecker;
 
 class Hotspot_Api
 {
@@ -40,6 +42,52 @@ class Hotspot_Api
         add_action('rest_api_init', array($this, 'register_proxy_hotspot_route'));
         add_action('rest_api_init', array($this, 'register_proxy_domestic_route'));
         add_action('rest_api_init', array($this, 'register_check_credit_route'));
+        add_action('rest_api_init', array($this, 'register_check_proxy_delay_route'));
+    }
+
+    public function register_check_proxy_delay_route()
+    {
+        register_rest_route("hotspot/{$this->__version}", '/proxy/check_delay', array(
+            'methods'             => 'GET',
+            'callback'            => array($this, 'check_delay'),
+            'permission_callback' => function () {
+                return current_user_can('edit_posts');
+            },
+        ));
+    }
+
+    public function check_delay($request)
+    {
+        $params = $request->get_params();
+
+        // 这里需要肯定的是，需要用先保存API接口！否则将 产生歧义
+
+        $ai_select  = get_option('ai_select');
+        $api_server = '';
+
+        if ($ai_select == 'Open_AI_Free') {
+            $api_server = 'https://233.gay';
+        } elseif ($ai_select == 'Open_AI_Domestic') {
+            $api_server = 'https://hotspot-ai.eswlnk.com';
+        } elseif ($ai_select == 'Open_AI_Custom') {
+            $api_server = get_option('custom_proxy');
+        }
+
+        if ($ai_select == '' || $api_server == '') {
+            return rest_ensure_response(array(
+                "error" => true,
+                "msg"   => "请先保存后再进行测试！",
+            ));
+        }
+
+        $checker = new UrlLatencyChecker($api_server, 10);
+        $delay   = $checker->check();
+        $data    = array(
+            "server" => $ai_select,
+            "delay"  => $delay . 'ms',
+        );
+        return rest_ensure_response($data);
+
     }
 
     // 验证 API 接口
@@ -59,7 +107,13 @@ class Hotspot_Api
         $params = $request->get_params();
         $key    = $params['key'];
 
-        $check_credit = new Check_Credit($key);
+        $ai_select = get_option('ai_select');
+
+        if ($ai_select == 'Open_AI_Custom') {
+            $custom_proxy = get_option('custom_proxy');
+        }
+
+        $check_credit = new Check_Credit($key, $custom_proxy ?? null);
         return rest_ensure_response($check_credit->getCredit());
 
     }
@@ -111,9 +165,7 @@ class Hotspot_Api
 
         $request_text = 'Please write a 1,000-character article in Chinese with the title "' . $prompt . '", requiring subtitles for each paragraph and no H1 headings. Paragraphs need to be wrapped with <p> tags, and subheadings are wrapped with <h2>. In addition, the first paragraph must be an introduction, no subheadings, packaging labels and symbols need to be included in the character count, and the article must be complete without truncation';
 
-        $key = get_option('openai_key', '');
-
-        $HotSpot_AI_Proxy = new HotSpot_AI_Proxy(get_option('openai_key', '') ?? null);
+        $HotSpot_AI_Proxy = new HotSpot_AI_Proxy(get_option('openai_key') ?? null, get_option('custom_proxy') ?? null);
 
         try {
             $answer = $HotSpot_AI_Proxy->ask($request_text, null, true);

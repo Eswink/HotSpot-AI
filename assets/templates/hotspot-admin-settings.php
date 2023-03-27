@@ -99,7 +99,7 @@
                             <label class="switch" style="margin-bottom:0">
                               <input class="form-control" type="checkbox" name="hotspot-switch" id="hotspot-switch" <?php checked(get_option('hotspot-switch'), 'on') ?> name="hospot-switch"><span class="switch-state"></span>
                             </label>
-                            <span style="padding-left:10px;font-size:10px">选项默认开启</span>
+                            <span style="padding-left:10px;font-size:10px">若需要此功能，请开启本选项</span>
                           </div>
                         </div>
 
@@ -119,10 +119,10 @@
                           <div class="col-sm-9">
                             <select class="js-example-basic-single col-sm-12" name="ai_select">
                               <optgroup label="OpenAI">
-                                <option value="Open_AI_Offical" <?php selected('Open_AI_Offical', get_option('ai_select')) ?>>官方接口(无需求未对接，勿选)</option>
-                                <option value="Open_AI_Free" <?php selected('Open_AI_Free', get_option('ai_select')) ?>>免费接口(有几率被限制构思,无需API秘钥,可用)</option>
-                                <option value="Open_AI_Domestic" <?php selected('Open_AI_Domestic', get_option('ai_select')) ?>>国内代理(速度优,需填写API秘钥,可用)</option>
-                                <option value="Open_AI_Custom" <?php selected('Open_AI_Custom', get_option('ai_select')) ?>>自定义代理(无需求，勿选)</option>
+                                <option value="Open_AI_Offical" <?php selected('Open_AI_Offical', get_option('ai_select')) ?> disabled>官方接口(勿选)</option>
+                                <option value="Open_AI_Free" <?php selected('Open_AI_Free', get_option('ai_select')) ?>>免费接口(有几率被限制构思)</option>
+                                <option value="Open_AI_Domestic" <?php selected('Open_AI_Domestic', get_option('ai_select')) ?>>国内代理</option>
+                                <option value="Open_AI_Custom" <?php selected('Open_AI_Custom', get_option('ai_select')) ?>>自定义代理</option>
                               </optgroup>
                               <optgroup label="文心一言">
                                 <option value="ERNIE_Bot_Offical" disabled>官方接口</option>
@@ -133,6 +133,8 @@
                                 <option value="Friday_AI_Domestic" disabled>国内代理</option>
                               </optgroup>
                             </select>
+                            <span class="valid-feedback"  style="display:block">保存配置后，点击右侧按钮即可检测API延迟！<button class="btn btn-primary-gradien btn-xs" id="check_delay" type="button" title=""
+                                data-bs-original-title="btn btn-primary-gradien">检测延迟</button></span>
                           </div>
                         </div>
 
@@ -141,11 +143,9 @@
                           <label class="col-sm-3 col-form-label" for="custom_proxy">自定义代理</label>
                           <div class="col-sm-9">
                             <input class="form-control" id="custom_proxy" type="text"
-                              placeholder="请填写正确的API地址(未实装)" name="custom_proxy" disabled>
+                              placeholder="请填写正确的API地址(未实装)" name="custom_proxy" value="<?php esc_html_e(get_option('custom_proxy')) ?>">
                             <div class="valid-feedback" style="display:block">
                               <span>如果你有更好的代理地址，可以在这里填写，务必在上方选择<strong>「自定义代理」</strong></span>
-                              <button disabled class="btn btn-primary-gradien btn-xs" type="button" title=""
-                                data-bs-original-title="btn btn-primary-gradien">验证API</button>
                             </div>
 
                           </div>
