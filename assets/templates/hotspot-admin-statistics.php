@@ -99,7 +99,7 @@
                         </div>
                         <div>
                           <h4 class="mb-0">100+</h4><span class="f-light">新增访问量</span><a class="btn btn-light f-light"
-                            href="learning-list-view.html">前往查看<span class="ms-2">
+                            href="#">前往查看<span class="ms-2">
                               <svg class="fill-icon f-light">
                                 <use href="<?php echo HOTSPOT_AI_URL_PATH ?>/assets/svg/icon-sprite.svg#arrowright"></use>
                               </svg></span></a>
@@ -129,7 +129,7 @@
                         </div>
                         <div>
                           <h4 class="mb-0">50+</h4><span class="f-light">新增热点</span><a class="btn btn-light f-light"
-                            href="learning-list-view.html">前往查看<span class="ms-2">
+                            href="#">前往查看<span class="ms-2">
                               <svg class="fill-icon f-light">
                                 <use href="<?php echo HOTSPOT_AI_URL_PATH ?>/assets/svg/icon-sprite.svg#arrowright"></use>
                               </svg></span></a>

@@ -7,6 +7,7 @@ require_once plugin_dir_path(__FILE__) . 'apis/proxy-hotspot.php'; //引用 HotS
 require_once plugin_dir_path(__FILE__) . 'apis/proxy-domestic.php'; //引用 HotSpot AI Free
 require_once plugin_dir_path(__FILE__) . 'apis/check-credit.php'; // 引用 检查信用
 require_once plugin_dir_path(__FILE__) . 'apis/check-proxy-delay.php'; //引用 服务器延迟检测
+require_once plugin_dir_path(__FILE__) . 'apis/search-imags.php'; //引用 搜图API
 
 use GuzzleHttp\Psr7;
 use HotSpot\Baidu\Baidu_V1;
@@ -14,6 +15,7 @@ use HotSpot\Check\Check_Credit;
 use HotSpot\Free\HotSpot_Domestic_AI_Proxy;
 use HotSpot\Porxy\HotSpot_AI_Proxy;
 use HotSpot\Proxy\UrlLatencyChecker;
+use HotSpot\Search\ImageSearchAPI;
 
 class Hotspot_Api
 {
@@ -43,8 +45,115 @@ class Hotspot_Api
         add_action('rest_api_init', array($this, 'register_proxy_domestic_route'));
         add_action('rest_api_init', array($this, 'register_check_credit_route'));
         add_action('rest_api_init', array($this, 'register_check_proxy_delay_route'));
+        add_action('rest_api_init', array($this, 'register_search_images_route'));
+        add_action('rest_api_init', array($this, 'register_seo_analysis_route'));
     }
 
+    // SEO 分析
+
+    public function register_seo_analysis_route()
+    {
+        register_rest_route("hotspot/{$this->__version}", '/seo/analysis', array(
+            'methods'             => 'POST',
+            'callback'            => array($this, 'seo_analysis'),
+            'permission_callback' => function () {
+                return current_user_can('edit_posts');
+            },
+        ));
+    }
+
+    // SEO分析
+    public function seo_analysis($request)
+    {
+        $params = $request->get_params();
+        $prompt = $params['prompt'];
+
+        //判断当前选择的接口
+
+        $request_text = 'Please extract the keywords of the following articles and analyze the SEO (the results of the analysis are scored on a scale of 0-100, and the reasons are given). It is required that each keyword must be separated by English commas (regardless of the language of the following articles), and the SEO results must be output in Chinese! Here are my articles:' . $prompt;
+
+        $ai_select  = get_option('ai_select');
+        $api_server = '';
+
+        if ($ai_select == 'Open_AI_Free') {
+            $Open_AI_Free = new HotSpot_Domestic_AI_Proxy('');
+
+            $response = $Open_AI_Free->fetchResponse($request_text);
+
+            $text = '';
+
+            $lines = explode("\n", $response);
+            foreach ($lines as $line) {
+                // 解析每行JSON数据
+                $jsonObj = json_decode(trim($line));
+                // 判断解析结果是否为对象或数组
+                if (is_object($jsonObj) || is_array($jsonObj)) {
+                    if (isset($jsonObj->detail->choices)) {
+                        $choices = $jsonObj->detail->choices;
+                        if (isset($choices[0]->delta->content)) {
+                            $content = $choices[0]->delta->content;
+                            $text    = $text . $content;
+                        }
+                    }
+                }
+            }
+
+            return rest_ensure_response(array(
+                'data' => $text,
+            ));
+
+        } else {
+            $HotSpot_AI_Proxy = new HotSpot_AI_Proxy(get_option('openai_key') ?? null, get_option('custom_proxy') ?? null);
+            try {
+                $answer = $HotSpot_AI_Proxy->ask($request_text, null, false);
+            } catch (RequestException $e) {
+                $error = $e->getMessage();
+                return rest_ensure_response(array(
+                    'data' => $error,
+                ));
+            }
+
+            return rest_ensure_response(array(
+                'data' => $answer['answer'],
+            ));
+        }
+        if ($ai_select == '' || $api_server == '') {
+            return rest_ensure_response(array(
+                "error" => true,
+                "msg"   => "请先选择好您的AI接口再尝试SEO分析！",
+            ));
+        }
+
+    }
+
+    // 搜图API注册
+    public function register_search_images_route()
+    {
+        register_rest_route("hotspot/{$this->__version}", '/search/images', array(
+            'methods'             => 'POST',
+            'callback'            => array($this, 'search_images'),
+            'permission_callback' => function () {
+                return current_user_can('edit_posts');
+            },
+        ));
+    }
+
+    // 搜索图片
+    public function search_images($request)
+    {
+        $params = $request->get_params();
+
+        $query_words = $params['query'];
+
+        $search = new ImageSearchAPI($token, 'https://x8ki-letl-twmt.n7.xano.io/api:tHUkNdeR');
+
+        $response_data = $search->searchImages($query_words);
+
+        return rest_ensure_response($response_data);
+
+    }
+
+    // 检测代理接口是否正常
     public function register_check_proxy_delay_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/proxy/check_delay', array(
@@ -56,6 +165,7 @@ class Hotspot_Api
         ));
     }
 
+    //检测延迟
     public function check_delay($request)
     {
         $params = $request->get_params();
@@ -90,7 +200,7 @@ class Hotspot_Api
 
     }
 
-    // 验证 API 接口
+    // 验证API秘钥
     public function register_check_credit_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/check/credit', array(
@@ -102,6 +212,7 @@ class Hotspot_Api
         ));
     }
 
+    //验证API秘钥
     public function check_credit($request)
     {
         $params = $request->get_params();
@@ -118,7 +229,7 @@ class Hotspot_Api
 
     }
 
-    // 不需要填写key的接口
+    // 不需要填写key的接口 国内免费接口
     public function register_proxy_domestic_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/proxy/domestic', array(
@@ -130,6 +241,7 @@ class Hotspot_Api
         ));
     }
 
+    // 国内免费接口
     public function proxy_domestic($request)
     {
 
@@ -137,7 +249,9 @@ class Hotspot_Api
 
         $prompt = isset($params['prompt']) ? $params['prompt'] : '';
 
-        $HotSpot_Domestic_AI_Proxy = new HotSpot_Domestic_AI_Proxy();
+        $request_text = 'Please write a 1,000-character article in Chinese with the title "' . $prompt . '", requiring subtitles for each paragraph and no H1 headings. Paragraphs need to be wrapped with <p> tags, and subheadings are wrapped with <h2>. In addition, the first paragraph must be an introduction, no subheadings, packaging labels and symbols need to be included in the character count, and the article must be complete without truncation';
+
+        $HotSpot_Domestic_AI_Proxy = new HotSpot_Domestic_AI_Proxy($request_text);
         $HotSpot_Domestic_AI_Proxy->handleRequest($prompt);
         exit();
 

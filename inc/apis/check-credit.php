@@ -1,4 +1,12 @@
 <?php
+/*
+ * @Descripttion: js
+ * @Version: 1.0
+ * @Author: name
+ * @Date: 2023-03-25 03:06:33
+ * @LastEditors: name
+ * @LastEditTime: 2023-04-01 13:49:50
+ */
 
 namespace HotSpot\Check;
 
@@ -64,13 +72,13 @@ class Check_Credit
                 $used_amount     = number_format($data['grants']['data'][0]['used_amount'], 2);
                 $expires_at      = date('Y-m-d H:i:s', $data['grants']['data'][0]['expires_at']); // 每个授权的过期时间
                 $total_available = number_format($data['total_available'], 2);
-
-                $result = array(
+                $result          = array(
                     "grant_amount"    => $grant_amount,
                     "used_amount"     => $used_amount,
                     "expires_at"      => $expires_at,
                     "total_available" => $total_available,
                 );
+
                 return $result;
             }
             $result = array(

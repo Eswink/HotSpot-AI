@@ -47,7 +47,6 @@ function hotspot_admin_enqueue_scripts()
             'hotspot-settings-apex-chart-js'        => 'assets/js/chart/apex-chart/apex-chart.js',
             'hotspot-settings-stock-prices-js'      => 'assets/js/chart/apex-chart/stock-prices.js',
             'hotspot-settings-chart-custom-2-js'    => 'assets/js/chart/apex-chart/chart-custom-2.js',
-            'hotspot-settings-moment-js'            => 'assets/js/chart/apex-chart/moment.min.js',
             'hotspot-settings-datepicker-js'        => 'assets/js/datepicker/date-picker/datepicker.js',
             'hotspot-settings-datepicker-zh-js'     => 'assets/js/datepicker/date-picker/datepicker.zh.js',
             'hotspot-settings-datepicker-custom-js' => 'assets/js/datepicker/date-picker/datepicker.custom.js',
@@ -119,22 +118,33 @@ function add_hotspot_admin_script()
 {
     $post_type = get_post_type();
     if ($post_type === 'post') {
-        echo '<script>window.request_worker_url = "' . HOTSPOT_AI_URL_PATH . 'assets/js/request-worker.js' . '";</script>';
-        echo '<script>hotspot_nonce="' . wp_create_nonce('wp_rest') . '";</script>';
-        echo '<script>window.he_js_url = "' . HOTSPOT_AI_URL_PATH . 'assets/js/he.min.js' . '";</script>';
+        // 将 request-worker.js 的路径作为变量保存
+        $request_worker_url = HOTSPOT_AI_URL_PATH . 'assets/js/request-worker.js';
+        // 使用 wp_localize_script 函数将变量传递到前台 JS 脚本中
+        wp_localize_script('jquery', 'request_worker_url', $request_worker_url);
+        wp_localize_script('jquery', 'hotspot_nonce', wp_create_nonce('wp_rest'));
+        wp_localize_script('jquery', 'he_js_url', HOTSPOT_AI_URL_PATH . 'assets/js/he.min.js');
         $AI_select_option = get_option('ai_select');
 
         $request_proxy_url = '';
-
         if ($AI_select_option == "Open_AI_Free") {
-            echo '<script>window.request_proxy_url = "' . rest_url('hotspot/v1/proxy/domestic') . '";</script>';
+            $request_proxy_url = rest_url('hotspot/v1/proxy/domestic');
         } elseif ($AI_select_option == 'Open_AI_Domestic') {
-            echo '<script>window.request_proxy_url = "' . rest_url('hotspot/v1/proxy/hotspot') . '";</script>';
+            $request_proxy_url = rest_url('hotspot/v1/proxy/hotspot');
+        }
+        wp_localize_script('jquery', 'request_proxy_url', $request_proxy_url);
+
+        if (get_option('seo-analysis') == 'on') {
+            wp_localize_script('jquery', 'seo_analysis_url', rest_url('hotspot/v1/seo/analysis'));
+        }
+
+        if (get_option('seo-analysis') == 'on') {
+            wp_localize_script('jquery', 'search_images_url', rest_url('hotspot/v1/search/images'));
         }
 
     }
 }
-add_action('admin_head', 'add_hotspot_admin_script');
+add_action('admin_enqueue_scripts', 'add_hotspot_admin_script');
 
 function sidebar_plugin_register()
 {

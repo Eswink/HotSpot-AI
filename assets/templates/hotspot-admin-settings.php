@@ -143,7 +143,7 @@
                           <label class="col-sm-3 col-form-label" for="custom_proxy">自定义代理</label>
                           <div class="col-sm-9">
                             <input class="form-control" id="custom_proxy" type="text"
-                              placeholder="请填写正确的API地址(未实装)" name="custom_proxy" value="<?php esc_html_e(get_option('custom_proxy')) ?>">
+                              placeholder="请填写正确的API地址" name="custom_proxy" value="<?php esc_html_e(get_option('custom_proxy')) ?>">
                             <div class="valid-feedback" style="display:block">
                               <span>如果你有更好的代理地址，可以在这里填写，务必在上方选择<strong>「自定义代理」</strong></span>
                             </div>
@@ -158,7 +158,7 @@
                             <input class="form-control" id="openai_key" type="text"
                               placeholder="请填写正确的API密钥" name="openai_key" value="<?php esc_html_e(get_option('openai_key')) ?>">
                             <div class="valid-feedback" style="display:block">
-                              <span>您可以访问<a href="#">OpenAI 网站</a>获取密钥</span>
+                              <span>您可以访问<a href="https://beta.openai.com" target="_blank">OpenAI 网站</a>获取密钥</span>&nbsp;
                               <button class="btn btn-primary-gradien btn-xs" type="button" title=""
                                 data-bs-original-title="btn btn-primary-gradien" id="check_credit">验证秘钥</button>
                             </div>
@@ -174,6 +174,34 @@
                               <input class="form-control" type="checkbox" disabled name="schedule-tasks"><span class="switch-state"></span>
                             </label>
                             <span style="padding-left:10px;font-size:10px">选项默认关闭 暂无该功能</span>
+                          </div>
+                        </div>
+
+
+                        <div class="mb-3 row">
+                          <label class="col-sm-3 col-form-label" for="seo-analysis">SEO分析 - 开关</label>
+                          <div class="col-sm-9  icon-state">
+                            <label class="switch">
+                              <input class="form-control" type="checkbox" name="seo-analysis" id="seo-analysis" <?php checked(get_option('seo-analysis'), 'on') ?>><span class="switch-state"></span>
+                            </label>
+                            <div class="valid-feedback" style="display:flex;align-items:center">
+                              <span>开启将会新增SEO分析功能，包含当前创作文章</span>&nbsp;<button class="btn btn-primary-gradien btn-xs" type="button" title=""
+                                data-bs-original-title="btn btn-primary-gradien">SEO分析</button>&nbsp;<button class="btn btn-secondary-gradien btn-xs" type="button" title=""
+                                data-bs-original-title="btn btn-secondary-gradien">关键词提取</button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                          <label class="col-sm-3 col-form-label" for="search-images">智能搜图 - 开关</label>
+                          <div class="col-sm-9  icon-state">
+                            <label class="switch">
+                              <input class="form-control" type="checkbox" name="search-images" id="search-images" <?php checked(get_option('search-images'), 'on') ?>><span class="switch-state"></span>
+                            </label>
+                            <div class="valid-feedback" style="display:flex;align-items:center">
+                              <span>开启后将会新增搜图功能，请认真选择相关搜图API</span>&nbsp;<button class="btn btn-secondary-gradien btn-xs" type="button" title=""
+                                data-bs-original-title="btn btn-secondary-gradien" id="images_search_check">检测延迟</button>
+                            </div>
                           </div>
                         </div>
 
