@@ -1,0 +1,139 @@
+/* 定义输入框获取焦点时的样式 */
+.hotspot-editor-input:focus {
+  border-color: #0073aa;
+  box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.3);
+}
+
+
+.hotspot-editor-input{
+  height: 400px;
+  max-width: 800px;
+  min-width: 780px!important;
+  overflow-y: scroll;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  background-color: #f5f5f5;
+  padding: 12px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 针对移动设备 */
+@media screen and (max-width: 767px) {
+  .hotspot-editor-input {
+    height: 400px;
+    max-width: none;
+    min-width: 0 !important;
+    width: 100%;
+  }
+}
+
+
+.image-results{
+  width: 810px;
+  min-height: 500px;
+}
+
+.image-results ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-results li {
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.image-results img {
+  width: 250px;
+  height: 250px;
+  display: block;
+}
+
+.image-results .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.image-results .overlay p {
+  color: #fff;
+  font-size: 18px;
+  display: none;
+  cursor: pointer;
+}
+
+.image-results li:hover .overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.image-results li:hover .overlay p {
+  display: block;
+}
+
+
+.loading-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  width: 200px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin:0 auto
+}
+
+.loading-text::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  bottom: -100%;
+  right: -100%;
+  margin: auto;
+  width: 50px;
+  height: 50px;
+  border-top: 5px solid #ffa500;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid transparent;
+  border-radius: 50%;
+  animation: loading 1s linear infinite;
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin:0 auto;
+  height: 80px;
+  width: 200px;
+  font-size: 16px;
+  color: #f44336;
+  font-weight: bold;
+}
+
