@@ -21,3 +21,8 @@ function hotspot_statistics_page()
 {
     include_once HOTSPOT_AI_DIR_PATH . 'assets/templates/hotspot-admin-statistics.php';
 }
+
+function hotspot_signin_page()
+{
+    include_once HOTSPOT_AI_DIR_PATH . 'assets/templates/hotspot-admin-signin.php';
+}

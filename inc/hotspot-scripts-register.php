@@ -111,6 +111,19 @@ function hotspot_admin_enqueue_scripts()
 
     }
 
+    if (isset($_GET['page']) && $_GET['page'] == 'hotspot-signin') {
+        $general_js = array(
+            'hotspot-signin-captcha-js' => 'assets/js/api.js',
+            'hotspot-signin-script-js'  => 'assets/js/script.js',
+        );
+
+        foreach ($general_js as $name => $src) {
+            wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
+            wp_enqueue_script($name);
+        }
+
+    }
+
 }
 
 // 编辑器注册相关变量的js

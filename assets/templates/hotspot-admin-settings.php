@@ -120,7 +120,7 @@
                             <select class="js-example-basic-single col-sm-12" name="ai_select">
                               <optgroup label="OpenAI">
                                 <option value="Open_AI_Offical" <?php selected('Open_AI_Offical', get_option('ai_select')) ?> disabled>官方接口(勿选)</option>
-                                <option value="Open_AI_Free" <?php selected('Open_AI_Free', get_option('ai_select')) ?>>免费接口(有几率被限制构思)</option>
+                                <!-- <option value="Open_AI_Free" >免费接口(有几率被限制构思)</option> -->
                                 <option value="Open_AI_Domestic" <?php selected('Open_AI_Domestic', get_option('ai_select')) ?>>国内代理</option>
                                 <option value="Open_AI_Custom" <?php selected('Open_AI_Custom', get_option('ai_select')) ?>>自定义代理</option>
                               </optgroup>
@@ -159,8 +159,8 @@
                               placeholder="请填写正确的API密钥" name="openai_key" value="<?php esc_html_e(get_option('openai_key')) ?>">
                             <div class="valid-feedback" style="display:block">
                               <span>您可以访问<a href="https://beta.openai.com" target="_blank">OpenAI 网站</a>获取密钥</span>&nbsp;
-                              <button class="btn btn-primary-gradien btn-xs" type="button" title=""
-                                data-bs-original-title="btn btn-primary-gradien" id="check_credit">验证秘钥</button>
+                              <!-- <button class="btn btn-primary-gradien btn-xs" type="button" title=""
+                                data-bs-original-title="btn btn-primary-gradien" id="check_credit">验证秘钥</button> -->
                             </div>
 
                           </div>

@@ -63,6 +63,13 @@ function hotspot_admin_enqueue_styles()
         }
     }
 
+    if (isset($_GET['page']) && $_GET['page'] == 'hotspot-signin') {
+        foreach ($general_styles as $name => $src) {
+            wp_register_style($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
+            wp_enqueue_style($name);
+        }
+    }
+
 }
 
 //美化古腾堡
