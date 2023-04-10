@@ -40,10 +40,10 @@
 
   $('.show-hide span').click(function () {
     if ($(this).hasClass('show')) {
-      $('input[name="login[password]"]').attr('type', 'text')
+      $('input[name="password"]').attr('type', 'text')
       $(this).removeClass('show')
     } else {
-      $('input[name="login[password]"]').attr('type', 'password')
+      $('input[name="password"]').attr('type', 'password')
       $(this).addClass('show')
     }
   })
@@ -51,9 +51,31 @@
     $('.show-hide span').addClass('show')
     $('.show-hide')
       .parent()
-      .find('input[name="login[password]"]')
+      .find('input[name="password"]')
       .attr('type', 'password')
   })
+
+
+  $('.show-hide-confirm').show()
+  $('.show-hide-confirm span').addClass('show')
+
+  $('.show-hide-confirm span').click(function () {
+    if ($(this).hasClass('show')) {
+      $('input[name="confirm_password"]').attr('type', 'text')
+      $(this).removeClass('show')
+    } else {
+      $('input[name="confirm_password"]').attr('type', 'password')
+      $(this).addClass('show')
+    }
+  })
+  $('form button[type="submit"]').on('click', function () {
+    $('.show-hide-confirm span').addClass('show')
+    $('.show-hide-confirm')
+      .parent()
+      .find('input[name="confirm_password"]')
+      .attr('type', 'password')
+  })
+
 
   /*=====================
       02. Background Image js

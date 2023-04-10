@@ -1,5 +1,16 @@
 <!-- // 定义设置界面 -->
-
+<?php
+$auth_token   = get_option('auth_signin_token');
+$disable_attr = '';
+if ($auth_token) {
+    $seo_analysis_checked  = checked(get_option('seo-analysis'), 'on');
+    $search_images_checked = checked(get_option('search-images'), 'on');
+} else {
+    $seo_analysis_checked  = 'off';
+    $search_images_checked = 'off';
+    $disable_attr          = 'disabled';
+}
+?>
 
   <!-- loader starts-->
   <div class="loader-wrapper">
@@ -84,7 +95,13 @@
                   <div class="card" style="max-width: 100%!important;">
                     <!-- 头 -->
                     <div class="card-header">
-                      <h5><?php esc_html_e('设置') ?></h5><span><?php esc_html_e('请完善插件信息，避免使用时出现错误') ?></span>
+                      <h5><?php esc_html_e('设置') ?></h5>
+                      <span>
+                        <?php esc_html_e('请完善插件信息，避免使用时出现错误。若有其他问题，请联系开发者或加入本插件交流群') ?>
+                        <button class="btn btn-secondary-gradien btn-xs" type="button" title=""
+                                data-bs-original-title="btn btn-primary-gradien" id="open_qq_group"><?php esc_html_e('QQ群：689155556') ?>
+                        </button>
+                      </span>
                     </div>
                     <!-- 头 -->
 
@@ -93,8 +110,22 @@
                     <div class="card-body">
                       <form class="theme-form submit" method="POST" id="hotpot-settings">
                       <?php settings_fields('hotspot_settings_group'); ?>
+
+
                         <div class="mb-3 row">
-                          <label class="col-sm-3 col-form-label" for="inputEmail3">热点筛选 - 开关</label>
+                          <label class="col-sm-3 col-form-label">登录状态</label>
+                          <div class="col-sm-9 icon-state" style="vertical-align: middle;align-items: center;display: flex;">
+                            <button class="btn <?php esc_html_e(get_option('auth_signin_token') ? 'btn-primary-gradien' : 'btn-secondary-gradien'); ?>" type="button" title="" data-bs-original-title="btn <?php esc_html_e(get_option('auth_signin_token') ? 'btn-primary-gradien' : 'btn-secondary-gradien'); ?>" id="hotspot-signin"><?php esc_html_e(get_option('auth_signin_token') ? '已登录' : '未登录'); ?></button>
+                            <span style="padding-left:10px;font-size:10px"><?php esc_html_e(get_option('auth_signin_token') ? '正在享受登录特权中！' : '无法使用热点筛选、智能搜图等高级功能，点击即可登录'); ?></span>
+                            <input type="hidden" id="auth_signin_token" name="auth_signin_token" value="<?php esc_html_e(get_option('auth_signin_token')) ?>">
+                          </div>
+
+                        </div>
+
+
+
+                        <div class="mb-3 row">
+                          <label class="col-sm-3 col-form-label">热点筛选 - 开关</label>
                           <div class="col-sm-9 icon-state" style="display:flex;align-items: center;">
                             <label class="switch" style="margin-bottom:0">
                               <input class="form-control" type="checkbox" name="hotspot-switch" id="hotspot-switch" <?php checked(get_option('hotspot-switch'), 'on') ?> name="hospot-switch"><span class="switch-state"></span>
@@ -105,22 +136,20 @@
 
 
                         <div class="mb-3 row">
-                          <label class="col-sm-3 col-form-label" for="inputEmail3">百家号热点</label>
+                          <label class="col-sm-3 col-form-label">热点状态</label>
                           <div class="col-sm-9">
-                            <textarea class="form-control" id="baijiahao_hotspot_cookies" name="baijiahao_hotspot_cookies"
-                              placeholder="请先获取Cookies后在此填写" required="true" style="height:150px"><?php esc_html_e(get_option('baijiahao_hotspot_cookies')) ?></textarea>
-                            <div class="invalid-feedback">请填写正确的Cookies</div>
+                          <button class="btn <?php esc_html_e(get_option('auth_signin_token') ? 'btn-primary-gradien' : 'btn-secondary-gradien'); ?>" type="button" title="" data-bs-original-title="btn <?php esc_html_e(get_option('auth_signin_token') ? 'btn-primary-gradien' : 'btn-secondary-gradien'); ?>" id="hotspot-baijiahao-display"><?php esc_html_e(get_option('auth_signin_token') ? '正在享受百家号热点特权！' : '无法使用'); ?></button>
                           </div>
                         </div>
 
 
                         <div class="mb-3 row">
-                          <label class="col-sm-3 col-form-label" for="inputPassword3">AI选择</label>
+                          <label class="col-sm-3 col-form-label">AI选择</label>
                           <div class="col-sm-9">
                             <select class="js-example-basic-single col-sm-12" name="ai_select">
                               <optgroup label="OpenAI">
                                 <option value="Open_AI_Offical" <?php selected('Open_AI_Offical', get_option('ai_select')) ?> disabled>官方接口(勿选)</option>
-                                <!-- <option value="Open_AI_Free" >免费接口(有几率被限制构思)</option> -->
+                                <option value="Open_AI_Free" <?php selected('Open_AI_Free', get_option('ai_select')) ?>>免费高速接口(登录用户专用，不用填写秘钥)</option>
                                 <option value="Open_AI_Domestic" <?php selected('Open_AI_Domestic', get_option('ai_select')) ?>>国内代理</option>
                                 <option value="Open_AI_Custom" <?php selected('Open_AI_Custom', get_option('ai_select')) ?>>自定义代理</option>
                               </optgroup>
@@ -167,7 +196,7 @@
                         </div>
 
 
-                        <div class="mb-3 row">
+                        <!-- <div class="mb-3 row">
                           <label class="col-sm-3 col-form-label" for="schedule-tasks">计划任务 - 开关</label>
                           <div class="col-sm-9  icon-state" style="display:flex;align-items: center;">
                             <label class="switch" style="margin-bottom:0">
@@ -175,19 +204,22 @@
                             </label>
                             <span style="padding-left:10px;font-size:10px">选项默认关闭 暂无该功能</span>
                           </div>
-                        </div>
+                        </div> -->
+
+
+
 
 
                         <div class="mb-3 row">
                           <label class="col-sm-3 col-form-label" for="seo-analysis">SEO分析 - 开关</label>
                           <div class="col-sm-9  icon-state">
                             <label class="switch">
-                              <input class="form-control" type="checkbox" name="seo-analysis" id="seo-analysis" <?php checked(get_option('seo-analysis'), 'on') ?>><span class="switch-state"></span>
+                              <input class="form-control" type="checkbox" name="seo-analysis" id="seo-analysis" <?php esc_html_e($seo_analysis_checked . " " . $disable_attr); ?>><span class="switch-state"></span>
                             </label>
                             <div class="valid-feedback" style="display:flex;align-items:center">
                               <span>开启将会新增SEO分析功能，包含当前创作文章</span>&nbsp;<button class="btn btn-primary-gradien btn-xs" type="button" title=""
-                                data-bs-original-title="btn btn-primary-gradien">SEO分析</button>&nbsp;<button class="btn btn-secondary-gradien btn-xs" type="button" title=""
-                                data-bs-original-title="btn btn-secondary-gradien">关键词提取</button>
+                                data-bs-original-title="btn btn-primary-gradien">SEO分析<?php esc_html_e(get_option('auth_signin_token') ? '' : '(无法使用)'); ?></button>&nbsp;<button class="btn btn-secondary-gradien btn-xs" type="button" title=""
+                                data-bs-original-title="btn btn-secondary-gradien">关键词提取<?php esc_html_e(get_option('auth_signin_token') ? '' : '(无法使用)'); ?></button>
                             </div>
                           </div>
                         </div>
@@ -196,11 +228,11 @@
                           <label class="col-sm-3 col-form-label" for="search-images">智能搜图 - 开关</label>
                           <div class="col-sm-9  icon-state">
                             <label class="switch">
-                              <input class="form-control" type="checkbox" name="search-images" id="search-images" <?php checked(get_option('search-images'), 'on') ?>><span class="switch-state"></span>
+                              <input class="form-control" type="checkbox" name="search-images" id="search-images" <?php esc_html_e($search_images_checked . " " . $disable_attr); ?>><span class="switch-state"></span>
                             </label>
                             <div class="valid-feedback" style="display:flex;align-items:center">
                               <span>开启后将会新增搜图功能，请认真选择相关搜图API</span>&nbsp;<button class="btn btn-secondary-gradien btn-xs" type="button" title=""
-                                data-bs-original-title="btn btn-secondary-gradien" id="images_search_check">检测延迟</button>
+                                data-bs-original-title="btn btn-secondary-gradien" id="images_search_check">检测延迟<?php esc_html_e(get_option('auth_signin_token') ? '' : '(无法使用)'); ?></button>
                             </div>
                           </div>
                         </div>

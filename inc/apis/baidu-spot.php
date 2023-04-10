@@ -1,15 +1,13 @@
 <?php
 namespace HotSpot\Baidu;
 
-use WP_Http_Cookie;
-
 if (!defined('ABSPATH')) {
     exit;
 }
 
 class Baidu_V1
 {
-    private $__post_url = "https://baijiahao.baidu.com/pcui/wordbag/getlists";
+    private $__post_url = "https://x8ki-letl-twmt.n7.xano.io/api:tHUkNdeR/auth/get_baijiahao";
 
     public function getPostUrl()
     {
@@ -25,11 +23,9 @@ class Baidu_V1
             "se_headline" => $se_headline,
         );
 
-        $cookie = new WP_Http_Cookie($cookies);
-
         $headers = array(
-            'Cookie'       => $cookies,
-            'Content-Type' => 'application/x-www-form-urlencoded',
+            'Authorization' => get_option("auth_signin_token"),
+            'Content-Type'  => 'application/x-www-form-urlencoded',
         );
 
         $args = array(
@@ -87,7 +83,7 @@ class Baidu_V1
         } else {
             wp_send_json(array(
                 "error" => true,
-                "msg"   => "鉴权失败或超时",
+                "msg"   => "鉴权失败或超时,重试后如果重复出现此问题,请务必联系开发者，Q群：689155556",
             ));
         }
 

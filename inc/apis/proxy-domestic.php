@@ -1,12 +1,4 @@
 <?php
-/*
- * @Descripttion: js
- * @Version: 1.0
- * @Author: name
- * @Date: 2023-03-20 11:47:56
- * @LastEditors: name
- * @LastEditTime: 2023-04-01 12:58:03
- */
 
 namespace HotSpot\Free;
 
@@ -16,7 +8,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7;
 
 /**
- * AI 机器人类，用于调用接口获取生成的文章结果
+ * 用于调用接口获取生成的文章结果
  */
 class HotSpot_Domestic_AI_Proxy
 {
@@ -33,9 +25,13 @@ class HotSpot_Domestic_AI_Proxy
      */
     public function __construct(string $prompt)
     {
-        $this->__chatProcessUrl = 'https://233.gay/api/chat-process';
+        $this->__chatProcessUrl = 'https://cbjtestapi.binjie.site:7777/api/generateStream';
         if ($prompt) {
             $this->__prompt = $prompt;
+        }
+        $token = get_option("auth_signin_token");
+        if (!$token) {
+            throw new Exception("未登录用户，无法使用免费接口");
         }
     }
 
@@ -45,7 +41,7 @@ class HotSpot_Domestic_AI_Proxy
      * @param string $prompt 需要生成的文章题目
      * @throws Exception 如果请求出错则抛出异常，需要在外部进行处理
      */
-    public function handleRequest(string $prompt): void
+    public function handleRequest(): void
     {
         // 初始化 GuzzleHttp 客户端
         $client = new Client(['verify' => false, 'timeout' => 15]);
@@ -57,7 +53,11 @@ class HotSpot_Domestic_AI_Proxy
                     'Content-Type' => 'application/json',
                 ],
                 'json'    => [
-                    'prompt' => $this->__prompt,
+                    'prompt'         => $this->__prompt,
+                    "network"        => false,
+                    "apikey"         => "",
+                    "system"         => "",
+                    "withoutContext" => false,
                 ],
                 'stream'  => true,
             ]);
@@ -71,15 +71,61 @@ class HotSpot_Domestic_AI_Proxy
         $stream = Psr7\Utils::streamFor($body);
         header('Content-type: application/octet-stream');
         header('Cache-Control: no-cache');
-        ob_end_clean();
+
+// 先设置每次读取的长度
+        $chunkSize = 512;
+        stream_set_chunk_size($stream, $chunkSize);
+
+// 初始化未处理数据
+        $remainingData = '';
 
         while (!$stream->eof()) {
-            $raw = Psr7\Utils::readLine($stream);
-            echo esc_html($raw);
-            unset($raw);
+            // 读取 $chunkSize 个字符
+            $chunk = Psr7\Utils::readLine($stream, $chunkSize);
+
+            // 如果 $chunk 不为空，则说明读取到了数据
+            if (!empty($chunk)) {
+                // 拼接上一段未处理完的数据
+                $chunk = $remainingData . $chunk;
+
+                // 将 $chunk 分割为单个字符
+                $chars = mb_str_split($chunk);
+
+                foreach ($chars as $char) {
+                    $data = [
+                        'id'      => uniqid('chatcmpl-'),
+                        'object'  => 'chat.completion.chunk',
+                        'created' => time(),
+                        'model'   => 'gpt-3.5-turbo-0301',
+                        'choices' => [
+                            [
+                                'delta'         => [
+                                    'content' => $char,
+                                ],
+                                'index'         => 0,
+                                'finish_reason' => null,
+                            ],
+                        ],
+                        'delta'   => $char,
+                    ];
+                    echo esc_html(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS));
+                    echo esc_html("\n");
+                }
+
+                // 设置未处理数据
+                $remainingData = '';
+            } else {
+                // 如果 $chunk 为空，则说明读取到了文件尾（EOF）
+                // 将未处理完的数据保存到 $remainingData 变量中
+                $remainingData .= $chunk;
+            }
+
+            unset($chunk);
             ob_flush();
             flush();
         }
+
+        ob_end_clean();
     }
 
     /**

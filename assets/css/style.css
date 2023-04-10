@@ -22402,28 +22402,28 @@ ul.dot-group li {
   right: 0;
 }
 
-.show-hide {
+.show-hide, .show-hide-confirm{
   position: absolute;
   top: 52px;
   right: 20px;
   transform: translateY(-50%);
 }
-.show-hide span {
+.show-hide span ,.show-hide-confirm span{
   cursor: pointer;
   font-size: 13px;
   color: var(--theme-deafult);
 }
-.show-hide span.show:before {
+.show-hide span.show:before,.show-hide-confirm span.show:before {
   content: "show";
 }
-.show-hide span:before {
+.show-hide span:before ,.show-hide-confirm span:before{
   content: "hide";
 }
 
 .needs-validation .invalid-feedback {
   color: #898989;
 }
-.needs-validation .show-hide {
+.needs-validation .show-hide ,.needs-validation .show-hide-confirm{
   right: 30px;
 }
 .needs-validation .invalid-tooltip {
@@ -29593,6 +29593,9 @@ body[class*=dark-] .for-light {
 .login-card .login-main .theme-form .show-hide {
   top: 50%;
 }
+.login-card .login-main .theme-form .show-hide-confirm {
+  top: 50%;
+}
 
 .faq-accordion .card .btn-link svg {
   margin-left: 20px;
@@ -36449,6 +36452,11 @@ html[dir=rtl] body.dark-only .page-wrapper .page-body-wrapper .page-body .card:n
   padding:0 !important;
   max-width:100%!important;
   
+}
+
+
+.signin-error{
+  color:#721c24
 }
 
 

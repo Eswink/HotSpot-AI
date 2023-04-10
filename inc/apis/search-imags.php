@@ -59,48 +59,7 @@ class ImageSearchAPI
                 return rest_ensure_response($data);
             } else {
                 // 请求错误
-                return new \WP_Error('api_error', $response_body);
-            }
-        }
-    }
-
-    /**
-     * 获取 API 授权令牌
-     **/
-    public function getAuthToken($email, $password)
-    {
-        $url = $this->_api_endpoint . '/auth/get-token';
-
-        $response = wp_remote_post(
-            $url,
-            array(
-                'headers'   => array(
-                    'Content-Type' => 'application/json',
-                ),
-                'body'      => json_encode(array('email' => $email, 'password' => $password)),
-                'timeout'   => 20,
-                'sslverify' => false, // 启用 SSL/TLS 证书验证
-            )
-        );
-
-        if (is_wp_error($response)) {
-            // 请求失败
-            return $response;
-        } else {
-            $response_code = wp_remote_retrieve_response_code($response);
-            $response_body = wp_remote_retrieve_body($response);
-
-            if ($response_code == '200') {
-                // 请求成功
-                $data = json_decode($response_body, true);
-                if (isset($data['authToken'])) {
-                    return $data['authToken'];
-                } else {
-                    return new \WP_Error('api_error', 'Invalid response body: ' . $response_body);
-                }
-            } else {
-                // 请求错误
-                return new \WP_Error('api_error', $response_body);
+                return new \WP_Error('api_error', json_decode($response_body));
             }
         }
     }

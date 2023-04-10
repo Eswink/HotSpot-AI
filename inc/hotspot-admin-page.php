@@ -26,3 +26,8 @@ function hotspot_signin_page()
 {
     include_once HOTSPOT_AI_DIR_PATH . 'assets/templates/hotspot-admin-signin.php';
 }
+
+function hotspot_signup_page()
+{
+    include_once HOTSPOT_AI_DIR_PATH . 'assets/templates/hotspot-admin-signup.php';
+}

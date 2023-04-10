@@ -6,9 +6,13 @@
             <div><img class="img-fluid for-light" src="<?php echo HOTSPOT_AI_URL_PATH . 'assets/images/login/login_logo.png' ?>"
                 alt="looginpage" width="450px"></div>
             <div class="login-main">
-              <form class="theme-form" id="signin_form" method="POST">
-                <h4>Sign in</h4>
-                <p>请登录以获得更好的AI体验</p>
+              <form class="theme-form" id="signup_form" method="POST">
+                <h4>Sign up</h4>
+                <p>感谢您对本插件的支持</p>
+                <div class="form-group">
+                  <label class="col-form-label">用户名</label>
+                  <input class="form-control" type="text" placeholder="new HotSpot" name="username">
+                </div>
                 <div class="form-group">
                   <label class="col-form-label">邮箱地址</label>
                   <input class="form-control" type="email" placeholder="your@email.com" name="email">
@@ -16,8 +20,15 @@
                 <div class="form-group">
                   <label class="col-form-label">密码</label>
                   <div class="form-input position-relative">
-                    <input class="form-control" type="password" name="password" placeholder="*********">
+                    <input class="form-control" type="password" name="password" id="password" placeholder="*********">
                     <div class="show-hide"><span class="show"> </span></div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">重复密码</label>
+                  <div class="form-input position-relative">
+                    <input class="form-control" type="password" name="confirm_password" id="confirm_password" placeholder="*********">
+                    <div class="show-hide-confirm"><span class="show"> </span></div>
                   </div>
                 </div>
                 <div class="form-group">
@@ -35,15 +46,14 @@
                   <div class="text-end mt-3 invalid-feedback" id="feedback">
                     <span>请先通过验证,正在加载验证码...</span>
                   </div>
-                <div class="form-group mb-0">
-                  <div class="checkbox p-0">
-                    <input id="checkbox1" type="checkbox">
-                    <label class="text-muted" for="checkbox1">记住密码</label>
+                  <div class="form-group mb-0">
+                    <div class="checkbox p-0">
+                      <input id="checkbox1" type="checkbox">
+                      <label class="text-muted" for="checkbox1">同意<a class="ms-2" href="#">HotSpot AI 热点创作 注册协议</a></label>
+                    </div>
+                    <button class="btn btn-primary btn-block w-100" type="submit" id="signup">注册</button>
                   </div>
-                  <!-- <a class="link" href="forget-password.html">忘记密码?</a> -->
-                  <button id="signin" class="btn btn-primary btn-block w-100" type="submit">登录</button>
-                </div>
-                <p class="mt-4 mb-0 text-center">还未注册过？<a class="ms-2" href="admin.php?page=hotspot-signup">创建用户</a></p>
+                <p class="mt-4 mb-0 text-center">已经有账户了？<a class="ms-2" href="admin.php?page=hotspot-signin">点我登录</a></p>
               </form>
             </div>
           </div>

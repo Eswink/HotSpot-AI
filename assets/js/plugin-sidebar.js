@@ -511,7 +511,7 @@
         })
           .then(function (response) {
             if (!response.ok) {
-              throw new Error('无法获取到图片，请重试')
+              throw new Error('无法获取到图片，请检测是否登录后重试')
             }
 
             return response.json()
@@ -578,6 +578,7 @@
           })
           .catch(function (error) {
             setIsLoading(false)
+            console.log(error)
             setError(error.message) // 在请求失败时设置 error 状态
           })
       }

@@ -8,6 +8,8 @@ require_once plugin_dir_path(__FILE__) . 'apis/proxy-domestic.php'; //引用 Hot
 require_once plugin_dir_path(__FILE__) . 'apis/check-credit.php'; // 引用 检查信用
 require_once plugin_dir_path(__FILE__) . 'apis/check-proxy-delay.php'; //引用 服务器延迟检测
 require_once plugin_dir_path(__FILE__) . 'apis/search-imags.php'; //引用 搜图API
+require_once plugin_dir_path(__FILE__) . 'apis/hotspot-signin.php'; //引用 登录API
+require_once plugin_dir_path(__FILE__) . 'apis/hotspot-signup.php'; //引用 注册API
 
 use GuzzleHttp\Psr7;
 use HotSpot\Baidu\Baidu_V1;
@@ -16,6 +18,8 @@ use HotSpot\Free\HotSpot_Domestic_AI_Proxy;
 use HotSpot\Porxy\HotSpot_AI_Proxy;
 use HotSpot\Proxy\UrlLatencyChecker;
 use HotSpot\Search\ImageSearchAPI;
+use HotSpot\Signin\SigninApi;
+use HotSpot\Signup\SignupApi;
 
 class Hotspot_Api
 {
@@ -47,6 +51,70 @@ class Hotspot_Api
         add_action('rest_api_init', array($this, 'register_check_proxy_delay_route'));
         add_action('rest_api_init', array($this, 'register_search_images_route'));
         add_action('rest_api_init', array($this, 'register_seo_analysis_route'));
+        add_action('rest_api_init', array($this, 'register_hotspot_signin_route'));
+        add_action('rest_api_init', array($this, 'register_hotspot_signup_route'));
+    }
+
+    // 注册接口
+
+    public function register_hotspot_signup_route()
+    {
+        register_rest_route("hotspot/{$this->__version}", '/hotspot/signup', array(
+            'methods'             => 'POST',
+            'callback'            => array($this, 'hotspot_signup'),
+            'permission_callback' => function () {
+                return current_user_can('edit_posts');
+            },
+        ));
+    }
+
+    public function hotspot_signup($request)
+    {
+        $params = $request->get_params();
+
+        $username = isset($params['username']) ? $params['username'] : '';
+
+        $email = isset($params['email']) ? $params['email'] : '';
+
+        $password = isset($params['password']) ? $params['password'] : '';
+
+        $confirm_password = isset($params['confirm_password']) ? $params['confirm_password'] : '';
+
+        $token = isset($params['g-recaptcha-response']) ? $params['g-recaptcha-response'] : '';
+
+        $signup_api = new SignupApi();
+
+        return rest_ensure_response($signup_api->signup($username, $email, $password, $confirm_password, $token));
+    }
+
+    // 登录接口
+
+    public function register_hotspot_signin_route()
+    {
+        register_rest_route("hotspot/{$this->__version}", '/hotspot/signin', array(
+            'methods'             => 'POST',
+            'callback'            => array($this, 'hotspot_signin'),
+            'permission_callback' => function () {
+                return current_user_can('edit_posts');
+            },
+        ));
+    }
+
+    public function hotspot_signin($request)
+    {
+
+        $params = $request->get_params();
+
+        $email = isset($params['email']) ? $params['email'] : '';
+
+        $password = isset($params['password']) ? $params['password'] : '';
+
+        $token = isset($params['g-recaptcha-response']) ? $params['g-recaptcha-response'] : '';
+
+        $signin_api = new SigninApi();
+
+        return rest_ensure_response($signin_api->signin($email, $password, $token));
+
     }
 
     // SEO 分析
@@ -66,7 +134,7 @@ class Hotspot_Api
     public function seo_analysis($request)
     {
         $params = $request->get_params();
-        $prompt = $params['prompt'];
+        $prompt = isset($params['prompt']) ? $params['prompt'] : '';
 
         //判断当前选择的接口
 
@@ -76,31 +144,19 @@ class Hotspot_Api
         $api_server = '';
 
         if ($ai_select == 'Open_AI_Free') {
-            $Open_AI_Free = new HotSpot_Domestic_AI_Proxy('');
+            try {
+                $Open_AI_Free = new HotSpot_Domestic_AI_Proxy('');
 
-            $response = $Open_AI_Free->fetchResponse($request_text);
+                $response = $Open_AI_Free->fetchResponse($request_text);
 
-            $text = '';
-
-            $lines = explode("\n", $response);
-            foreach ($lines as $line) {
-                // 解析每行JSON数据
-                $jsonObj = json_decode(trim($line));
-                // 判断解析结果是否为对象或数组
-                if (is_object($jsonObj) || is_array($jsonObj)) {
-                    if (isset($jsonObj->detail->choices)) {
-                        $choices = $jsonObj->detail->choices;
-                        if (isset($choices[0]->delta->content)) {
-                            $content = $choices[0]->delta->content;
-                            $text    = $text . $content;
-                        }
-                    }
-                }
+                return rest_ensure_response(array(
+                    'data' => $response,
+                ));
+            } catch (Exception $e) {
+                return rest_ensure_response(array(
+                    'data' => $e->getMessage(),
+                ));
             }
-
-            return rest_ensure_response(array(
-                'data' => $text,
-            ));
 
         } else {
             $HotSpot_AI_Proxy = new HotSpot_AI_Proxy(get_option('openai_key') ?? null, get_option('custom_proxy') ?? null);
@@ -145,6 +201,8 @@ class Hotspot_Api
 
         $query_words = $params['query'];
 
+        $token = get_option("auth_signin_token");
+
         $search = new ImageSearchAPI($token, 'https://x8ki-letl-twmt.n7.xano.io/api:tHUkNdeR');
 
         $response_data = $search->searchImages($query_words);
@@ -153,7 +211,7 @@ class Hotspot_Api
 
     }
 
-    // 检测代理接口是否正常
+    // 检测检测延迟
     public function register_check_proxy_delay_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/proxy/check_delay', array(
@@ -176,7 +234,7 @@ class Hotspot_Api
         $api_server = '';
 
         if ($ai_select == 'Open_AI_Free') {
-            $api_server = 'https://233.gay';
+            $api_server = 'https://cbjtestapi.binjie.site:7777';
         } elseif ($ai_select == 'Open_AI_Domestic') {
             $api_server = 'https://hotspot-ai.eswlnk.com';
         } elseif ($ai_select == 'Open_AI_Custom') {
@@ -251,8 +309,21 @@ class Hotspot_Api
 
         $request_text = 'Please write a 1,000-character article in Chinese with the title "' . $prompt . '", requiring subtitles for each paragraph and no H1 headings. Paragraphs need to be wrapped with <p> tags, and subheadings are wrapped with <h2>. In addition, the first paragraph must be an introduction, no subheadings, packaging labels and symbols need to be included in the character count, and the article must be complete without truncation';
 
-        $HotSpot_Domestic_AI_Proxy = new HotSpot_Domestic_AI_Proxy($request_text);
-        $HotSpot_Domestic_AI_Proxy->handleRequest($prompt);
+        try {
+            $HotSpot_Domestic_AI_Proxy = new HotSpot_Domestic_AI_Proxy($request_text);
+        } catch (Exception $e) {
+
+            header('Content-type: application/octet-stream');
+            header('Cache-Control: no-cache');
+
+            echo esc_html(json_encode(array(
+                'delta' => $e->getMessage(),
+            )) . "\n");
+            exit();
+            die();
+        }
+
+        $HotSpot_Domestic_AI_Proxy->handleRequest();
         exit();
 
     }
@@ -385,10 +456,9 @@ class Hotspot_Api
         $page_size   = isset($params['page_size']) ? $params['page_size'] : 10;
         $se_pv       = isset($params['se_pv']) ? $params['se_pv'] : 1;
         $se_headline = isset($params['se_headline']) ? $params['se_headline'] : '';
-        $cookie      = get_option('baijiahao_hotspot_cookies', '');
 
         $api   = new Baidu_V1();
-        $datas = $api->get_baidu_hotspot($page_no, $page_size, $se_pv, $se_headline, $cookie);
+        $datas = $api->get_baidu_hotspot($page_no, $page_size, $se_pv, $se_headline);
 
         return rest_ensure_response($datas);
     }

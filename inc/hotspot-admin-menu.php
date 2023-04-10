@@ -64,13 +64,22 @@ function hotspot_add_menu_item()
     );
 
     add_submenu_page(
-      'noid', // 父级菜单的页面slug
-      __('HotSpot AI - Signin', 'hotspot'), // page title
-      __('HotSpot AI - Signin', 'hotspot'), // menu title
-       'manage_options', // 用户角色
-       'hotspot-signin', // 子菜单slug
-       'hotspot_signin_page'
-  );
+        'noid', // 父级菜单的页面slug
+        __('HotSpot AI - Signin', 'hotspot'), // page title
+        __('HotSpot AI - Signin', 'hotspot'), // menu title
+         'manage_options', // 用户角色
+         'hotspot-signin', // 子菜单slug
+         'hotspot_signin_page'
+    );
+
+    add_submenu_page(
+        'noid', // 父级菜单的页面slug
+        __('HotSpot AI - Signup', 'hotspot'), // page title
+        __('HotSpot AI - Signup', 'hotspot'), // menu title
+         'manage_options', // 用户角色
+         'hotspot-signup', // 子菜单slug
+         'hotspot_signup_page'
+    );
 }
 
 add_action('admin_menu', 'hotspot_add_menu_item');
