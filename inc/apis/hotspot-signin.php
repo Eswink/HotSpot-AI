@@ -40,6 +40,7 @@ class SigninApi
                     'Accept' => 'application/json',
                 ],
                 'sslverify' => true, // 开启 SSL 验证
+                 'timeout'   => 30, // 超时时间为 30 秒
             ]);
 
             // 判断是否出现错误
@@ -47,13 +48,12 @@ class SigninApi
                 return new WP_Error('REQUEST_FAILED', $response->get_error_message(), ['status' => 500]);
             }
 
-            // 检查响应状态码，如果不是 200，则抛出异常
-            if ($response['response']['code'] !== 200) {
-                throw new Exception('邮箱或密码不正确!');
-            }
-
-            // 解析响应数据
             $data = json_decode($response['body'], true);
+
+            // 检查响应状态码，如果不是 200，则抛出异常
+            if ($data['code']) {
+                throw new Exception($data['message']);
+            }
 
             // 判断是否登录成功 登录成功后我们需要保存token值
             if (isset($data['authToken'])) {
