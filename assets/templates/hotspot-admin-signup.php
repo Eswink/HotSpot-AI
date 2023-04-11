@@ -11,11 +11,21 @@
                 <p>感谢您对本插件的支持</p>
                 <div class="form-group">
                   <label class="col-form-label">用户名</label>
-                  <input class="form-control" type="text" placeholder="new HotSpot" name="username">
+                  <input class="form-control" type="text" placeholder="New HotSpot User" name="username">
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">邮箱地址</label>
                   <input class="form-control" type="email" placeholder="your@email.com" name="email">
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label">验证码</label>
+
+                  <div class="form-input position-relative">
+                  <input class="form-control" type="text" placeholder="*****" name="code">
+                    <div class="show-hide">
+                  <button class="btn btn-primary-gradien btn-xs" type="button" title=""
+                                data-bs-original-title="btn btn-primary-gradien" id="send_email">发送</button></div>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label class="col-form-label">密码</label>
@@ -48,7 +58,7 @@
                   </div>
                   <div class="form-group mb-0">
                     <div class="checkbox p-0">
-                      <input id="checkbox1" type="checkbox">
+                      <input id="checkbox1" type="checkbox" name="checkbox1">
                       <label class="text-muted" for="checkbox1">同意<a class="ms-2" href="#">HotSpot AI 热点创作 注册协议</a></label>
                     </div>
                     <button class="btn btn-primary btn-block w-100" type="submit" id="signup">注册</button>

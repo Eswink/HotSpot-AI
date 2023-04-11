@@ -25,13 +25,13 @@ class HotSpot_Domestic_AI_Proxy
      */
     public function __construct(string $prompt)
     {
-        $this->__chatProcessUrl = 'https://cbjtestapi.binjie.site:7777/api/generateStream';
+        $this->__chatProcessUrl = 'https://api.aichatos.cloud/api/generateStream';
         if ($prompt) {
             $this->__prompt = $prompt;
         }
         $token = get_option("auth_signin_token");
         if (!$token) {
-            throw new Exception("未登录用户，无法使用免费接口");
+            throw new Exception("未登录用户，无法使用免费接口，如果重复出现此问题，请加入开发者Q群：689155556");
         }
     }
 
@@ -63,7 +63,7 @@ class HotSpot_Domestic_AI_Proxy
             ]);
         } catch (GuzzleException $e) {
             // 如果请求出错，则抛出异常
-            throw new Exception($e->getMessage());
+            throw new Exception("请求出现异常，请尝试重新构思，如果重复出现此问题，请加入开发者Q群：689155556");
         }
 
         // 获取响应的正文并输出到浏览器

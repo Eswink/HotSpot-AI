@@ -53,6 +53,33 @@ class Hotspot_Api
         add_action('rest_api_init', array($this, 'register_seo_analysis_route'));
         add_action('rest_api_init', array($this, 'register_hotspot_signin_route'));
         add_action('rest_api_init', array($this, 'register_hotspot_signup_route'));
+        add_action('rest_api_init', array($this, 'register_hotspot_send_email_route'));
+    }
+
+    // 注册发送邮件接口
+
+    public function register_hotspot_send_email_route()
+    {
+        register_rest_route("hotspot/{$this->__version}", '/hotspot/send_email', array(
+            'methods'             => 'POST',
+            'callback'            => array($this, 'send_email'),
+            'permission_callback' => function () {
+                return current_user_can('edit_posts');
+            },
+        ));
+    }
+
+    public function send_email($request)
+    {
+
+        $params = $request->get_params();
+        $email  = isset($params['email']) ? $params['email'] : '';
+        $token  = isset($params['token']) ? $params['token'] : '';
+
+        $send_api = new SignupApi();
+
+        return rest_ensure_response($send_api->send_email($token, $email));
+
     }
 
     // 注册接口
@@ -82,9 +109,11 @@ class Hotspot_Api
 
         $token = isset($params['g-recaptcha-response']) ? $params['g-recaptcha-response'] : '';
 
+        $code = isset($params['code']) ? $params['code'] : '';
+
         $signup_api = new SignupApi();
 
-        return rest_ensure_response($signup_api->signup($username, $email, $password, $confirm_password, $token));
+        return rest_ensure_response($signup_api->signup($username, $email, $password, $confirm_password, $code, $token));
     }
 
     // 登录接口
@@ -294,7 +323,7 @@ class Hotspot_Api
             'methods'             => 'POST',
             'callback'            => array($this, 'proxy_domestic'),
             'permission_callback' => function () {
-                return current_user_can('edit_posts');
+                return true;
             },
         ));
     }
@@ -311,6 +340,7 @@ class Hotspot_Api
 
         try {
             $HotSpot_Domestic_AI_Proxy = new HotSpot_Domestic_AI_Proxy($request_text);
+            $HotSpot_Domestic_AI_Proxy->handleRequest();
         } catch (Exception $e) {
 
             header('Content-type: application/octet-stream');
@@ -323,7 +353,6 @@ class Hotspot_Api
             die();
         }
 
-        $HotSpot_Domestic_AI_Proxy->handleRequest();
         exit();
 
     }

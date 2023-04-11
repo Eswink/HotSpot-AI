@@ -36,10 +36,10 @@
                     <span>请先通过验证,正在加载验证码...</span>
                   </div>
                 <div class="form-group mb-0">
-                  <div class="checkbox p-0">
+                  <!-- <div class="checkbox p-0">
                     <input id="checkbox1" type="checkbox">
                     <label class="text-muted" for="checkbox1">记住密码</label>
-                  </div>
+                  </div> -->
                   <!-- <a class="link" href="forget-password.html">忘记密码?</a> -->
                   <button id="signin" class="btn btn-primary btn-block w-100" type="submit">登录</button>
                 </div>

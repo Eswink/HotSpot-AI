@@ -134,11 +134,11 @@ function hotspot_admin_enqueue_scripts()
 
     if (isset($_GET['page']) && $_GET['page'] == 'hotspot-signup') {
         $general_js = array(
-            'hotspot-signup-validate-js'   => 'assets/js/jquery.validate.min.js',
-            'hotspot-signup-sweetalert-js' => 'assets/js/sweet-alert/sweetalert.min.js',
-            'hotspot-signup-captcha-js'    => 'assets/js/api.js',
-            'hotspot-signup-api-js'        => 'assets/js/login/signup-api.js',
-            'hotspot-signup-script-js'     => 'assets/js/script.js',
+            'hotspot-signup-validate-js'    => 'assets/js/jquery.validate.min.js',
+            'hotspot-signup-sweetalert2-js' => 'assets/js/sweet-alert/sweetalert2.js',
+            'hotspot-signup-captcha-js'     => 'assets/js/api.js',
+            'hotspot-signup-api-js'         => 'assets/js/login/signup-api.js',
+            'hotspot-signup-script-js'      => 'assets/js/script.js',
         );
 
         foreach ($general_js as $name => $src) {
@@ -147,6 +147,7 @@ function hotspot_admin_enqueue_scripts()
         }
 
         wp_localize_script('hotspot-signup-api-js', 'access_token', array(
+            "hotspot_send"   => rest_url('hotspot/v1/hotspot/send_email'),
             "hotspot_signup" => rest_url('hotspot/v1/hotspot/signup'),
             "wp_nonce"       => wp_create_nonce('wp_rest'),
         ));

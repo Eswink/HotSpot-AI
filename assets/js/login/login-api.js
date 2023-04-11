@@ -26,6 +26,7 @@ function validate_token(token) {
     rules: {
       password: {
         required: true,
+        minlength:8
       },
       email: {
         required: true,
@@ -35,6 +36,7 @@ function validate_token(token) {
     messages: {
       password: {
         required: '请填写密码!',
+        minlength: '密码必须至少包含 8 个字符！'
       },
       email: {
         required: '请填写邮箱!',
