@@ -31,6 +31,7 @@ class Baidu_V1
         $args = array(
             'body'    => $postData,
             'headers' => $headers,
+            'timeout' => 30, // 超时时间为 30 秒
         );
 
         $response = wp_remote_post($this->getPostUrl(), $args);
