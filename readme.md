@@ -17,15 +17,6 @@ License: GNU General Public License v2.0 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
-目前已在WordPress插件市场上架，搜索"热点创作"即可下载体验本插件：https://cn.wordpress.org/plugins/hotspot-ai/
-
-教程文档：https://docs.eswlnk.com
-
-博客: https://blog.eswlnk.com/hotspot-ai
-
-交流群聊天吹水Q群：689155556
-
-
 基于AI技术的WordPress插件，旨在帮助您分析获取全网热词并帮助构思和写作，提高您网站的整体权重，自动生成观点、标题、摘要等内容，并为您提供有关该主题的更多详细信息
 
 == Description ==
