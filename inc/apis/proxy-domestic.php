@@ -43,10 +43,13 @@ class HotSpot_Domestic_AI_Proxy
      */
     public function handleRequest(): void
     {
-        // 初始化 GuzzleHttp 客户端
-        $client = new Client(['verify' => false, 'timeout' => 15]);
-
         try {
+            // 初始化 GuzzleHttp 客户端
+            $client = new Client([
+                'verify'  => false,
+                'timeout' => 30,
+            ]);
+
             // 发送 POST 请求
             $response = $client->request('POST', $this->__chatProcessUrl, [
                 'headers' => [
@@ -68,28 +71,20 @@ class HotSpot_Domestic_AI_Proxy
             throw new Exception("请求出现异常，请尝试重新构思，如果重复出现此问题，请加入开发者Q群：689155556");
         }
 
-        // 获取响应的正文并输出到浏览器
+// 获取响应的正文并输出到浏览器
         $body   = $response->getBody();
         $stream = Psr7\Utils::streamFor($body);
         header('Content-type: application/octet-stream');
         header('Cache-Control: no-cache');
 
-// 先设置每次读取的长度
-        $chunkSize = 512;
-        stream_set_chunk_size($stream, $chunkSize);
-
-// 初始化未处理数据
-        $remainingData = '';
+        ob_end_clean();
 
         while (!$stream->eof()) {
             // 读取 $chunkSize 个字符
-            $chunk = Psr7\Utils::readLine($stream, $chunkSize);
+            $chunk = Psr7\Utils::readLine($stream);
 
             // 如果 $chunk 不为空，则说明读取到了数据
             if (!empty($chunk)) {
-                // 拼接上一段未处理完的数据
-                $chunk = $remainingData . $chunk;
-
                 // 将 $chunk 分割为单个字符
                 $chars = mb_str_split($chunk);
 
@@ -113,13 +108,6 @@ class HotSpot_Domestic_AI_Proxy
                     echo esc_html(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS));
                     echo esc_html("\n");
                 }
-
-                // 设置未处理数据
-                $remainingData = '';
-            } else {
-                // 如果 $chunk 为空，则说明读取到了文件尾（EOF）
-                // 将未处理完的数据保存到 $remainingData 变量中
-                $remainingData .= $chunk;
             }
 
             unset($chunk);
@@ -127,7 +115,6 @@ class HotSpot_Domestic_AI_Proxy
             flush();
         }
 
-        ob_end_clean();
     }
 
     /**
