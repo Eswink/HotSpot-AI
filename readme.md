@@ -10,20 +10,20 @@ Tested up to: 6.2
 
 Requires PHP: 7.4
 
-Stable tag: 1.2
+Stable tag: 1.2.5
 
 License: GNU General Public License v2.0 or later
 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-
-基于AI技术的WordPress插件，旨在帮助您分析获取全网热词并帮助构思和写作，提高您网站的整体权重，自动生成观点、标题、摘要等内容，并为您提供有关该主题的更多详细信息
+基于AI技术的WordPress插件，旨在帮助您分析获取全网热词并帮助构思和写作，提高您网站的整体权重
 
 == Description ==
 
 Hotspot使用机器学习算法来分析全网热词，自动生成观点、标题、摘要等内容，并为您提供有关该主题的更多详细信息。通过这种方式，Hotspot可以帮助您快速构思和编写高质量的内容，从而提高您网站的整体权重。
 
 作者博客：https://blog.eswlnk.com
+
 插件教程：https://docs.eswlnk.com
 
 开发者交流(意见反馈)群：689155556
@@ -56,6 +56,21 @@ Hotspot使用机器学习算法来分析全网热词，自动生成观点、标�
    
 
 == Changelog ==
+
+= 1.2.5 =
+1. 修复免费API接口BUG
+2. 修复设置界面问题
+
+= 1.2.4 =
+
+1. 发布稳定版本号
+
+= 1.2.3 =
+
+1. 新增鉴权
+2. 新增用户注册接口
+3. 全网热词不再需要填写百家号cookies，注册用户可直接使用
+4. 接入新免费API接口
 
 = 1.2 =
 
