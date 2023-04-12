@@ -3,11 +3,11 @@
 $auth_token   = get_option('auth_signin_token');
 $disable_attr = '';
 if ($auth_token) {
-    $seo_analysis_checked  = checked(get_option('seo-analysis'), 'on');
-    $search_images_checked = checked(get_option('search-images'), 'on');
+    $seo_analysis_checked  = (get_option('seo-analysis') == 'on') ? 'checked' : '';
+    $search_images_checked = (get_option('search-images') == 'on') ? 'checked' : '';
 } else {
-    $seo_analysis_checked  = 'off';
-    $search_images_checked = 'off';
+    $seo_analysis_checked  = '';
+    $search_images_checked = '';
     $disable_attr          = 'disabled';
 }
 ?>
