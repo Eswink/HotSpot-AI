@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 /* 定义输入框获取焦点时的样式 */
 .hotspot-editor-input:focus {
   border-color: #0073aa;
@@ -16,6 +18,50 @@
   background-color: #f5f5f5;
   padding: 12px;
   transition: all 0.3s ease-in-out;
+}
+
+.mask.loading {
+  position: relative;
+  color:rgba(128, 128, 128, 0.5)
+}
+
+.mask.loading h2{
+  color:rgba(128, 128, 128, 0.5)
+}
+
+.mask.loading::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #007bff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -20px;
+  margin-top: -20px;
+  animation: rotate 1s linear infinite;
+}
+
+.mask.loading::before {
+  content: "AI正在构思中";
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  position: absolute;
+  top: calc(50% + 30px);
+  left: -2px;
+  width: 100%;
+  color: #333;
+}
+
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* 针对移动设备 */

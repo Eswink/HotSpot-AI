@@ -218,7 +218,7 @@ class Hotspot_Api
             'methods'             => 'POST',
             'callback'            => array($this, 'search_images'),
             'permission_callback' => function () {
-                return current_user_can('edit_posts');
+                return true;
             },
         ));
     }

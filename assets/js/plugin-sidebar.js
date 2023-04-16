@@ -111,6 +111,9 @@
       var editorInput = document.querySelector('.hotspot-editor-input')
       editorInput.setAttribute('contenteditable', false)
 
+      var mask = document.querySelector('.mask')
+      mask.classList.add('loading')
+
       // 发送消息给 Worker 实例进行处理
       AiConceptContent = ''
 
@@ -129,6 +132,7 @@
         if (data === 'done') {
           editorInput.setAttribute('contenteditable', true)
           button.textContent = '重新构思'
+          mask.classList.remove('loading')
           setIsRequesting(false)
         } else if (data != undefined) {
           AiConceptContent += data
@@ -322,23 +326,25 @@
               style: { marginBottom: '10px' },
             },
             // 标签分析Pro标签
-            el('h3', {
-            }, [
+            el('h3', {}, [
               el('span', {}, '分析'),
-              el('span', { 
-                style: {
-                  lineHeight: '16px',
-                  fontSize: '12px',
-                  padding: '0 5px',
-                  background: '#06c',
-                  borderRadius: '3px',
-                  color: '#fff',
-                  cursor: 'pointer',
-                  marginLeft: '5px',
+              el(
+                'span',
+                {
+                  style: {
+                    lineHeight: '16px',
+                    fontSize: '12px',
+                    padding: '0 5px',
+                    background: '#06c',
+                    borderRadius: '3px',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    marginLeft: '5px',
+                  },
                 },
-               }, 'Pro'),
+                'Pro'
+              ),
             ]),
-            
 
             el(
               Button,
@@ -413,12 +419,19 @@
               setTitle(newTitle)
             },
           }),
-          el(RichText, {
-            tagName: 'div',
-            value: _content,
-            onChange: setContent,
-            className: 'hotspot-editor-input',
-          }),
+          el(
+            'div',
+            {
+              className:'mask'
+            },
+            el(RichText, {
+              tagName: 'div',
+              value: _content,
+              onChange: setContent,
+              className: 'hotspot-editor-input',
+            })
+          ),
+
           el('p', {}, '将会在此生成 AI 创作的内容。'),
           el(
             Button,
@@ -473,13 +486,10 @@
       var [error, setError] = wp.element.useState(null) // 添加 error 状态
 
       function onButtonClick() {
-
         if (typeof search_images_url === 'undefined') {
           alert('未开启智能搜图功能！')
           return
         }
-
-
 
         const selectedBlock = wp.data
           .select('core/block-editor')
@@ -511,16 +521,22 @@
         })
           .then(function (response) {
             if (!response.ok) {
-              throw new Error('无法获取到图片，请检测是否登录后重试')
+              return response.json().then(function (data) {
+                throw new Error(
+                  data && data.message
+                    ? data.message
+                    : '无法获取到数据，请检查登录信息是否正常。如果搜索其他图片也出现此错误，请联系开发者Q群：689155556'
+                )
+              })
+            } else {
+              return response.json() // 将响应体内容读取并保存为 JSON 格式的对象
             }
-
-            return response.json()
           })
           .then(function (data) {
             setIsLoading(false)
 
             if (!data.data || data.data.length === 0) {
-              setError('No images found.') // 如果 data.data 不存在或为空，则设置 error 状态
+              setError('未找到符合条件的图片') // 如果 data.data 不存在或为空，则设置 error 状态
             } else {
               var images = data.data.map(function (image) {
                 // 添加点击事件处理函数
@@ -578,7 +594,6 @@
           })
           .catch(function (error) {
             setIsLoading(false)
-            console.log(error)
             setError(error.message) // 在请求失败时设置 error 状态
           })
       }

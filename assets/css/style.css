@@ -26341,7 +26341,11 @@ body.dark-only .page-wrapper .page-body-wrapper .page-body .card:not(.email-body
 body.dark-only .page-wrapper .page-body-wrapper .page-body .card:not(.email-body) .card-header h3,
 body.dark-only .page-wrapper .page-body-wrapper .page-body .card:not(.email-body) .card-header h4,
 body.dark-only .page-wrapper .page-body-wrapper .page-body .card:not(.email-body) .card-header h5,
-body.dark-only .page-wrapper .page-body-wrapper .page-body .card:not(.email-body) .card-header h6 {
+body.dark-only .page-wrapper .page-body-wrapper .page-body .card:not(.email-body) .card-header h6,
+body.dark-only .card-body .col-form-label,
+body.dark-only .card-body .project-box,
+body.dark-only .card-body h4
+{
   color: rgba(255, 255, 255, 0.6);
 }
 body.dark-only .page-wrapper .page-body-wrapper .page-body .card:not(.email-body) .card-header .card-header-right {

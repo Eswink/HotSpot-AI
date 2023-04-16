@@ -51,7 +51,7 @@ class SigninApi
             $data = json_decode($response['body'], true);
 
             // 检查响应状态码，如果不是 200，则抛出异常
-            if ($data['code']) {
+            if (isset($data['code'])) {
                 throw new Exception($data['message']);
             }
 
