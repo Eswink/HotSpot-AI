@@ -1,17 +1,18 @@
 # HotSpot AI 热点创作
 **基于AI技术的WordPress插件，旨在帮助您分析获取全网热词并帮助构思和写作，提高您网站的整体权重**
 
-> Contributors: ersanwu
-Tags: hotspot,writer,ai
-Requires at least: 5.8
-Tested up to: 6.2
-Requires PHP: 7.4
-Stable tag: 1.2.5
-License: GNU General Public License v2.0 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+- [![GitHub release](https://img.shields.io/github/v/release/Eswink/HotSpot-AI.svg?style=for-the-badge&logo=appveyor)](https://github.com/Eswink/HotSpot-AI/releases/latest)[![GitHub Release Date](https://img.shields.io/github/release-date/Eswink/HotSpot-AI?style=for-the-badge&logo=appveyor)](https://github.com/Eswink/HotSpot-AI/releases)![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Eswink/HotSpot-AI?style=for-the-badge&logo=appveyor)
+- Contributors: ersanwu
+- Tags: hotspot,writer,ai
+- Requires at least: 5.8
+- Tested up to: 6.2
+- Requires PHP: 7.4
+- Stable tag: 1.2.5
+- License: GNU General Public License v2.0 or later
+- License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
-## Description 简介##
+## Description 简介 ##
 
 > Hotspot使用机器学习算法来分析全网热词，自动生成观点、标题、摘要等内容，并为您提供有关该主题的更多详细信息。通过这种方式，Hotspot可以帮助您快速构思和编写高质量的内容，从而提高您网站的整体权重。
 
@@ -47,44 +48,44 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 1.2.5
 > 1. 修复免费API接口BUG
-2. 修复设置界面问题
+> 2. 修复设置界面问题
 
 1.2.4
 
->1. 发布稳定版本号
+> 1. 发布稳定版本号
 
 1.2.3
 
->1. 新增鉴权
-2. 新增用户注册接口
-3. 全网热词不再需要填写百家号cookies，注册用户可直接使用
-4. 接入新免费API接口
+> 1. 新增鉴权
+> 2. 新增用户注册接口
+> 3. 全网热词不再需要填写百家号cookies，注册用户可直接使用
+> 4. 接入新免费API接口
 
 1.2
 
->1. 新增SEO分析
-2. 新增智能搜图
-3. 优化依赖库
+> 1. 新增SEO分析
+> 2. 新增智能搜图
+> 3. 优化依赖库
 
 
 
 1.1 beta
 
->1. 新增API测速接口
-2. 修复JQuery依赖问题
-3. 修复热点筛选获取问题
+> 1. 新增API测速接口
+> 2. 修复JQuery依赖问题
+> 3. 修复热点筛选获取问题
 
 1.1
 
->1. 新增教程：https://docs.eswlnk.com
-2. 新增验证接口
-3. 优化文件结构
-4. 优化相关函数
-5. 优化命名空间
-6. 优化输出方式 
+> 1. 新增教程：https://docs.eswlnk.com
+> 2. 新增验证接口
+> 3. 优化文件结构
+> 4. 优化相关函数
+> 5. 优化命名空间
+> 6. 优化输出方式 
 
 1.0
 
->1. 优化插件目录结构
-3. 使用更安全的WP REST API
+> 1. 优化插件目录结构
+> 2. 使用更安全的WP REST API
 
