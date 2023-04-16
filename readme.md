@@ -1,34 +1,25 @@
-=== HotSpot AI 热点创作 ===
+# HotSpot AI 热点创作
+**基于AI技术的WordPress插件，旨在帮助您分析获取全网热词并帮助构思和写作，提高您网站的整体权重**
 
-Contributors: ersanwu
-
+> Contributors: ersanwu
 Tags: hotspot,writer,ai
-
 Requires at least: 5.8
-
 Tested up to: 6.2
-
 Requires PHP: 7.4
-
 Stable tag: 1.2.5
-
 License: GNU General Public License v2.0 or later
-
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-基于AI技术的WordPress插件，旨在帮助您分析获取全网热词并帮助构思和写作，提高您网站的整体权重
 
-== Description ==
+## Description 简介##
 
-Hotspot使用机器学习算法来分析全网热词，自动生成观点、标题、摘要等内容，并为您提供有关该主题的更多详细信息。通过这种方式，Hotspot可以帮助您快速构思和编写高质量的内容，从而提高您网站的整体权重。
+> Hotspot使用机器学习算法来分析全网热词，自动生成观点、标题、摘要等内容，并为您提供有关该主题的更多详细信息。通过这种方式，Hotspot可以帮助您快速构思和编写高质量的内容，从而提高您网站的整体权重。
 
-作者博客：https://blog.eswlnk.com
+[作者博客](https://blog.eswlnk.com "作者博客") | [插件教程](https://docs.eswlnk.com "插件教程")
 
-插件教程：https://docs.eswlnk.com
+> 开发者交流 ~~大佬吹牛~~ 群：689155556
 
-开发者交流(意见反馈)群：689155556
-
-== Installation ==
+## Installation 安装教程
 
 1. 进入WordPress仪表盘，点击“插件-安装插件”；
 2. 点击界面左上方的“上传按钮”，选择本地提前下载好的插件压缩包hotspot-ai.zip，点击“现在安装”；
@@ -37,67 +28,63 @@ Hotspot使用机器学习算法来分析全网热词，自动生成观点、标�
 5. 填写相关选项，选择接口，点击保存即可
 
 
+## FAQ 常见问题
 
-== Frequently Asked Questions ==
-
-= 文章编辑页面为何没有出现"Hotspot AI Sidebar"选项？=
+- **文章编辑页面为何没有出现"Hotspot AI Sidebar"选项？**
 请保证当前WordPress > 5.8 ，PHP > 7.4，且保证古腾堡编辑器处于启用状态，重新启用插件即可解决当前问题。
 
-= 为何无法正常使用热词筛序功能？=
+- **为何无法正常使用热词筛序功能？**
 请保证热词筛选的相关项填写正确，相关教程请前往<a href="https://docs.eswlnk.com" rel="friend" title="Eswlnk docs">文档</a>。
 
-== Screenshots ==
+## Screenshots 截图
 1. 热词筛选截图
 2. 设置界面截图
 3. 统计分析截图
 4. 关于界面截图
 5. AI创作截图
 
-   
+## Changelog 更新日志
 
-== Changelog ==
-
-= 1.2.5 =
-1. 修复免费API接口BUG
+1.2.5
+> 1. 修复免费API接口BUG
 2. 修复设置界面问题
 
-= 1.2.4 =
+1.2.4
 
-1. 发布稳定版本号
+>1. 发布稳定版本号
 
-= 1.2.3 =
+1.2.3
 
-1. 新增鉴权
+>1. 新增鉴权
 2. 新增用户注册接口
 3. 全网热词不再需要填写百家号cookies，注册用户可直接使用
 4. 接入新免费API接口
 
-= 1.2 =
+1.2
 
-1. 新增SEO分析
+>1. 新增SEO分析
 2. 新增智能搜图
 3. 优化依赖库
 
 
 
-= 1.1 beta =
+1.1 beta
 
-1. 新增API测速接口
+>1. 新增API测速接口
 2. 修复JQuery依赖问题
 3. 修复热点筛选获取问题
 
-= 1.1 =
+1.1
 
-1. 新增教程：https://docs.eswlnk.com
+>1. 新增教程：https://docs.eswlnk.com
 2. 新增验证接口
 3. 优化文件结构
 4. 优化相关函数
 5. 优化命名空间
 6. 优化输出方式 
 
+1.0
 
-= 1.0 =
-
-1. 优化插件目录结构
+>1. 优化插件目录结构
 3. 使用更安全的WP REST API
 
