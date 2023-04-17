@@ -157,9 +157,15 @@ class HotSpot_Domestic_AI_Proxy
             $response = $client->request('POST', $this->__chatProcessUrl, [
                 'headers' => [
                     'Content-Type' => 'application/json',
+                    'origin'       => 'http://chat1.aichatos.com',
+                    'referer'      => 'http://chat1.aichatos.com/',
                 ],
                 'json'    => [
-                    'prompt' => $prompt,
+                    'prompt'         => $prompt,
+                    "network"        => false,
+                    "apikey"         => "",
+                    "system"         => "",
+                    "withoutContext" => false,
                 ],
                 'stream'  => true,
             ]);
