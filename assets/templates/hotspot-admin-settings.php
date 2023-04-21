@@ -149,9 +149,9 @@ if ($auth_token) {
                             <select class="js-example-basic-single col-sm-12" name="ai_select">
                               <optgroup label="OpenAI">
                                 <option value="Open_AI_Offical" <?php selected('Open_AI_Offical', get_option('ai_select')) ?> disabled>官方接口(勿选)</option>
-                                <option value="Open_AI_Free" <?php selected('Open_AI_Free', get_option('ai_select')) ?>>免费高速接口(登录用户专用，不用填写秘钥)</option>
+                                <option value="Open_AI_Free" <?php selected('Open_AI_Free', get_option('ai_select')) ?>>免费高速接口(登录用户专用，不用填写秘钥，无需自定义代理)</option>
                                 <option value="Open_AI_Domestic" <?php selected('Open_AI_Domestic', get_option('ai_select')) ?>>国内代理</option>
-                                <option value="Open_AI_Custom" <?php selected('Open_AI_Custom', get_option('ai_select')) ?>>自定义代理</option>
+                                <option value="Open_AI_Custom" <?php selected('Open_AI_Custom', get_option('ai_select')) ?>>自定义代理(能直接提供反向代理的API，非Socket代理)</option>
                               </optgroup>
                               <optgroup label="文心一言">
                                 <option value="ERNIE_Bot_Offical" disabled>官方接口</option>
@@ -174,7 +174,7 @@ if ($auth_token) {
                             <input class="form-control" id="custom_proxy" type="text"
                               placeholder="请填写正确的API地址" name="custom_proxy" value="<?php esc_html_e(get_option('custom_proxy')) ?>">
                             <div class="valid-feedback" style="display:block">
-                              <span>如果你有更好的代理地址，可以在这里填写，务必在上方选择<strong>「自定义代理」</strong></span>
+                              <span>如果你有更好的代理地址，可以在这里填写，务必在上方选择<strong>「自定义代理」</strong>，若不会填写，可发issue或者加入Q交流群：689155556</span>
                             </div>
 
                           </div>
@@ -192,6 +192,16 @@ if ($auth_token) {
                                 data-bs-original-title="btn btn-primary-gradien" id="check_credit">验证秘钥</button> -->
                             </div>
 
+                          </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                          <label class="col-sm-3 col-form-label">经典编辑器支持 - 开关</label>
+                          <div class="col-sm-9 icon-state" style="display:flex;align-items: center;">
+                            <label class="switch" style="margin-bottom:0">
+                              <input class="form-control" type="checkbox" name="classic_editor_support_switch" id="classic_editor_support_switch" <?php checked(get_option('classic_editor_support_switch'), 'on') ?> name="classic_editor_support_switch"><span class="switch-state"></span>
+                            </label>
+                            <span style="padding-left:10px;font-size:10px">若使用经典编辑器，请务必开启本功能！</span>
                           </div>
                         </div>
 

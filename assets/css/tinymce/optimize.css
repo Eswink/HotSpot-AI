@@ -1,0 +1,175 @@
+.media-button-icon{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  line-height: 1;
+  vertical-align: middle;
+  margin: 0 2px;
+}
+
+
+.media-button-icon:before{
+  content: "\f339";
+}
+
+
+.image-button-icon::before{
+  content: "\f128";
+}
+
+
+.loading::after {
+  content: "";
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #007bff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -20px;
+  margin-top: -20px;
+  animation: rotate 1s linear infinite;
+}
+
+.loading::before {
+  content: "AI正在构思中";
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  position: absolute;
+  top: calc(50% + 30px);
+  left: -2px;
+  width: 100%;
+  color: #333;
+  z-index: 99;
+}
+
+.analysis_loading::after{
+  top: 25%!important;
+}
+
+.analysis_loading::before{
+  content: "AI正在分析中"!important;
+  top: calc(25% + 30px)!important;
+}
+
+.search_loading::before{
+  content: "AI正在搜索中"!important;
+}
+
+.search_downloading::before{
+  content: "正在下载远程文件中..."!important;
+}
+
+.search_uploading::before{
+  content: "正在上传图片中..."!important;
+}
+
+.search_finished::before{
+  content: "上传完毕！"!important;
+}
+
+
+
+.loading textarea{
+  color:rgba(128, 128, 128, 0.5)
+}
+
+#search_button-button .mce-txt{
+  color: #fff!important;
+}
+
+
+
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* 图片包装器的样式 */
+.image-wrapper {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+/* 图片与作者名包装器的样式 */
+.image-wrap {
+  position: relative!important;
+  width: 23%!important;
+  padding: 15px!important;
+}
+
+/* 图片的样式 */
+.image-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* 遮罩层的样式 */
+.image-wrap::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 显示文字的样式 */
+.image-wrap p {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 鼠标悬浮在图片包装器上时的样式 */
+.image-wrap:hover::before {
+  opacity: 1;
+}
+
+/* 鼠标悬浮在图片包装器上时，显示文本信息 */
+.image-wrap:hover p {
+  opacity: 1;
+}
+
+
+
+#image-results {
+  max-height: 600px; /* 设置最大高度 */
+  overflow-y: auto; /* 添加滚动条 */
+}
+
+#image-results::-webkit-scrollbar {
+  width: 6px;
+}
+
+#image-results::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+#image-results::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 6px;
+}
+
+#image-results::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}

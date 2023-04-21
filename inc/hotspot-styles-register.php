@@ -72,15 +72,22 @@ function hotspot_admin_enqueue_styles()
 
 }
 
-//美化古腾堡
+//美化编辑器，区分古腾堡和经典编辑器
 
 function hotspot_enqueue_styles()
 {
     global $pagenow;
 
-    if ($pagenow == 'post.php' || $pagenow == 'post-new.php') {
-        wp_enqueue_style('my-plugin-styles', HOTSPOT_AI_URL_PATH . '/assets/css/gutenberg-editor.css');
+    $editor = get_option('classic_editor_support_switch');
+
+    if ($editor == 'on') {
+
+    } else {
+        if ($pagenow == 'post.php' || $pagenow == 'post-new.php') {
+            wp_enqueue_style('my-plugin-styles', HOTSPOT_AI_URL_PATH . '/assets/css/gutenberg-editor.css');
+        }
     }
+
 }
 
 add_action('admin_enqueue_scripts', 'hotspot_enqueue_styles');

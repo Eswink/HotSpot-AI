@@ -159,36 +159,122 @@ function hotspot_admin_enqueue_scripts()
 // 编辑器注册相关变量的js
 function add_hotspot_admin_script()
 {
-    $post_type = get_post_type();
-    if ($post_type === 'post') {
-        // 将 request-worker.js 的路径作为变量保存
-        $request_worker_url = HOTSPOT_AI_URL_PATH . 'assets/js/request-worker.js';
-        // 使用 wp_localize_script 函数将变量传递到前台 JS 脚本中
-        wp_localize_script('jquery', 'request_worker_url', $request_worker_url);
-        wp_localize_script('jquery', 'hotspot_nonce', wp_create_nonce('wp_rest'));
-        wp_localize_script('jquery', 'he_js_url', HOTSPOT_AI_URL_PATH . 'assets/js/he.min.js');
-        $AI_select_option = get_option('ai_select');
+    $editor = get_option('classic_editor_support_switch');
 
-        $request_proxy_url = '';
-        if ($AI_select_option == "Open_AI_Free") {
-            $request_proxy_url = rest_url('hotspot/v1/proxy/domestic');
-        } elseif ($AI_select_option == 'Open_AI_Domestic') {
-            $request_proxy_url = rest_url('hotspot/v1/proxy/hotspot');
-        }
-        wp_localize_script('jquery', 'request_proxy_url', $request_proxy_url);
+    global $pagenow;
 
-        if (get_option('seo-analysis') == 'on') {
-            wp_localize_script('jquery', 'seo_analysis_url', rest_url('hotspot/v1/seo/analysis'));
-        }
+    // 检查当前页面是否为文章编辑页面
+    $is_edit_page = in_array($pagenow, array('post.php', 'post-new.php'));
 
-        if (get_option('seo-analysis') == 'on') {
-            wp_localize_script('jquery', 'search_images_url', rest_url('hotspot/v1/search/images'));
+    if ($is_edit_page) {
+        wp_localize_script('jquery', 'classic_switch', array(
+            "checked" => $editor,
+        ));
+
+        wp_register_script('hotspot_classic_editor_judge', HOTSPOT_AI_URL_PATH . 'assets/js/tinymce/judge.js');
+        wp_enqueue_script('hotspot_classic_editor_judge');
+
+        if ($editor == 'on') {
+            // 经典编辑器页面
+
+            wp_register_script('hotspot_classic_editor_js', HOTSPOT_AI_URL_PATH . 'assets/js/tinymce/optimize.js');
+            wp_register_style('hotspot_classic_editor_css', HOTSPOT_AI_URL_PATH . 'assets/css/tinymce/optimize.css');
+            wp_enqueue_script('hotspot_classic_editor_js');
+            wp_enqueue_style('hotspot_classic_editor_css');
+            // 加载相关的接口
+
+            // 新建一个数组
+
+            $data_inline_script = array();
+            $request_worker_url = HOTSPOT_AI_URL_PATH . 'assets/js/request-worker.js';
+            $data_inline_script = array(
+                'request_worker_url' => $request_worker_url,
+                'hotspot_nonce'      => wp_create_nonce('wp_rest'),
+                'he_js_url'          => HOTSPOT_AI_URL_PATH . 'assets/js/he.min.js',
+            );
+
+            $request_proxy_url = '';
+            $AI_select_option  = get_option('ai_select');
+            if ($AI_select_option == "Open_AI_Free") {
+                $request_proxy_url = rest_url('hotspot/v1/proxy/domestic');
+            } elseif ($AI_select_option == 'Open_AI_Domestic') {
+                $request_proxy_url = rest_url('hotspot/v1/proxy/hotspot');
+            }
+            $data_inline_script['request_proxy_url'] = $request_proxy_url;
+
+            if (get_option('seo-analysis') == 'on') {
+                $data_inline_script['seo_analysis_url'] = rest_url('hotspot/v1/seo/analysis');
+            }
+
+            if (get_option('search-images') == 'on') {
+                $data_inline_script['search_images_url'] = rest_url('hotspot/v1/search/images');
+            }
+
+            //这里需要传递一个 css 的地址过去
+
+            $data_inline_script['editor_css'] = HOTSPOT_AI_URL_PATH . 'assets/css/tinymce/editor.css';
+            wp_localize_script('hotspot_classic_editor_js', 'classic_optimize', $data_inline_script);
+
+        } else {
+            // 经典编辑器未启用 即古腾堡
+            // 将 request-worker.js 的路径作为变量保存
+            // $request_worker_url = HOTSPOT_AI_URL_PATH . 'assets/js/request-worker.js';
+            // // 使用 wp_localize_script 函数将变量传递到前台 JS 脚本中
+            // wp_localize_script('jquery', 'request_worker_url', $request_worker_url);
+            // wp_localize_script('jquery', 'hotspot_nonce', wp_create_nonce('wp_rest'));
+            // wp_localize_script('jquery', 'he_js_url', HOTSPOT_AI_URL_PATH . 'assets/js/he.min.js');
+            // $AI_select_option = get_option('ai_select');
+
+            // $request_proxy_url = '';
+            // if ($AI_select_option == "Open_AI_Free") {
+            //     $request_proxy_url = rest_url('hotspot/v1/proxy/domestic');
+            // } elseif ($AI_select_option == 'Open_AI_Domestic') {
+            //     $request_proxy_url = rest_url('hotspot/v1/proxy/hotspot');
+            // }
+            // wp_localize_script('jquery', 'request_proxy_url', $request_proxy_url);
+
+            // if (get_option('seo-analysis') == 'on') {
+            //     wp_localize_script('jquery', 'seo_analysis_url', rest_url('hotspot/v1/seo/analysis'));
+            // }
+
+            // if (get_option('search-images') == 'on') {
+            //     wp_localize_script('jquery', 'search_images_url', rest_url('hotspot/v1/search/images'));
+            // }
+
+            $request_worker_url = HOTSPOT_AI_URL_PATH . 'assets/js/request-worker.js';
+            $data_inline_script = array(
+                'request_worker_url' => $request_worker_url,
+                'hotspot_nonce'      => wp_create_nonce('wp_rest'),
+                'he_js_url'          => HOTSPOT_AI_URL_PATH . 'assets/js/he.min.js',
+            );
+
+            $request_proxy_url = '';
+            $AI_select_option  = get_option('ai_select');
+            if ($AI_select_option == "Open_AI_Free") {
+                $request_proxy_url = rest_url('hotspot/v1/proxy/domestic');
+            } elseif ($AI_select_option == 'Open_AI_Domestic') {
+                $request_proxy_url = rest_url('hotspot/v1/proxy/hotspot');
+            }
+            $data_inline_script['request_proxy_url'] = $request_proxy_url;
+
+            if (get_option('seo-analysis') == 'on') {
+                $data_inline_script['seo_analysis_url'] = rest_url('hotspot/v1/seo/analysis');
+            }
+
+            if (get_option('search-images') == 'on') {
+                $data_inline_script['search_images_url'] = rest_url('hotspot/v1/search/images');
+            }
+
+            wp_localize_script('jquery', 'gutenberg_optimize', $data_inline_script);
+
         }
 
     }
+
 }
 add_action('admin_enqueue_scripts', 'add_hotspot_admin_script');
 
+// 古登堡编辑器
 function sidebar_plugin_register()
 {
     wp_register_script(
@@ -210,3 +296,71 @@ function sidebar_plugin_script_enqueue()
     wp_enqueue_script('plugin-sidebar-js');
 }
 add_action('enqueue_block_editor_assets', 'sidebar_plugin_script_enqueue');
+
+/*----------------经典编辑器区域-----------------------------*/
+
+// 经典编辑器 按钮
+add_action('media_buttons', 'add_hotspot_classic_button', 15);
+function add_hotspot_classic_button()
+{
+    $button_html = '<button class="button" id="ai-idea-btn"><span class="media-button-icon dashicons"></span>AI构思</button>';
+    $button_html .= '<button class="button" id="ai-search-btn" type="button"><span class="media-button-icon image-button-icon dashicons"></span>智能搜图</button>';
+    echo $button_html;
+    wp_enqueue_media();
+}
+
+function add_hotspot_AI_SEO_postbox()
+{
+
+    $editor = get_option('classic_editor_support_switch');
+
+    if ($editor == 'on') {
+        add_meta_box(
+            'hotspot-seo-analysis-postbox',
+            '文章分析',
+            'add_hotspot_AI_SEO_postbox_callback',
+            'post',
+            'normal',
+            'high'
+        );
+    }
+
+}
+
+function add_hotspot_AI_SEO_postbox_callback()
+{
+    $editor = get_option('classic_editor_support_switch');
+
+    if ($editor == 'on') {
+        wp_nonce_field(basename(__FILE__), 'hotspot_ai_seo_nonce');
+        $hotspot_content = get_post_meta(get_the_ID(), '_hotspot_content', true);
+        ?>
+    <p>
+      <div class="mask">
+        <textarea id="hotspot_seo_analysis_content" name="hotspot-content" rows="5" style="width: 100%;"><?php echo esc_textarea($hotspot_content); ?></textarea>
+      </div>
+      <button id="ai_seo_analysis" class="button" type="button">AI分析</button>
+    </p>
+    <?php
+}
+
+}
+
+// 保存文本域的值
+function save_hotspot_AI_SEO_postbox($post_id)
+{
+    if (!isset($_POST['hotspot_ai_seo_nonce']) || !wp_verify_nonce($_POST['hotspot_ai_seo_nonce'], basename(__FILE__))) {
+        return;
+    }
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (isset($_POST['hotspot-content'])) {
+        update_post_meta($post_id, '_hotspot_content', sanitize_text_field($_POST['hotspot-content']));
+    }
+}
+
+add_action('add_meta_boxes', 'add_hotspot_AI_SEO_postbox');
+add_action('save_post', 'save_hotspot_AI_SEO_postbox');

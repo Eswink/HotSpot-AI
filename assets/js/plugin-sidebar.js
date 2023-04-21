@@ -36,7 +36,7 @@
       // 如果 Worker 实例不存在，则创建一个新实例并保存到 _worker 变量中
       if (!_worker) {
         var workerUrl = URL.createObjectURL(
-          new Blob(['importScripts("' + window.request_worker_url + '")'], {
+          new Blob(['importScripts("' + gutenberg_optimize.request_worker_url + '")'], {
             type: 'text/javascript',
           })
         )
@@ -118,13 +118,13 @@
       AiConceptContent = ''
 
       _worker.postMessage({
-        url: window.request_proxy_url,
+        url: gutenberg_optimize.request_proxy_url,
         data: {
           prompt: _title,
           options: {},
         },
-        nonce: hotspot_nonce,
-        js_add: he_js_url,
+        nonce: gutenberg_optimize.hotspot_nonce,
+        js_add: gutenberg_optimize.he_js_url,
       })
 
       // 在 Worker 接收到消息时执行的函数，处理 Worker 传回的数据并设置为 state 变量
@@ -147,7 +147,7 @@
     }
 
     function handleAiAnalysis() {
-      if (typeof seo_analysis_url === 'undefined') {
+      if (typeof gutenberg_optimize.seo_analysis_url === 'undefined') {
         alert('未开启SOE分析功能！')
         return
       }
@@ -160,7 +160,7 @@
         .map((block) => block.attributes.content)
         .join(' ')
 
-      fetch(seo_analysis_url, {
+      fetch(gutenberg_optimize.seo_analysis_url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -486,7 +486,7 @@
       var [error, setError] = wp.element.useState(null) // 添加 error 状态
 
       function onButtonClick() {
-        if (typeof search_images_url === 'undefined') {
+        if (typeof gutenberg_optimize.search_images_url === 'undefined') {
           alert('未开启智能搜图功能！')
           return
         }
@@ -509,11 +509,11 @@
         setIsLoading(true)
         setError(null) // 在每次请求前重置 error 状态
 
-        fetch(window.search_images_url, {
+        fetch(gutenberg_optimize.search_images_url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'X-WP-Nonce': hotspot_nonce,
+            'X-WP-Nonce': gutenberg_optimize.hotspot_nonce,
           },
           body: JSON.stringify({
             query: _Query,
