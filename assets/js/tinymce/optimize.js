@@ -212,25 +212,26 @@ jQuery(document).ready(function ($) {
             success: function (data) {
               if (data.success) {
                 var imageUrl = data.data.url
-                var editor = parent_editor
+                var editor = tinymce.activeEditor
                 // current_upload_window.close()
                 mask.removeClass('search_uploading').addClass('search_finished')
 
                 setTimeout(() => {
                   // 判断是否有光标位置
+                  current_upload_window.close()
+                  current_windowManager.close()
                   if (editor.selection) {
                     // 如果有光标位置，使用 execCommand() 方法插入图片
                     editor.execCommand(
                       'mceInsertContent',
                       false,
-                      '<img src="' + imageUrl + '">'
+                      '<img src="' + imageUrl + '" />'
                     )
                   } else {
                     // 如果没有光标位置，使用 insertContent() 方法插入图片
-                    editor.insertContent('<img src="' + imageUrl + '">')
+                    editor.insertContent('<img src="' + imageUrl + '" />')
+                    console.log("有光标位置")
                   }
-                  current_upload_window.close()
-                  current_windowManager.close()
                 }, 1000)
 
                 

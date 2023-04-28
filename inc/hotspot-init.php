@@ -94,3 +94,81 @@ function hotspot_upload_file_callback()
         wp_send_json_success(['url' => $attachment_url]);
     }
 }
+
+add_action('admin_notices', 'hotspot_update_notice');
+function hotspot_update_notice()
+{
+    $current_screen = get_current_screen();
+
+    if ($current_screen->base === 'hotspot_page_hotspot-settings') {
+        $last_checked_time = get_transient('hotspot_last_checked_time'); // 从 Transients 中读取上一次检测的时间戳
+        $now_time          = time(); // 获取当前时间戳
+
+        $check_interval = 3600; // 设置检测间隔为 1 小时
+
+        if (!$last_checked_time || $now_time - $last_checked_time >= $check_interval) {
+            // 判断是否需要进行检测
+            $plugin_info    = get_plugin_data(HOTSPOT_AI_DIR_PATH . 'hotspot.php');
+            $plugin_version = $plugin_info['Version']; // 获取当前插件版本号
+
+            $api_url  = "https://api.wordpress.org/plugins/info/1.0/hotspot-ai"; // WordPress 插件仓库 API 地址
+            $response = wp_remote_get($api_url); // 发送 HTTP 请求获取 API 数据
+            if (!is_wp_error($response) && $response['response']['code'] == 200) {
+                // 判断返回值是否成功
+                $api_response = unserialize($response['body']);
+                if (version_compare($plugin_version, $api_response->version, '<')) {
+                    // 检测插件新旧版本号
+                    $update_link     = wp_nonce_url(admin_url('update.php?action=upgrade-plugin&plugin=' . plugin_basename(HOTSPOT_AI_DIR_PATH . 'hotspot.php')), 'upgrade-plugin_' . plugin_basename(HOTSPOT_AI_DIR_PATH . 'hotspot.php')); // 拼接更新链接
+                    $updated_version = "{$api_response->version}"; // 注意这里没有 HTML 标签
+                    $output          = sprintf(esc_html__('插件有新本啦 (%s)，更多好用的功能尽在新版本中！', 'hotspot'), $updated_version);
+                    $output .= ' <a href="' . $update_link . '">' . esc_html__('立即更新', 'hotspot') . '</a>'; // 添加更新链接
+                    echo "<div class='update-message notice inline notice-warning notice-alt' style='position:absolute;z-index:100'><p>{$output}</p></div>";
+                }
+            }
+
+            set_transient('hotspot_last_checked_time', $now_time); // 将当前时间戳存入 Transients 中，作为下一次检测的时间基准
+        }
+    }
+}
+
+// add_action('admin_init', 'check_plugin_update');
+
+// function check_plugin_update()
+// {
+
+//     // Get plugin data
+//     $plugin_data = get_plugin_data(HOTSPOT_AI_DIR_PATH . 'hotspot.php');
+
+//     // Get current version
+//     $current_version = $plugin_data['Version'];
+
+//     // Get latest version from API
+//     $response = wp_remote_get('https://api.wordpress.org/plugins/info/1.0/hotspot-ai');
+
+//     if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
+//         return;
+//     }
+
+//     $info = unserialize(wp_remote_retrieve_body($response));
+
+//     if (!$info || !is_object($info)) {
+//         return;
+//     }
+
+//     $latest_version = $info->version;
+
+//     // Check if update is available
+//     if (version_compare($current_version, $latest_version, '<')) {
+
+//         // Display update message and button
+//         printf(
+//             '<div class="update-message"><p>%s %s %s</p> <a class="update-now" href="%s">%s</a></div>',
+//             __('A new version of the plugin is available:', 'hotspot-ai'),
+//             $latest_version,
+//             __('View details or update now:', 'hotspot-ai'),
+//             admin_url('update.php?action=upgrade-plugin&amp;plugin=hotspot-ai'),
+//             __('Update Now', 'hotspot-ai')
+//         );
+
+//     }
+// }
