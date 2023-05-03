@@ -199,6 +199,8 @@ function add_hotspot_admin_script()
                 $request_proxy_url = rest_url('hotspot/v1/proxy/domestic');
             } elseif ($AI_select_option == 'Open_AI_Domestic') {
                 $request_proxy_url = rest_url('hotspot/v1/proxy/hotspot');
+            } elseif ($AI_select_option == 'Open_AI_Custom') {
+                $request_proxy_url = get_option('custom_proxy');
             }
             $data_inline_script['request_proxy_url'] = $request_proxy_url;
 
@@ -216,31 +218,6 @@ function add_hotspot_admin_script()
             wp_localize_script('hotspot_classic_editor_js', 'classic_optimize', $data_inline_script);
 
         } else {
-            // 经典编辑器未启用 即古腾堡
-            // 将 request-worker.js 的路径作为变量保存
-            // $request_worker_url = HOTSPOT_AI_URL_PATH . 'assets/js/request-worker.js';
-            // // 使用 wp_localize_script 函数将变量传递到前台 JS 脚本中
-            // wp_localize_script('jquery', 'request_worker_url', $request_worker_url);
-            // wp_localize_script('jquery', 'hotspot_nonce', wp_create_nonce('wp_rest'));
-            // wp_localize_script('jquery', 'he_js_url', HOTSPOT_AI_URL_PATH . 'assets/js/he.min.js');
-            // $AI_select_option = get_option('ai_select');
-
-            // $request_proxy_url = '';
-            // if ($AI_select_option == "Open_AI_Free") {
-            //     $request_proxy_url = rest_url('hotspot/v1/proxy/domestic');
-            // } elseif ($AI_select_option == 'Open_AI_Domestic') {
-            //     $request_proxy_url = rest_url('hotspot/v1/proxy/hotspot');
-            // }
-            // wp_localize_script('jquery', 'request_proxy_url', $request_proxy_url);
-
-            // if (get_option('seo-analysis') == 'on') {
-            //     wp_localize_script('jquery', 'seo_analysis_url', rest_url('hotspot/v1/seo/analysis'));
-            // }
-
-            // if (get_option('search-images') == 'on') {
-            //     wp_localize_script('jquery', 'search_images_url', rest_url('hotspot/v1/search/images'));
-            // }
-
             $request_worker_url = HOTSPOT_AI_URL_PATH . 'assets/js/request-worker.js';
             $data_inline_script = array(
                 'request_worker_url' => $request_worker_url,
@@ -254,6 +231,8 @@ function add_hotspot_admin_script()
                 $request_proxy_url = rest_url('hotspot/v1/proxy/domestic');
             } elseif ($AI_select_option == 'Open_AI_Domestic') {
                 $request_proxy_url = rest_url('hotspot/v1/proxy/hotspot');
+            } elseif ($AI_select_option == 'Open_AI_Custom') {
+                $request_proxy_url = get_option('custom_proxy');
             }
             $data_inline_script['request_proxy_url'] = $request_proxy_url;
 

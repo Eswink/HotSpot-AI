@@ -218,7 +218,7 @@ class Hotspot_Api
             'methods'             => 'POST',
             'callback'            => array($this, 'search_images'),
             'permission_callback' => function () {
-                return true;
+                return current_user_can('edit_posts');
             },
         ));
     }
@@ -323,7 +323,7 @@ class Hotspot_Api
             'methods'             => 'POST',
             'callback'            => array($this, 'proxy_domestic'),
             'permission_callback' => function () {
-                return true;
+                return current_user_can('edit_posts');
             },
         ));
     }

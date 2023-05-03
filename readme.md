@@ -7,7 +7,7 @@
 - Requires at least: 5.8
 - Tested up to: 6.2
 - Requires PHP: 7.4
-- Stable tag: 1.3.2
+- Stable tag: 1.3.2.1
 - License: GNU General Public License v2.0 or later
 - License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,7 +32,7 @@
 ## FAQ 常见问题
 
 - **文章编辑页面为何没有出现"Hotspot AI Sidebar"选项？**
-请保证当前WordPress > 5.8 ，PHP > 7.4，且保证古腾堡编辑器处于启用状态，重新启用插件即可解决当前问题。
+请保证当前WordPress > 5.8 ，PHP > 7.4，且保证古腾堡编辑器处于启用状态，重新启用插件即可解决当前问题。目前已经支持经典编辑器，开启经典编辑器开关即可！
 
 - **为何无法正常使用热词筛序功能？**
 请保证热词筛选的相关项填写正确，相关教程请前往<a href="https://docs.eswlnk.com" rel="friend" title="Eswlnk docs">文档</a>。
@@ -45,6 +45,10 @@
 5. AI创作截图
 
 ## Changelog 更新日志
+
+= 1.3.2 =
+
+> 1. 修复自定义接口问题
 
 = 1.3.2 =
 
