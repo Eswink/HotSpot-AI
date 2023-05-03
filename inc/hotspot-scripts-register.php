@@ -197,10 +197,8 @@ function add_hotspot_admin_script()
             $AI_select_option  = get_option('ai_select');
             if ($AI_select_option == "Open_AI_Free") {
                 $request_proxy_url = rest_url('hotspot/v1/proxy/domestic');
-            } elseif ($AI_select_option == 'Open_AI_Domestic') {
+            } elseif ($AI_select_option == 'Open_AI_Domestic' || $AI_select_option == 'Open_AI_Custom') {
                 $request_proxy_url = rest_url('hotspot/v1/proxy/hotspot');
-            } elseif ($AI_select_option == 'Open_AI_Custom') {
-                $request_proxy_url = get_option('custom_proxy');
             }
             $data_inline_script['request_proxy_url'] = $request_proxy_url;
 
@@ -229,10 +227,8 @@ function add_hotspot_admin_script()
             $AI_select_option  = get_option('ai_select');
             if ($AI_select_option == "Open_AI_Free") {
                 $request_proxy_url = rest_url('hotspot/v1/proxy/domestic');
-            } elseif ($AI_select_option == 'Open_AI_Domestic') {
+            } elseif ($AI_select_option == 'Open_AI_Domestic' || $AI_select_option == 'Open_AI_Custom') {
                 $request_proxy_url = rest_url('hotspot/v1/proxy/hotspot');
-            } elseif ($AI_select_option == 'Open_AI_Custom') {
-                $request_proxy_url = get_option('custom_proxy');
             }
             $data_inline_script['request_proxy_url'] = $request_proxy_url;
 
