@@ -118,7 +118,7 @@ function hotspot_update_notice()
                 $api_response = unserialize($response['body']);
                 if (version_compare($plugin_version, $api_response->version, '<')) {
                     // 检测插件新旧版本号
-                    $update_link     = wp_nonce_url(admin_url('update.php?action=upgrade-plugin&plugin=' . plugin_basename(HOTSPOT_AI_DIR_PATH . 'hotspot.php')), 'upgrade-plugin_' . plugin_basename(HOTSPOT_AI_DIR_PATH . 'hotspot.php')); // 拼接更新链接
+                    $update_link     = admin_url('plugin-install.php?s=%25E7%2583%25AD%25E7%2582%25B9%25E5%2588%259B%25E4%25BD%259C&tab=search&type=term'); // 拼接更新链接
                     $updated_version = "{$api_response->version}"; // 注意这里没有 HTML 标签
                     $output          = sprintf(esc_html__('插件有新本啦 (%s)，更多好用的功能尽在新版本中！', 'hotspot'), $updated_version);
                     $output .= ' <a href="' . $update_link . '">' . esc_html__('立即更新', 'hotspot') . '</a>'; // 添加更新链接
@@ -130,45 +130,3 @@ function hotspot_update_notice()
         }
     }
 }
-
-// add_action('admin_init', 'check_plugin_update');
-
-// function check_plugin_update()
-// {
-
-//     // Get plugin data
-//     $plugin_data = get_plugin_data(HOTSPOT_AI_DIR_PATH . 'hotspot.php');
-
-//     // Get current version
-//     $current_version = $plugin_data['Version'];
-
-//     // Get latest version from API
-//     $response = wp_remote_get('https://api.wordpress.org/plugins/info/1.0/hotspot-ai');
-
-//     if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
-//         return;
-//     }
-
-//     $info = unserialize(wp_remote_retrieve_body($response));
-
-//     if (!$info || !is_object($info)) {
-//         return;
-//     }
-
-//     $latest_version = $info->version;
-
-//     // Check if update is available
-//     if (version_compare($current_version, $latest_version, '<')) {
-
-//         // Display update message and button
-//         printf(
-//             '<div class="update-message"><p>%s %s %s</p> <a class="update-now" href="%s">%s</a></div>',
-//             __('A new version of the plugin is available:', 'hotspot-ai'),
-//             $latest_version,
-//             __('View details or update now:', 'hotspot-ai'),
-//             admin_url('update.php?action=upgrade-plugin&amp;plugin=hotspot-ai'),
-//             __('Update Now', 'hotspot-ai')
-//         );
-
-//     }
-// }

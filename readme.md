@@ -7,7 +7,7 @@
 - Requires at least: 5.8
 - Tested up to: 6.2
 - Requires PHP: 7.4
-- Stable tag: 1.3.2.1
+- Stable tag: 1.3.2.2
 - License: GNU General Public License v2.0 or later
 - License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,7 +46,12 @@
 
 ## Changelog 更新日志
 
-= 1.3.2 =
+= 1.3.2.2 =
+
+> 1. 修复更新问题
+
+
+= 1.3.2.1 =
 
 > 1. 修复自定义接口问题
 

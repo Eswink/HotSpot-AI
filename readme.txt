@@ -10,7 +10,7 @@ Tested up to: 6.2
 
 Requires PHP: 7.4
 
-Stable tag: 1.3.2.1
+Stable tag: 1.3.2.2
 
 License: GNU General Public License v2.0 or later
 
@@ -56,7 +56,11 @@ Hotspot使用机器学习算法来分析全网热词，自动生成观点、标�
 
 == Changelog ==
 
-= 1.3.2.1=
+= 1.3.2.2 =
+
+1.修复更新问题
+
+= 1.3.2.1 =
 
 1.修复自定义接口bug
 
