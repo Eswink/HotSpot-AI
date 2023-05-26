@@ -17,7 +17,7 @@ function hotspot_admin_enqueue_scripts()
             'hotspot-settings-slick-js'        => 'assets/js/slick/slick.js',
             'hotspot-settings-header-slick-js' => 'assets/js/header-slick.js',
             'hotspot-settings-sweetalert-js'   => 'assets/js/sweet-alert/sweetalert.min.js',
-            'hotspot-settings-settings-js'     => 'assets/js/admin-hotspot-settings.js"',
+            'hotspot-settings-settings-js'     => 'assets/js/admin-hotspot-settings.js',
             'hotspot-settings-script-js'       => 'assets/js/script.js',
         );
 

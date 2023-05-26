@@ -7,7 +7,7 @@
 - Requires at least: 5.8
 - Tested up to: 6.2
 - Requires PHP: 7.4
-- Stable tag: 1.3.2.3
+- Stable tag: 1.3.2.4
 - License: GNU General Public License v2.0 or later
 - License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,7 +46,12 @@
 
 ## Changelog 更新日志
 
-1.3.2.2
+1.3.2.4
+
+> 1. 更新热词筛选接口，更加符合生成标准
+> 2. 修复部分浏览器无法正常加载文件，导致无法正常登录的BUG
+
+1.3.2.3
 
 > 1. 小版本迭代
 
