@@ -90,17 +90,17 @@
                 <div class="row">
                   <div class="col-md-6">
                     <ul class="nav nav-tabs border-tab" id="top-tab" role="tablist">
-                      <li class="nav-item"><a class="nav-link active" id="common-words-tab" data-bs-toggle="tab"
+                      <!-- <li class="nav-item"><a class="nav-link active" id="common-words-tab" data-bs-toggle="tab"
                           href="#common-words" role="tab" aria-controls="common-words" aria-selected="true"><i
-                            data-feather="info"></i>普通词</a></li>
-                      <li class="nav-item"><a class="nav-link" id="hotwords-tab" data-bs-toggle="tab"
-                          href="#hotwords" role="tab" aria-controls="hotwords" aria-selected="false"><i
+                            data-feather="info"></i>普通词</a></li> -->
+                      <li class="nav-item"><a class="nav-link active" id="hotwords-tab" data-bs-toggle="tab"
+                          href="#hotwords" role="tab" aria-controls="hotwords" aria-selected="true"><i
                             data-feather="check-circle"></i>热词</a></li>
                     </ul>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group mb-0 me-0"></div>
-                    <button class="btn btn-primary-gradien" id="serach"><span>搜索</span></button>
+                    <!-- <button class="btn btn-primary-gradien" id="serach"><span>搜索</span></button> -->
                   </div>
                 </div>
               </div>
@@ -113,16 +113,16 @@
                     <!-- ALL 结束 -->
 
 
-                    <div class="tab-pane fade show active" id="common-words" role="tabpanel" aria-labelledby="common-words-tab">
-                      <div class="row">
+                    <!-- <div class="tab-pane fade show active" id="common-words" role="tabpanel" aria-labelledby="common-words-tab">
+                      <div class="row"> -->
                         <!-- 动态渲染 普通词-->
 
-                      </div>
-                    </div>
+                      <!-- </div>
+                    </div> -->
 
 
 
-                    <div class="tab-pane fade" id="hotwords" role="tabpanel" aria-labelledby="hotwords-tab">
+                    <div class="tab-pane fade show active" id="hotwords" role="tabpanel" aria-labelledby="hotwords-tab">
                       <div class="row">
                         <!-- 动态渲染 热词 -->
 

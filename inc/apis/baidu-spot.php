@@ -67,6 +67,10 @@ class Baidu_V1
             $packed_data = array("data" => array());
 
             foreach ($datas->data->lists as $data) {
+                if (!isset($data->headline)) {
+                    continue;
+                }
+
                 array_push($packed_data['data'], array(
                     "id"         => $data->id,
                     "headline"   => $data->headline,

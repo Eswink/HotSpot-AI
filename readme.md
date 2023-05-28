@@ -7,7 +7,7 @@
 - Requires at least: 5.8
 - Tested up to: 6.2
 - Requires PHP: 7.4
-- Stable tag: 1.3.2.4
+- Stable tag: 1.3.3
 - License: GNU General Public License v2.0 or later
 - License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,11 @@
 5. AI创作截图
 
 ## Changelog 更新日志
+
+1.3.3
+
+> 1. 修复热词API接口问题
+> 2. 修复一些BUGs
 
 1.3.2.4
 

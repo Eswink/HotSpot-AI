@@ -17,10 +17,10 @@
   hot_id = 'hotwords'
 
   access_baidu_hotspot(
-    page_no_common,
+    page_no_hot,
     default_page_size,
-    common_se_pv,
-    common_id
+    hot_se_pv,
+    hot_id
   )
 
   // 绑定tab [普通词] 事件
