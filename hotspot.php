@@ -3,7 +3,7 @@
  * Plugin Name: HotSpot AI 热点创作
  * Description: 基于AI技术的WordPress插件，旨在帮助您分析获取全网热词并帮助构思和写作，提高您网站的整体权重
  * Author: Eswlnk
- * Version: 1.3.3
+ * Version: 1.3.4
  * Author URI: https://blog.eswlnk.com/
  */
 

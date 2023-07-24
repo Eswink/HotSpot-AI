@@ -380,7 +380,6 @@ class Hotspot_Api
         $request_text = 'Please write a 1,000-character article in Chinese with the title "' . $prompt . '", requiring subtitles for each paragraph and no H1 headings. Paragraphs need to be wrapped with <p> tags, and subheadings are wrapped with <h2>. In addition, the first paragraph must be an introduction, no subheadings, packaging labels and symbols need to be included in the character count, and the article must be complete without truncation';
 
         $HotSpot_AI_Proxy = new HotSpot_AI_Proxy(get_option('openai_key') ?? null, get_option('custom_proxy') ?? null);
-
         try {
             $answer = $HotSpot_AI_Proxy->ask($request_text, null, true);
         } catch (RequestException $e) {
