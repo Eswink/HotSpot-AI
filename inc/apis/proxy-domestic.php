@@ -25,7 +25,7 @@ class HotSpot_Domestic_AI_Proxy
      */
     public function __construct(string $prompt)
     {
-        $this->__chatProcessUrl = 'https://ai.qidianym.net/api/chat-process';
+        $this->__chatProcessUrl = 'https://api.binjie.fun/api/generateStream';
         if ($prompt) {
             $this->__prompt = $prompt;
         }
@@ -54,13 +54,15 @@ class HotSpot_Domestic_AI_Proxy
             $response = $client->request('POST', $this->__chatProcessUrl, [
                 'headers' => [
                     'Content-Type' => 'application/json',
-                    'origin'       => 'https://ai.qidianym.net',
-                    'referer'      => 'https://ai.qidianym.net',
+                    'Origin'       => 'https://chat11.aichatos.xyz',
+                    'Referer'      => 'https://chat11.aichatos.xyz/',
                 ],
                 'json'    => [
-                    'prompt'      => $this->__prompt,
-                    'temperature' => 0.8,
-                    'top_p'       => 1,
+                    'prompt'         => $this->__prompt,
+                    'network'        => false,
+                    'system'         => "",
+                    'withoutContext' => false,
+                    'stream'         => false,
                 ],
                 'stream'  => true,
             ]);
@@ -78,48 +80,37 @@ class HotSpot_Domestic_AI_Proxy
         ob_end_clean();
 
         while (!$stream->eof()) {
-            $raw = Psr7\Utils::readLine($stream);
-            echo esc_html($raw);
-            unset($raw);
+            $chunk = Psr7\Utils::readLine($stream);
+
+            if (!empty($chunk)) {
+                $chars = mb_str_split($chunk);
+
+                foreach ($chars as $char) {
+                    $data = [
+                        'id'      => uniqid('chatcmpl-'),
+                        'object'  => 'chat.completion.chunk',
+                        'created' => time(),
+                        'model'   => 'gpt-3.5-turbo-0301',
+                        'choices' => [
+                            [
+                                'delta'         => [
+                                    'content' => $char,
+                                ],
+                                'index'         => 0,
+                                'finish_reason' => null,
+                            ],
+                        ],
+                        'delta'   => $char,
+                    ];
+                    echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS);
+                    echo "\n";
+                }
+            }
+
+            unset($chunk);
             ob_flush();
             flush();
         }
-
-        // while (!$stream->eof()) {
-        //     // 读取 $chunkSize 个字符
-        //     $chunk = Psr7\Utils::readLine($stream);
-
-        //     // 如果 $chunk 不为空，则说明读取到了数据
-        //     if (!empty($chunk)) {
-        //         // 将 $chunk 分割为单个字符
-        //         $chars = mb_str_split($chunk);
-
-        //         foreach ($chars as $char) {
-        //             $data = [
-        //                 'id'      => uniqid('chatcmpl-'),
-        //                 'object'  => 'chat.completion.chunk',
-        //                 'created' => time(),
-        //                 'model'   => 'gpt-3.5-turbo-0301',
-        //                 'choices' => [
-        //                     [
-        //                         'delta'         => [
-        //                             'content' => $char,
-        //                         ],
-        //                         'index'         => 0,
-        //                         'finish_reason' => null,
-        //                     ],
-        //                 ],
-        //                 'delta'   => $char,
-        //             ];
-        //             echo esc_html(json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS));
-        //             echo esc_html("\n");
-        //         }
-        //     }
-
-        //     unset($chunk);
-        //     ob_flush();
-        //     flush();
-        // }
 
     }
 

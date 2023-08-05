@@ -1,6 +1,6 @@
 <?php
 
-namespace HotSpot\Porxy;
+namespace HotSpot\Proxy;
 
 use Exception;
 use GuzzleHttp\Client;
@@ -10,7 +10,7 @@ defined('ABSPATH') || exit;
 
 class HotSpot_AI_Proxy
 {
-    private $__baseUrl = 'https://hotspot-ai.eswlnk.com/';
+    private $__baseUrl = 'https://chatapi.chatanywhere.cn/api/openai/';
 
     private $__model = 'gpt-3.5-turbo';
 
@@ -77,6 +77,7 @@ class HotSpot_AI_Proxy
      */
     public function ask(string $prompt, string $user = null, bool $stream = false)
     {
+
         // 将消息添加到消息列表中
         $this->addMessage($prompt);
 
@@ -87,12 +88,11 @@ class HotSpot_AI_Proxy
             'temperature' => $this->__temperature,
             'top_p'       => $this->__topP,
             'n'           => 1,
-            'user'        => $user ?? 'chatgpt-php',
         ];
 
         try {
             $response = $this->__http->post(
-                'v1/chat/completions?timestamp=' . time(),
+                'v1/chat/completions',
                 [
                     'json'    => $data,
                     'headers' => [
@@ -102,7 +102,7 @@ class HotSpot_AI_Proxy
                 ]
             );
         } catch (GuzzleException $e) {
-            throw new Exception($e->getMessage());
+            throw new Exception("请求出现异常，请尝试重新构思，如果重复出现此问题，请加入开发者Q群：689155556");
         }
 
         // 如果是数据流模式，则直接返回数据流
@@ -111,6 +111,7 @@ class HotSpot_AI_Proxy
         }
 
         $data = json_decode($response->getBody()->getContents(), true);
+
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new Exception('Response is not json');
         }

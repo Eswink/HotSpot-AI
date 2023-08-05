@@ -15,7 +15,7 @@ use GuzzleHttp\Psr7;
 use HotSpot\Baidu\Baidu_V1;
 use HotSpot\Check\Check_Credit;
 use HotSpot\Free\HotSpot_Domestic_AI_Proxy;
-use HotSpot\Porxy\HotSpot_AI_Proxy;
+use HotSpot\Proxy\HotSpot_AI_Proxy;
 use HotSpot\Proxy\UrlLatencyChecker;
 use HotSpot\Search\ImageSearchAPI;
 use HotSpot\Signin\SigninApi;
@@ -188,10 +188,20 @@ class Hotspot_Api
             }
 
         } else {
-            $HotSpot_AI_Proxy = new HotSpot_AI_Proxy(get_option('openai_key') ?? null, get_option('custom_proxy') ?? null);
+
+            $current_proxy = null;
+
+            if ($ai_select == 'Open_AI_Custom') {
+                // 如果选择的是 自定义代理
+
+                $current_proxy = get_option('custom_proxy');
+
+            }
+
+            $HotSpot_AI_Proxy = new HotSpot_AI_Proxy(get_option('openai_key') ?? null, $current_proxy);
             try {
                 $answer = $HotSpot_AI_Proxy->ask($request_text, null, false);
-            } catch (RequestException $e) {
+            } catch (Exception $e) {
                 $error = $e->getMessage();
                 return rest_ensure_response(array(
                     'data' => $error,
@@ -263,7 +273,7 @@ class Hotspot_Api
         $api_server = '';
 
         if ($ai_select == 'Open_AI_Free') {
-            $api_server = 'https://cbjtestapi.binjie.site:7777';
+            $api_server = 'https://api.binjie.fun/api/generateStream';
         } elseif ($ai_select == 'Open_AI_Domestic') {
             $api_server = 'https://hotspot-ai.eswlnk.com';
         } elseif ($ai_select == 'Open_AI_Custom') {
@@ -363,7 +373,7 @@ class Hotspot_Api
             'methods'             => 'POST',
             'callback'            => array($this, 'proxy_hotspot'),
             'permission_callback' => function () {
-                return current_user_can('edit_posts');
+                return true;
             },
         ));
     }
@@ -379,12 +389,29 @@ class Hotspot_Api
 
         $request_text = 'Please write a 1,000-character article in Chinese with the title "' . $prompt . '", requiring subtitles for each paragraph and no H1 headings. Paragraphs need to be wrapped with <p> tags, and subheadings are wrapped with <h2>. In addition, the first paragraph must be an introduction, no subheadings, packaging labels and symbols need to be included in the character count, and the article must be complete without truncation';
 
-        $HotSpot_AI_Proxy = new HotSpot_AI_Proxy(get_option('openai_key') ?? null, get_option('custom_proxy') ?? null);
+        $ai_select = get_option('ai_select');
+
+        $current_proxy = null;
+
+        if ($ai_select == 'Open_AI_Custom') {
+            // 如果选择的是 自定义代理
+
+            $current_proxy = get_option('custom_proxy');
+
+        }
+
+        $HotSpot_AI_Proxy = new HotSpot_AI_Proxy(get_option('openai_key') ?? null, $current_proxy);
         try {
             $answer = $HotSpot_AI_Proxy->ask($request_text, null, true);
-        } catch (RequestException $e) {
-            $error = $e->getMessage();
-            echo esc_html($error);
+        } catch (Exception $e) {
+            header('Content-type: application/octet-stream');
+            header('Cache-Control: no-cache');
+
+            echo esc_html(json_encode(array(
+                'delta' => $e->getMessage(),
+            )) . "\n");
+            exit();
+            die();
         }
 
         header('Content-type: application/octet-stream');
