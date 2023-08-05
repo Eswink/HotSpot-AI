@@ -50,6 +50,7 @@ class HotSpot_AI_Proxy
             'base_uri' => $this->__baseUrl,
             'timeout'  => $timeout,
             'stream'   => true,
+            'verify'   => false,
         ]);
     }
 
