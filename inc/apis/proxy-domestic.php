@@ -25,7 +25,7 @@ class HotSpot_Domestic_AI_Proxy
      */
     public function __construct(string $prompt)
     {
-        $this->__chatProcessUrl = 'https://api.binjie.fun/api/generateStream';
+        $this->__chatProcessUrl = 'https://ai.qidianym.net/api/chat-process';
         if ($prompt) {
             $this->__prompt = $prompt;
         }
@@ -54,15 +54,12 @@ class HotSpot_Domestic_AI_Proxy
             $response = $client->request('POST', $this->__chatProcessUrl, [
                 'headers' => [
                     'Content-Type' => 'application/json',
-                    'Origin'       => 'https://chat11.aichatos.xyz',
-                    'Referer'      => 'https://chat11.aichatos.xyz/',
+                    'Referer'      => 'https://ai.qidianym.net/',
                 ],
                 'json'    => [
-                    'prompt'         => $this->__prompt,
-                    'network'        => false,
-                    'system'         => "",
-                    'withoutContext' => false,
-                    'stream'         => false,
+                    'prompt'      => $this->__prompt,
+                    'temperature' => 0.8,
+                    'top_p'       => 1,
                 ],
                 'stream'  => true,
             ]);
@@ -80,34 +77,9 @@ class HotSpot_Domestic_AI_Proxy
         ob_end_clean();
 
         while (!$stream->eof()) {
-            $chunk = Psr7\Utils::readLine($stream);
-
-            if (!empty($chunk)) {
-                $chars = mb_str_split($chunk);
-
-                foreach ($chars as $char) {
-                    $data = [
-                        'id'      => uniqid('chatcmpl-'),
-                        'object'  => 'chat.completion.chunk',
-                        'created' => time(),
-                        'model'   => 'gpt-3.5-turbo-0301',
-                        'choices' => [
-                            [
-                                'delta'         => [
-                                    'content' => $char,
-                                ],
-                                'index'         => 0,
-                                'finish_reason' => null,
-                            ],
-                        ],
-                        'delta'   => $char,
-                    ];
-                    echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS);
-                    echo "\n";
-                }
-            }
-
-            unset($chunk);
+            $raw = Psr7\Utils::readLine($stream);
+            echo esc_html($raw);
+            unset($raw);
             ob_flush();
             flush();
         }
@@ -154,25 +126,47 @@ class HotSpot_Domestic_AI_Proxy
             $response = $client->request('POST', $this->__chatProcessUrl, [
                 'headers' => [
                     'Content-Type' => 'application/json',
-                    'origin'       => 'http://chat1.aichatos.com',
-                    'referer'      => 'http://chat1.aichatos.com/',
+                    'Referer'      => 'https://ai.qidianym.net/',
                 ],
                 'json'    => [
-                    'prompt'         => $prompt,
-                    "network"        => false,
-                    "apikey"         => "",
-                    "system"         => "",
-                    "withoutContext" => false,
+                    'prompt'      => $prompt,
+                    'temperature' => 0.8,
+                    'top_p'       => 1,
+                    'stream'      => false,
                 ],
-                'stream'  => true,
+                'stream'  => false,
             ]);
         } catch (GuzzleException $e) {
             // 如果请求出错，则抛出异常
             throw new Exception($e->getMessage());
         }
 
-        // 获取响应的正文并返回原始数据流
-        return $response->getBody()->getContents();
+        $data = explode("\n", $response->getBody()->getContents());
+
+        $data = json_decode(end($data), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new Exception('Response is not json');
+        }
+
+        if (!isset($data['text'])) {
+
+            throw new Exception('请求出现异常！请联系开发者！');
+        }
+
+        $answer = $data['text'];
+        return $answer;
+
+    }
+
+    public function checkFields($line): bool
+    {
+        return isset($line['choices'][0]['message']['content']) && isset($line['id']) && isset($line['usage']);
+    }
+
+    public function checkStreamFields($line): bool
+    {
+        return isset($line['choices'][0]['delta']['content']) && isset($line['id']);
     }
 
 }
