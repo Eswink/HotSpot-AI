@@ -5,9 +5,9 @@
 - Contributors: ersanwu
 - Tags: hotspot,writer,ai
 - Requires at least: 5.8
-- Tested up to: 6.2
+- Tested up to: 6.3.1
 - Requires PHP: 7.4
-- Stable tag: 1.3.6
+- Stable tag: 1.3.7
 - License: GNU General Public License v2.0 or later
 - License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,6 +15,8 @@
 ## Description 简介 ##
 
 > Hotspot使用机器学习算法来分析全网热词，自动生成观点、标题、摘要等内容，并为您提供有关该主题的更多详细信息。通过这种方式，Hotspot可以帮助您快速构思和编写高质量的内容，从而提高您网站的整体权重。
+
+> WordPress插件市场：https://wordpress.org/plugins/hotspot-ai/，搜索「热点创作」即可安装插件！
 
 [作者博客](https://blog.eswlnk.com "作者博客") | [插件教程](https://docs.eswlnk.com "插件教程")
 
@@ -45,6 +47,11 @@
 5. AI创作截图
 
 ## Changelog 更新日志
+
+1.3.7
+
+> 1. 维护国内接口，修复文章输出逻辑
+> 2. 热更新搜图接口，接入全网搜图
 
 1.3.6
 
