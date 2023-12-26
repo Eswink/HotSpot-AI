@@ -109,6 +109,21 @@ if ($auth_token) {
                     <!-- 表单开始 -->
                     <div class="card-body">
                       <form class="theme-form submit" method="POST" id="hotpot-settings">
+
+
+
+                      <?php $rest_api_is_active = !is_rest_api_disabled(); ?>
+                      <div class="mb-3 row">
+                          <label class="col-sm-3 col-form-label">REST API 状态</label>
+                          <div class="col-sm-9 icon-state" style="vertical-align: middle;align-items: center;display: flex;">
+                            <button class="btn <?php esc_html_e($rest_api_is_active ? 'btn-primary-gradien' : 'btn-secondary-gradien'); ?>" type="button" title="" data-bs-original-title="btn <?php esc_html_e($rest_api_is_active ? 'btn-primary-gradien' : 'btn-secondary-gradien'); ?>" id="check-restapi"><?php esc_html_e($rest_api_is_active ? '配置正常' : '功能无法正常使用，请加群689155556'); ?></button>
+                          </div>
+
+                        </div>
+
+
+
+
                       <?php settings_fields('hotspot_settings_group'); ?>
 
 

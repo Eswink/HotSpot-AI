@@ -1,3 +1,4 @@
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 <div class="container-fluid p-0">
     <div class="row m-0">
       <div class="col-12 p-0">

@@ -5,9 +5,9 @@
 - Contributors: ersanwu
 - Tags: hotspot,writer,ai
 - Requires at least: 5.8
-- Tested up to: 6.3.1
+- Tested up to: 6.4.1
 - Requires PHP: 7.4
-- Stable tag: 1.3.7
+- Stable tag: 1.3.8
 - License: GNU General Public License v2.0 or later
 - License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,10 @@
 5. AI创作截图
 
 ## Changelog 更新日志
+
+1.3.8
+
+> 1. 修复登录/注册验证码API接口
 
 1.3.7
 

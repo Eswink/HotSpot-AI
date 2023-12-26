@@ -130,3 +130,22 @@ function hotspot_update_notice()
         }
     }
 }
+
+// 检测 REST API
+
+function is_rest_api_disabled()
+{
+    $response = wp_remote_get(rest_url());
+
+    if (is_wp_error($response)) {
+        return true; // REST API已被禁用
+    }
+
+    $status_code = wp_remote_retrieve_response_code($response);
+
+    if ($status_code !== 200) {
+        return true; // REST API已被禁用
+    }
+
+    return false; // REST API可用
+}

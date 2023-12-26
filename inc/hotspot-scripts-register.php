@@ -115,8 +115,8 @@ function hotspot_admin_enqueue_scripts()
         $general_js = array(
             'hotspot-signin-validate-js'   => 'assets/js/jquery.validate.min.js',
             'hotspot-signin-sweetalert-js' => 'assets/js/sweet-alert/sweetalert.min.js',
-            'hotspot-signin-captcha-js'    => 'assets/js/api.js',
-            'hotspot-signin-api-js'        => 'assets/js/login/login-api.js',
+            //'hotspot-signin-captcha-js'    => 'assets/js/api.js',
+             'hotspot-signin-api-js'        => 'assets/js/login/login-api.js',
             'hotspot-signin-script-js'     => 'assets/js/script.js',
         );
 
@@ -136,8 +136,8 @@ function hotspot_admin_enqueue_scripts()
         $general_js = array(
             'hotspot-signup-validate-js'    => 'assets/js/jquery.validate.min.js',
             'hotspot-signup-sweetalert2-js' => 'assets/js/sweet-alert/sweetalert2.js',
-            'hotspot-signup-captcha-js'     => 'assets/js/api.js',
-            'hotspot-signup-api-js'         => 'assets/js/login/signup-api.js',
+            //'hotspot-signup-captcha-js'     => 'assets/js/api.js',
+             'hotspot-signup-api-js'         => 'assets/js/login/signup-api.js',
             'hotspot-signup-script-js'      => 'assets/js/script.js',
         );
 
