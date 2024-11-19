@@ -12,7 +12,7 @@
   let common_loaded = false,
     hot_loaded = false,
     common_se_pv = 1,
-    hot_se_pv = 2
+    hot_se_pv = 1
   common_id = 'common-words'
   hot_id = 'hotwords'
 
@@ -152,14 +152,14 @@
         '<li class="page-item"><a class="page-link" href="javascript:void(0)">...</a></li>'
     }
 
-    for (i of pages) {
-      content += `<li class="page-item ${
-        i == page_no ? 'active' : ''
-      }"><a class="page-link" href="javascript:void(0)" data-page=${i} >${i}</a></li>`
+    for (let i of pages) {
+      content += `<li class="page-item ${i == page_no ? 'active' : ''}">
+                <a class="page-link" href="javascript:void(0);" data-page=${i} onclick="access_baidu_hotspot(${i}, 500, 1, 'hotwords')">${i}</a>
+              </li>`;
     }
     content += `<li class="page-item"><a class="page-link" href="javascript:void(0)" data-page=${page_no}>...</a></li>`
 
-    content += `<li class="page-item"><a class="page-link" href="javascript:void(0)"data-page=${page_end} >${page_end}</a></li>`
+    content += `<li class="page-item"><a class="page-link" href="javascript:void(0)" data-page=${page_end} >${page_end}</a></li>`
 
     return content
   }

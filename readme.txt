@@ -6,11 +6,11 @@ Tags: hotspot,writer,ai
 
 Requires at least: 5.8
 
-Tested up to: 6.4.1
+Tested up to: 6.7
 
 Requires PHP: 7.4
 
-Stable tag: 1.3.8
+Stable tag: 1.3.9
 
 License: GNU General Public License v2.0 or later
 
@@ -55,6 +55,10 @@ Hotspot使用机器学习算法来分析全网热词，自动生成观点、标�
    
 
 == Changelog ==
+
+= 1.3.9 =
+
+1. 修复热词功能
 
 = 1.3.8 =
 
