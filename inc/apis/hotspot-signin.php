@@ -10,15 +10,20 @@ class SigninApi
 {
     /**
      * 登录方法，接收 email 和 password 数据并发送 POST 请求
+     * 2024年11月20日 修改验证机制
      *
      * @param string $email
      * @param string $password
+     * @param string $captcha_output
+     * @param string $gen_time
+     * @param string $lot_number
+     * @param string $pass_token
      *
      * @return WP_REST_Response
      *
      * @throws Exception 如果请求失败或登录失败
      */
-    public static function signin($email, $password, $token)
+    public static function signin($email, $password, $captcha_output, $gen_time, $lot_number, $pass_token)
     {
         try {
             // 检查 email 和 password 是否为空
@@ -34,7 +39,10 @@ class SigninApi
                 'body'      => [
                     'email'                => $email,
                     'password'             => $password,
-                    'g-recaptcha-response' => $token,
+                    'captcha_output' => $captcha_output,
+                    'gen_time' => $gen_time,
+                    'lot_number' => $lot_number,
+                    'pass_token' => $pass_token,
                 ],
                 'headers'   => [
                     'Accept' => 'application/json',

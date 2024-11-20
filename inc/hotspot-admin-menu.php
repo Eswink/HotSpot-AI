@@ -8,9 +8,9 @@ function hotspot_add_menu_item()
         __('Hotspot', 'hotspot'), // menu title
          'manage_options', // capability
          'hotspot', // menu slug
-         '', // callback function
+         'hotspot_render', // callback function
          'dashicons-admin-plugins', // icon
-        90// position
+        90
     );
 
     add_submenu_page(
@@ -21,8 +21,6 @@ function hotspot_add_menu_item()
          'hotspot-settings', // menu slug
          'hotspot_settings_page' // callback function
     );
-
-    // Add sub-menu items under Hotspot
 
     if (get_option('hotspot-switch') == 'on') {
 
@@ -35,17 +33,6 @@ function hotspot_add_menu_item()
              'hotspot_choices_page' // callback function
         );
     }
-
-    add_submenu_page(
-        'hotspot', // parent slug
-        __('统计分析', 'hotspot'), // page title
-        __('统计分析', 'hotspot'), // menu title
-         'manage_options', // capability
-         'hotspot-statistics', // menu slug
-         'hotspot_statistics_page' // callback function
-    );
-
-    // Add sub-menu items under Hotspot about
     add_submenu_page(
         'hotspot', // parent slug
         __('关于', 'hotspot'), // page title
@@ -62,24 +49,6 @@ function hotspot_add_menu_item()
          'open-dcos', // 子菜单slug
          '__return_false'
     );
-
-    add_submenu_page(
-        'noid', // 父级菜单的页面slug
-        __('HotSpot AI - Signin', 'hotspot'), // page title
-        __('HotSpot AI - Signin', 'hotspot'), // menu title
-         'manage_options', // 用户角色
-         'hotspot-signin', // 子菜单slug
-         'hotspot_signin_page'
-    );
-
-    add_submenu_page(
-        'noid', // 父级菜单的页面slug
-        __('HotSpot AI - Signup', 'hotspot'), // page title
-        __('HotSpot AI - Signup', 'hotspot'), // menu title
-         'manage_options', // 用户角色
-         'hotspot-signup', // 子菜单slug
-         'hotspot_signup_page'
-    );
 }
 
 add_action('admin_menu', 'hotspot_add_menu_item');
@@ -92,6 +61,29 @@ function remove_hotspot_submenu()
     }
 }
 add_action('admin_menu', 'remove_hotspot_submenu');
+
+
+// 2024年11月21日 修改子菜单
+add_action('admin_menu', function () {
+    global $submenu;
+
+    $custom_urls = [
+        'hotspot-settings' => 'admin.php?page=hotspot#/',
+        'hotspot-choices'  => 'admin.php?page=hotspot#/hotword',
+        'hotspot-about'    => 'admin.php?page=hotspot#/about',
+    ];
+
+    if (isset($submenu['hotspot'])) {
+        foreach ($submenu['hotspot'] as &$submenu_item) {
+            $menu_slug = $submenu_item[2];
+            if (isset($custom_urls[$menu_slug])) {
+                $submenu_item[2] = $custom_urls[$menu_slug];
+            }
+        }
+    }
+}, 999);
+
+
 
 // 添加目标URL的主机名到allowed_redirect_hosts列表中
 function hotspot_allowed_redirect_hosts($content)

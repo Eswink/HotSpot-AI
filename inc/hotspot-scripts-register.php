@@ -1,160 +1,44 @@
 <?php
-// Enqueue scripts
 
-// 注册并加载JavaScript脚本
-// 去除第三方jquery
+// 2024年11月21日 引入为vue版本
 add_action('admin_enqueue_scripts', 'hotspot_admin_enqueue_scripts');
 function hotspot_admin_enqueue_scripts()
 {
-
-    if (isset($_GET['page']) && $_GET['page'] == 'hotspot-settings') {
-        // 通用js
-
-        $general_js = array(
-            'hotspot-settings-feather-js'      => 'assets/js/icons/feather-icon/feather.min.js',
-            'hotspot-settings-feather-icon-js' => 'assets/js/icons/feather-icon/feather-icon.js',
-            'hotspot-settings-config-js'       => 'assets/js/config.js',
-            'hotspot-settings-slick-js'        => 'assets/js/slick/slick.js',
-            'hotspot-settings-header-slick-js' => 'assets/js/header-slick.js',
-            'hotspot-settings-sweetalert-js'   => 'assets/js/sweet-alert/sweetalert.min.js',
-            'hotspot-settings-settings-js'     => 'assets/js/admin-hotspot-settings.js',
-            'hotspot-settings-script-js'       => 'assets/js/script.js',
+    if (isset($_GET['page']) && $_GET['page'] == 'hotspot'){    
+        wp_enqueue_script(
+            'hotspot-vue-script',
+            HOTSPOT_AI_URL_PATH . 'assets/js/index.js',
+            [],
+            '2.0',
+            true // 在页面 footer 中加载
         );
-
-        foreach ($general_js as $name => $src) {
-            wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
-            wp_enqueue_script($name);
-        }
-        wp_localize_script('hotspot-settings-settings-js', 'check_credit', array(
-            "url"      => rest_url('hotspot/v1/check/credit'),
-            "wp_nonce" => wp_create_nonce('wp_rest'),
-        ));
-        wp_localize_script('hotspot-settings-settings-js', 'check_delay', array(
-            "url"      => rest_url('hotspot/v1/proxy/check_delay'),
-            "wp_nonce" => wp_create_nonce('wp_rest'),
-        ));
-
-    }
-
-    // 统计分析页面
-    if (isset($_GET['page']) && $_GET['page'] == 'hotspot-statistics') {
-
-        $general_js = array(
-            'hotspot-settings-bootstrap-js'         => 'assets/js/bootstrap/bootstrap.bundle.min.js',
-            'hotspot-settings-feather-js'           => 'assets/js/icons/feather-icon/feather.min.js',
-            'hotspot-settings-feather-icon-js'      => 'assets/js/icons/feather-icon/feather-icon.js',
-            'hotspot-settings-config-js'            => 'assets/js/config.js',
-            'hotspot-settings-apex-chart-js'        => 'assets/js/chart/apex-chart/apex-chart.js',
-            'hotspot-settings-stock-prices-js'      => 'assets/js/chart/apex-chart/stock-prices.js',
-            'hotspot-settings-chart-custom-2-js'    => 'assets/js/chart/apex-chart/chart-custom-2.js',
-            'hotspot-settings-datepicker-js'        => 'assets/js/datepicker/date-picker/datepicker.js',
-            'hotspot-settings-datepicker-zh-js'     => 'assets/js/datepicker/date-picker/datepicker.zh.js',
-            'hotspot-settings-datepicker-custom-js' => 'assets/js/datepicker/date-picker/datepicker.custom.js',
-            'hotspot-settings-dashboard_3-js'       => 'assets/js/dashboard/dashboard_3.js',
-            'hotspot-settings-slick-js'             => 'assets/js/slick/slick.js',
-            'hotspot-settings-header-slick-js'      => 'assets/js/header-slick.js',
-            'hotspot-settings-script-js'            => 'assets/js/script.js',
+    
+        // 注入全局数据
+        $rest_api_available = !is_rest_api_disabled() ? 'true' : 'false';
+    
+        wp_localize_script(
+            'hotspot-vue-script', // 关联的脚本句柄
+            'hotspot',            // JavaScript 全局变量名称
+            [
+                "wp_nonce" => wp_create_nonce('wp_rest'), // 创建REST API的nonce
+                "hotspot_rest_api" => $rest_api_available,
+            ]
         );
-
-        foreach ($general_js as $name => $src) {
-            wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
-            wp_enqueue_script($name);
-        }
-
-        // 显示一个当前的目录
-        wp_localize_script('hotspot-settings-dashboard_3-js', 'hotspot_url', array(
-            "plugin_url" => HOTSPOT_AI_URL_PATH,
-        ));
-    }
-
-    // 热词筛选配置界面
-
-    if (isset($_GET['page']) && $_GET['page'] == 'hotspot-choices') {
-        $general_js = array(
-            'hotspot-settings-bootstrap-js'    => 'assets/js/bootstrap/bootstrap.bundle.min.js',
-            'hotspot-settings-feather-js'      => 'assets/js/icons/feather-icon/feather.min.js',
-            'hotspot-settings-feather-icon-js' => 'assets/js/icons/feather-icon/feather-icon.js',
-            'hotspot-settings-config-js'       => 'assets/js/config.js',
-            'hotspot-settings-slick-js'        => 'assets/js/slick/slick.js',
-            'hotspot-settings-header-slick-js' => 'assets/js/header-slick.js',
-            'hotspot-settings-sweetalert-js'   => 'assets/js/sweet-alert/sweetalert.min.js',
-            'hotspot-settings-script-js'       => 'assets/js/script.js',
-            'hotspot-settings-choices-js'      => 'assets/js/admin-hotspot-choices.js',
-        );
-
-        foreach ($general_js as $name => $src) {
-            wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
-            wp_enqueue_script($name);
-        }
-
-        wp_localize_script('hotspot-settings-choices-js', 'access_choices', array(
-            "baidu_hotspot" => rest_url('hotspot/v1/baidu_hot_pot'),
-            "create_post"   => rest_url('hotspot/v1/create_post'),
-            "wp_nonce"      => wp_create_nonce('wp_rest'),
-        ));
-    }
-
-    if (isset($_GET['page']) && $_GET['page'] == 'hotspot-about') {
-        $general_js = array(
-            'hotspot-settings-feather-js'      => 'assets/js/icons/feather-icon/feather.min.js',
-            'hotspot-settings-feather-icon-js' => 'assets/js/icons/feather-icon/feather-icon.js',
-            'hotspot-settings-config-js'       => 'assets/js/config.js',
-            'hotspot-settings-slick-js'        => 'assets/js/slick/slick.js',
-            'hotspot-settings-header-slick-js' => 'assets/js/header-slick.js',
-            'hotspot-settings-script-js'       => 'assets/js/script.js',
-        );
-
-        foreach ($general_js as $name => $src) {
-            wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
-            wp_enqueue_script($name);
-        }
-
-    }
-
-    if (isset($_GET['page']) && $_GET['page'] == 'hotspot-signin') {
-        $general_js = array(
-            'hotspot-signin-validate-js'   => 'assets/js/jquery.validate.min.js',
-            'hotspot-signin-sweetalert-js' => 'assets/js/sweet-alert/sweetalert.min.js',
-            //'hotspot-signin-captcha-js'    => 'assets/js/api.js',
-             'hotspot-signin-api-js'        => 'assets/js/login/login-api.js',
-            'hotspot-signin-script-js'     => 'assets/js/script.js',
-        );
-
-        foreach ($general_js as $name => $src) {
-            wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
-            wp_enqueue_script($name);
-        }
-
-        wp_localize_script('hotspot-signin-api-js', 'access_token', array(
-            "hotspot_signin" => rest_url('hotspot/v1/hotspot/signin'),
-            "wp_nonce"       => wp_create_nonce('wp_rest'),
-        ));
-
-    }
-
-    if (isset($_GET['page']) && $_GET['page'] == 'hotspot-signup') {
-        $general_js = array(
-            'hotspot-signup-validate-js'    => 'assets/js/jquery.validate.min.js',
-            'hotspot-signup-sweetalert2-js' => 'assets/js/sweet-alert/sweetalert2.js',
-            //'hotspot-signup-captcha-js'     => 'assets/js/api.js',
-             'hotspot-signup-api-js'         => 'assets/js/login/signup-api.js',
-            'hotspot-signup-script-js'      => 'assets/js/script.js',
-        );
-
-        foreach ($general_js as $name => $src) {
-            wp_register_script($name, HOTSPOT_AI_URL_PATH . $src, array(), '1.0', 'all');
-            wp_enqueue_script($name);
-        }
-
-        wp_localize_script('hotspot-signup-api-js', 'access_token', array(
-            "hotspot_send"   => rest_url('hotspot/v1/hotspot/send_email'),
-            "hotspot_signup" => rest_url('hotspot/v1/hotspot/signup'),
-            "wp_nonce"       => wp_create_nonce('wp_rest'),
-        ));
-
     }
 
 }
+
+// 2024年11月21日
+// 为生产环境的脚本添加 `type="module"` 属性
+add_filter('script_loader_tag', function ($tag, $handle, $src) {
+    if ('hotspot-vue-script' === $handle) {
+        // 修改标签以支持ES Module
+        return sprintf('<script type="module" src="%s"></script>', esc_url($src));
+    }
+    return $tag;
+}, 10, 3);
+
+
 
 // 编辑器注册相关变量的js
 function add_hotspot_admin_script()

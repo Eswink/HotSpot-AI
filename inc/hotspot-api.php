@@ -54,15 +54,18 @@ class Hotspot_Api
         add_action('rest_api_init', array($this, 'register_hotspot_signin_route'));
         add_action('rest_api_init', array($this, 'register_hotspot_signup_route'));
         add_action('rest_api_init', array($this, 'register_hotspot_send_email_route'));
+        add_action('rest_api_init', array($this, 'register_get_settings'));
+        add_action('rest_api_init', array($this, 'register_save_settings'));
     }
 
     // 注册发送邮件接口
+    // 2024年11月20日 修改验证机制
 
     public function register_hotspot_send_email_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/hotspot/send_email', array(
-            'methods'             => 'POST',
-            'callback'            => array($this, 'send_email'),
+            'methods' => 'POST',
+            'callback' => array($this, 'send_email'),
             'permission_callback' => function () {
                 return current_user_can('edit_posts');
             },
@@ -73,22 +76,26 @@ class Hotspot_Api
     {
 
         $params = $request->get_params();
-        $email  = isset($params['email']) ? $params['email'] : '';
-        $token  = isset($params['token']) ? $params['token'] : '';
+        $email = isset($params['email']) ? $params['email'] : '';
+        $captcha_output = isset($params['captcha_output']) ? $params['captcha_output'] : '';
+        $gen_time = isset($params['gen_time']) ? $params['gen_time'] : '';
+        $lot_number = isset($params['lot_number']) ? $params['lot_number'] : '';
+        $pass_token = isset($params['pass_token']) ? $params['pass_token'] : '';
 
         $send_api = new SignupApi();
 
-        return rest_ensure_response($send_api->send_email($token, $email));
+        return rest_ensure_response($send_api->send_email($captcha_output, $gen_time, $lot_number, $pass_token, $email));
 
     }
 
     // 注册接口
+    // 2024年11月20日 修改验证机制
 
     public function register_hotspot_signup_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/hotspot/signup', array(
-            'methods'             => 'POST',
-            'callback'            => array($this, 'hotspot_signup'),
+            'methods' => 'POST',
+            'callback' => array($this, 'hotspot_signup'),
             'permission_callback' => function () {
                 return current_user_can('edit_posts');
             },
@@ -105,15 +112,18 @@ class Hotspot_Api
 
         $password = isset($params['password']) ? $params['password'] : '';
 
-        $confirm_password = isset($params['confirm_password']) ? $params['confirm_password'] : '';
+        $confirm_password = isset($params['confirmPassword']) ? $params['confirmPassword'] : '';
 
-        $token = isset($params['g-recaptcha-response']) ? $params['g-recaptcha-response'] : '';
+        $captcha_output = isset($params['captcha_output']) ? $params['captcha_output'] : '';
+        $gen_time = isset($params['gen_time']) ? $params['gen_time'] : '';
+        $lot_number = isset($params['lot_number']) ? $params['lot_number'] : '';
+        $pass_token = isset($params['pass_token']) ? $params['pass_token'] : '';
 
-        $code = isset($params['code']) ? $params['code'] : '';
+        $code = isset($params['verificationCode']) ? $params['verificationCode'] : '';
 
         $signup_api = new SignupApi();
 
-        return rest_ensure_response($signup_api->signup($username, $email, $password, $confirm_password, $code, $token));
+        return rest_ensure_response($signup_api->signup($username, $email, $password, $confirm_password, $code, $captcha_output, $gen_time, $lot_number, $pass_token));
     }
 
     // 登录接口
@@ -121,8 +131,8 @@ class Hotspot_Api
     public function register_hotspot_signin_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/hotspot/signin', array(
-            'methods'             => 'POST',
-            'callback'            => array($this, 'hotspot_signin'),
+            'methods' => 'POST',
+            'callback' => array($this, 'hotspot_signin'),
             'permission_callback' => function () {
                 return current_user_can('edit_posts');
             },
@@ -138,11 +148,14 @@ class Hotspot_Api
 
         $password = isset($params['password']) ? $params['password'] : '';
 
-        $token = isset($params['g-recaptcha-response']) ? $params['g-recaptcha-response'] : '';
+        $captcha_output = isset($params['captcha_output']) ? $params['captcha_output'] : '';
+        $gen_time = isset($params['gen_time']) ? $params['gen_time'] : '';
+        $lot_number = isset($params['lot_number']) ? $params['lot_number'] : '';
+        $pass_token = isset($params['pass_token']) ? $params['pass_token'] : '';
 
         $signin_api = new SigninApi();
 
-        return rest_ensure_response($signin_api->signin($email, $password, $token));
+        return rest_ensure_response($signin_api->signin($email, $password, $captcha_output, $gen_time, $lot_number, $pass_token));
 
     }
 
@@ -151,8 +164,8 @@ class Hotspot_Api
     public function register_seo_analysis_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/seo/analysis', array(
-            'methods'             => 'POST',
-            'callback'            => array($this, 'seo_analysis'),
+            'methods' => 'POST',
+            'callback' => array($this, 'seo_analysis'),
             'permission_callback' => function () {
                 return current_user_can('edit_posts');
             },
@@ -169,7 +182,7 @@ class Hotspot_Api
 
         $request_text = 'Please extract the keywords of the following articles and analyze the SEO (the results of the analysis are scored on a scale of 0-100, and the reasons are given). It is required that each keyword must be separated by English commas (regardless of the language of the following articles), and the SEO results must be output in Chinese! Here are my articles:' . $prompt;
 
-        $ai_select  = get_option('ai_select');
+        $ai_select = get_option('ai_select');
         $api_server = '';
 
         if ($ai_select == 'Open_AI_Free') {
@@ -215,7 +228,7 @@ class Hotspot_Api
         if ($ai_select == '' || $api_server == '') {
             return rest_ensure_response(array(
                 "error" => true,
-                "msg"   => "请先选择好您的AI接口再尝试SEO分析！",
+                "msg" => "请先选择好您的AI接口再尝试SEO分析！",
             ));
         }
 
@@ -225,8 +238,8 @@ class Hotspot_Api
     public function register_search_images_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/search/images', array(
-            'methods'             => 'POST',
-            'callback'            => array($this, 'search_images'),
+            'methods' => 'POST',
+            'callback' => array($this, 'search_images'),
             'permission_callback' => function () {
                 return current_user_can('edit_posts');
             },
@@ -254,8 +267,8 @@ class Hotspot_Api
     public function register_check_proxy_delay_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/proxy/check_delay', array(
-            'methods'             => 'GET',
-            'callback'            => array($this, 'check_delay'),
+            'methods' => 'GET',
+            'callback' => array($this, 'check_delay'),
             'permission_callback' => function () {
                 return current_user_can('edit_posts');
             },
@@ -269,7 +282,7 @@ class Hotspot_Api
 
         // 这里需要肯定的是，需要用先保存API接口！否则将 产生歧义
 
-        $ai_select  = get_option('ai_select');
+        $ai_select = get_option('ai_select');
         $api_server = '';
 
         if ($ai_select == 'Open_AI_Free') {
@@ -283,15 +296,15 @@ class Hotspot_Api
         if ($ai_select == '' || $api_server == '') {
             return rest_ensure_response(array(
                 "error" => true,
-                "msg"   => "请先保存后再进行测试！",
+                "msg" => "请先保存后再进行测试！",
             ));
         }
 
         $checker = new UrlLatencyChecker($api_server, 10);
-        $delay   = $checker->check();
-        $data    = array(
+        $delay = $checker->check();
+        $data = array(
             "server" => $ai_select,
-            "delay"  => $delay . 'ms',
+            "delay" => $delay . 'ms',
         );
         return rest_ensure_response($data);
 
@@ -301,8 +314,8 @@ class Hotspot_Api
     public function register_check_credit_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/check/credit', array(
-            'methods'             => 'POST',
-            'callback'            => array($this, 'check_credit'),
+            'methods' => 'POST',
+            'callback' => array($this, 'check_credit'),
             'permission_callback' => function () {
                 return current_user_can('edit_posts');
             },
@@ -313,7 +326,7 @@ class Hotspot_Api
     public function check_credit($request)
     {
         $params = $request->get_params();
-        $key    = $params['key'];
+        $key = $params['key'];
 
         $ai_select = get_option('ai_select');
 
@@ -330,8 +343,8 @@ class Hotspot_Api
     public function register_proxy_domestic_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/proxy/domestic', array(
-            'methods'             => 'POST',
-            'callback'            => array($this, 'proxy_domestic'),
+            'methods' => 'POST',
+            'callback' => array($this, 'proxy_domestic'),
             'permission_callback' => function () {
                 return current_user_can('edit_posts');
             },
@@ -370,8 +383,8 @@ class Hotspot_Api
     public function register_proxy_hotspot_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/proxy/hotspot', array(
-            'methods'             => 'POST',
-            'callback'            => array($this, 'proxy_hotspot'),
+            'methods' => 'POST',
+            'callback' => array($this, 'proxy_hotspot'),
             'permission_callback' => function () {
                 return true;
             },
@@ -418,11 +431,11 @@ class Hotspot_Api
         header('Cache-Control: no-cache');
 
         ob_end_clean();
-        $temp       = '';
+        $temp = '';
         $message_id = '';
-        $first      = true;
+        $first = true;
         while (!$answer->eof()) {
-            $raw  = Psr7\Utils::readLine($answer);
+            $raw = Psr7\Utils::readLine($answer);
             $line = $HotSpot_AI_Proxy->formatStreamMessage($raw);
             if ($HotSpot_AI_Proxy->checkStreamFields($line)) {
                 if (!$first) {
@@ -430,17 +443,17 @@ class Hotspot_Api
                 }
                 $first = false;
                 $temp .= $line['choices'][0]['delta']['content'];
-                $single     = $line['choices'][0]['delta']['content'];
+                $single = $line['choices'][0]['delta']['content'];
                 $message_id = $line['message_id'];
 
                 // 转义字符 避免出现问题
                 echo esc_html(json_encode([
-                    "role"            => "assistant",
-                    "id"              => uniqid(),
-                    'conversationId'  => $line['id'],
+                    "role" => "assistant",
+                    "id" => uniqid(),
+                    'conversationId' => $line['id'],
                     "parentMessageId" => uniqid(),
-                    "text"            => $temp,
-                    "delta"           => $single,
+                    "text" => $temp,
+                    "delta" => $single,
                 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS));
             }
             unset($raw, $line);
@@ -452,12 +465,92 @@ class Hotspot_Api
 
     }
 
+    // 2.0 新增保存设置API
+    public function save_settings($request)
+    {
+        // 获取请求参数
+        $params = $request->get_params();
+
+        // 验证必要字段
+        $required_fields = ['auth_signin_token', 'hotspot-switch', 'ai_select', 'custom_proxy', 'openai_key', 'seo-analysis', 'search-images', 'classic_editor_support_switch'];
+        foreach ($required_fields as $field) {
+            if (!isset($params[$field])) {
+                return rest_ensure_response(array(
+                    'success' => false,
+                    'message' => "缺少必要字段：{$field}",
+                ));
+            }
+        }
+
+        // 分别更新每个设置
+        update_option('auth_signin_token', sanitize_text_field($params['auth_signin_token']));
+        update_option('hotspot-switch', sanitize_text_field($params['hotspot-switch']));
+        update_option('ai_select', sanitize_text_field($params['ai_select']));
+        update_option('custom_proxy', esc_url_raw($params['custom_proxy']));
+        update_option('openai_key', sanitize_text_field($params['openai_key']));
+        update_option('seo-analysis', sanitize_text_field($params['seo-analysis']));
+        update_option('search-images', sanitize_text_field($params['search-images']));
+        update_option('classic_editor_support_switch', sanitize_text_field($params['classic_editor_support_switch']));
+
+        // 返回成功响应
+        return rest_ensure_response(array(
+            'success' => true,
+            'message' => '设置已保存',
+        ));
+    }
+
+    // 2.0 新增注册 保存设置API
+    public function register_save_settings()
+    {
+        register_rest_route("hotspot/{$this->__version}", '/save_settings', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'save_settings'),
+            'permission_callback' => function () {
+                return current_user_can('edit_posts');
+            },
+        ));
+    }
+
+    // 2.0 新增获取 设置API
+    public function get_settings($request)
+    {
+        // 从数据库分别获取每个设置
+        $settings = array(
+            'auth_signin_token' => get_option('auth_signin_token', ''), // 默认值为空
+            'hotspot-switch' => get_option('hotspot-switch', 'off'), // 默认值为 'off'
+            'ai_select' => get_option('ai_select', 'Open_AI_Custom'), // 默认值为 'Open_AI_Custom'
+            'custom_proxy' => get_option('custom_proxy', ''), // 默认值为空
+            'openai_key' => get_option('openai_key', ''), // 默认值为空
+            'seo-analysis' => get_option('seo-analysis', 'off'), // 默认值为 'off'
+            'search-images' => get_option('search-images', 'off'), // 默认值为 'off'
+            'classic_editor_support_switch' => get_option('classic_editor_support_switch', 'off'),
+        );
+
+        // 返回响应
+        return rest_ensure_response(array(
+            'success' => true,
+            'data' => $settings,
+        ));
+    }
+
+    // 2.0 新增注册 获取设置API
+    public function register_get_settings()
+    {
+        register_rest_route("hotspot/{$this->__version}", '/get_settings', array(
+            'methods' => 'GET',
+            'callback' => array($this, 'get_settings'),
+            'permission_callback' => function () {
+                return current_user_can('edit_posts');
+            },
+        ));
+    }
+
     // 注册用于创建新文章的REST路由
     public function register_create_post_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/create_post', array(
-            'methods'             => 'POST',
-            'callback'            => array($this, 'create_post'),
+            'methods' => 'POST',
+            'callback' => array($this, 'create_post'),
             'permission_callback' => function () {
                 return current_user_can('edit_posts');
             },
@@ -467,14 +560,14 @@ class Hotspot_Api
     // 用于创建新文章的REST回调函数
     public function create_post($request)
     {
-        $params  = $request->get_params();
+        $params = $request->get_params();
         $post_id = wp_insert_post(array(
-            'post_type'   => 'post',
-            'post_title'  => $params['title'],
+            'post_type' => 'post',
+            'post_title' => $params['title'],
             'post_status' => 'draft',
-            'meta_input'  => array(
+            'meta_input' => array(
                 'created_by_hotspot' => true,
-                'se_pv'              => $params['se_pv'],
+                'se_pv' => $params['se_pv'],
             ),
         ));
 
@@ -483,7 +576,7 @@ class Hotspot_Api
 
         // 返回JSON格式的响应数据
         $response = array(
-            'success'  => true,
+            'success' => true,
             'editLink' => $edit_link,
         );
         return rest_ensure_response($response);
@@ -493,8 +586,8 @@ class Hotspot_Api
     public function register_baidu_hot_pot_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/baidu_hot_pot', array(
-            'methods'             => 'POST',
-            'callback'            => array($this, 'get_baidu_hot_pot'),
+            'methods' => 'POST',
+            'callback' => array($this, 'get_baidu_hot_pot'),
             'permission_callback' => function () {
                 return current_user_can('edit_posts');
             },
@@ -507,12 +600,12 @@ class Hotspot_Api
 
         $params = $request->get_params();
 
-        $page_no     = isset($params['page_no']) ? $params['page_no'] : 1;
-        $page_size   = isset($params['page_size']) ? $params['page_size'] : 10;
-        $se_pv       = isset($params['se_pv']) ? $params['se_pv'] : 1;
+        $page_no = isset($params['page_no']) ? $params['page_no'] : 1;
+        $page_size = isset($params['page_size']) ? $params['page_size'] : 10;
+        $se_pv = isset($params['se_pv']) ? $params['se_pv'] : 1;
         $se_headline = isset($params['se_headline']) ? $params['se_headline'] : '';
 
-        $api   = new Baidu_V1();
+        $api = new Baidu_V1();
         $datas = $api->get_baidu_hotspot($page_no, $page_size, $se_pv, $se_headline);
 
         return rest_ensure_response($datas);
@@ -522,8 +615,8 @@ class Hotspot_Api
     public function register_load_more_posts_route()
     {
         register_rest_route("hotspot/{$this->__version}", '/load_more_posts', array(
-            'methods'             => 'POST',
-            'callback'            => array($this, 'load_more_posts'),
+            'methods' => 'POST',
+            'callback' => array($this, 'load_more_posts'),
             'permission_callback' => function () {
                 return current_user_can('edit_posts');
             },
@@ -534,21 +627,21 @@ class Hotspot_Api
     public function load_more_posts($request)
     {
 
-        $params         = $request->get_params();
-        $page           = isset($params['page']) ? $params['page'] : 1;
+        $params = $request->get_params();
+        $page = isset($params['page']) ? $params['page'] : 1;
         $posts_per_page = 10;
 
         $args = array(
-            'meta_query'     => array(
+            'meta_query' => array(
                 array(
-                    'key'   => 'created_by_hotspot',
+                    'key' => 'created_by_hotspot',
                     'value' => true,
                 ),
             ),
-            'post_type'      => 'post',
-            'post_status'    => 'any',
+            'post_type' => 'post',
+            'post_status' => 'any',
             'posts_per_page' => $posts_per_page,
-            'paged'          => $page,
+            'paged' => $page,
         );
 
         $hotspot_query = new WP_Query($args);
@@ -558,10 +651,10 @@ class Hotspot_Api
             while ($hotspot_query->have_posts()) {
                 $hotspot_query->the_post();
                 $current_post = array(
-                    'title'      => get_the_title(),
-                    'link'       => get_permalink(),
-                    'date'       => get_the_date(),
-                    'author'     => get_the_author(),
+                    'title' => get_the_title(),
+                    'link' => get_permalink(),
+                    'date' => get_the_date(),
+                    'author' => get_the_author(),
                     'categories' => get_the_category_list(', '),
                 );
                 array_push($response, $current_post);
@@ -573,7 +666,7 @@ class Hotspot_Api
         } else {
             // 如果没有更多文章，返回 false
             $arg = array(
-                "msg"  => "无更多文章",
+                "msg" => "无更多文章",
                 "data" => "none",
             );
             return rest_ensure_response($arg);

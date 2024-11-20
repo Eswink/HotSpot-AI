@@ -3,11 +3,11 @@
 
 - [![GitHub release](https://img.shields.io/github/v/release/Eswink/HotSpot-AI.svg?style=for-the-badge&logo=appveyor)](https://github.com/Eswink/HotSpot-AI/releases/latest)[![GitHub Release Date](https://img.shields.io/github/release-date/Eswink/HotSpot-AI?style=for-the-badge&logo=appveyor)](https://github.com/Eswink/HotSpot-AI/releases)![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Eswink/HotSpot-AI?style=for-the-badge&logo=appveyor)
 - Contributors: ersanwu
-- Tags: hotspot,writer,ai
+- Tags: hotspot,writer,ai,热点,创作,写作
 - Requires at least: 5.8
 - Tested up to: 6.7
 - Requires PHP: 7.4
-- Stable tag: 1.3.9
+- Stable tag: 2.0
 - License: GNU General Public License v2.0 or later
 - License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,7 @@
 
 - **文章编辑页面为何没有出现"Hotspot AI Sidebar"选项？**
 请保证当前WordPress > 5.8 ，PHP > 7.4，且保证古腾堡编辑器处于启用状态，重新启用插件即可解决当前问题。目前已经支持经典编辑器，开启经典编辑器开关即可！
+2.0版本过后，将不再支持经典编辑器，请在后续版本发布后，务必保证古腾堡编辑器的启用！
 
 - **为何无法正常使用热词筛序功能？**
 请保证热词筛选的相关项填写正确，相关教程请前往<a href="https://docs.eswlnk.com" rel="friend" title="Eswlnk docs">文档</a>。
@@ -47,6 +48,14 @@
 5. AI创作截图
 
 ## Changelog 更新日志
+
+2.0(重大更新)
+
+> 1. 修复AI创作
+> 2. 修复SEO分析
+> 3. 使用现代化的后台界面框架
+> 4. 后续更新将不再继续支持经典编辑器，请在后续的版本中务必保证古腾堡编辑器的开启
+> 5. 需要REST API支持，请务必启用
 
 1.3.9
 

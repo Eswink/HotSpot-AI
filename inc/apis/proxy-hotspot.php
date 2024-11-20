@@ -12,7 +12,7 @@ class HotSpot_AI_Proxy
 {
     private $__baseUrl = 'https://chatapi.chatanywhere.cn/api/openai/';
 
-    private $__model = 'gpt-3.5-turbo';
+    private $__model = 'gpt-4o';
 
     private $__key;
 
