@@ -10,9 +10,9 @@ defined('ABSPATH') || exit;
 
 class HotSpot_AI_Proxy
 {
-    private $__baseUrl = 'https://chatapi.chatanywhere.cn/api/openai/';
+    private $__baseUrl = '';
 
-    private $__model = 'gpt-4o';
+    private $__model = '';
 
     private $__key;
 
@@ -83,7 +83,7 @@ class HotSpot_AI_Proxy
         $this->addMessage($prompt);
 
         $data = [
-            'model'       => $this->__model,
+            'model'       => get_option('chatgptModel', 'gpt-3.5-turbo'),
             'messages'    => $this->__messages,
             'stream'      => $stream,
             'temperature' => $this->__temperature,

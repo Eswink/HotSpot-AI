@@ -1,0 +1,1 @@
+console.log("\n %c HotSpotAI Designed by Eswlnk® %c https://blog.eswlnk.com \n","color: #ffffff; background: #0073e6; padding:5px 0; font-size:12px; border-radius:3px;","background: #ffd700; color: #000; padding:5px 0; font-size:12px; border-radius:3px;");

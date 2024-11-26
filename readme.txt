@@ -10,7 +10,7 @@ Tested up to: 6.7
 
 Requires PHP: 7.4
 
-Stable tag: 2.0
+Stable tag: 2.0.1
 
 License: GNU General Public License v2.0 or later
 
@@ -56,6 +56,12 @@ Hotspot使用机器学习算法来分析全网热词，自动生成观点、标�
    
 
 == Changelog ==
+
+= 2.0.1 =
+
+1. 新增AI模型选择
+2. 新增AI创作指令自定义
+3. 不再支持经典编辑器
 
 = 2.0 =
 

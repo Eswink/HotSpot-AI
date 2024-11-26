@@ -3,11 +3,11 @@
 
 - [![GitHub release](https://img.shields.io/github/v/release/Eswink/HotSpot-AI.svg?style=for-the-badge&logo=appveyor)](https://github.com/Eswink/HotSpot-AI/releases/latest)[![GitHub Release Date](https://img.shields.io/github/release-date/Eswink/HotSpot-AI?style=for-the-badge&logo=appveyor)](https://github.com/Eswink/HotSpot-AI/releases)![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Eswink/HotSpot-AI?style=for-the-badge&logo=appveyor)
 - Contributors: ersanwu
-- Tags: hotspot,writer,ai,热点,创作,写作
+- Tags: hotspot,writer,ai,热点,创作
 - Requires at least: 5.8
 - Tested up to: 6.7
 - Requires PHP: 7.4
-- Stable tag: 2.0
+- Stable tag: 2.0.1
 - License: GNU General Public License v2.0 or later
 - License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,13 @@
 5. AI创作截图
 
 ## Changelog 更新日志
+
+2.0.1
+
+> 1. 新增AI模型选择
+> 2. 新增AI创作指令自定义
+> 3. 不再支持经典编辑器
+
 
 2.0(重大更新)
 

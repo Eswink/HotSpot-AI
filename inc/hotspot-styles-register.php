@@ -6,32 +6,16 @@ function hotspot_admin_enqueue_styles()
 {
 
     if (isset($_GET['page']) && $_GET['page'] == 'hotspot'){
+        $plugin_data = get_plugin_data(HOTSPOT_AI_DIR_PATH . 'hotspot.php'); // 获取插件主文件的版本号
+        $plugin_version = $plugin_data['Version']; // 获取插件版本号
+
         wp_enqueue_style(
             'hotspot-vue-style',
             HOTSPOT_AI_URL_PATH . 'assets/css/index.css',
             [],
-            '2.0'
+            $plugin_version
         );
     }
 
 }
 
-//美化编辑器，区分古腾堡和经典编辑器
-
-function hotspot_enqueue_styles()
-{
-    global $pagenow;
-
-    $editor = get_option('classic_editor_support_switch');
-
-    if ($editor == 'on') {
-
-    } else {
-        if ($pagenow == 'post.php' || $pagenow == 'post-new.php') {
-            wp_enqueue_style('classic-styles', HOTSPOT_AI_URL_PATH . '/assets/css/gutenberg-editor.css');
-        }
-    }
-
-}
-
-add_action('admin_enqueue_scripts', 'hotspot_enqueue_styles');

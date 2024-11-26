@@ -1,0 +1,29 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "hotspot-ai/ai-image-search",
+  "version": "0.1.0",
+  "title": "AI 智能搜图",
+  "category": "media",
+  "icon": "format-image",
+  "description": "一个可以通过 AI 智能搜索图片并插入到区块的 Gutenberg 区块。",
+  "example": {
+    "attributes": {
+      "imageUrl": "https://via.placeholder.com/150"
+    }
+  },
+  "supports": {
+    "html": false
+  },
+  "textdomain": "hotspot-ai",
+  "attributes": {
+    "imageUrl": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js"
+}

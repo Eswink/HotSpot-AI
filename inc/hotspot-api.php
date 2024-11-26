@@ -386,7 +386,7 @@ class Hotspot_Api
             'methods' => 'POST',
             'callback' => array($this, 'proxy_hotspot'),
             'permission_callback' => function () {
-                return true;
+                return current_user_can('edit_posts');
             },
         ));
     }
@@ -400,7 +400,11 @@ class Hotspot_Api
 
         $prompt = isset($params['prompt']) ? $params['prompt'] : '';
 
-        $request_text = 'Please write a 1,000-character article in Chinese with the title "' . $prompt . '", requiring subtitles for each paragraph and no H1 headings. Paragraphs need to be wrapped with <p> tags, and subheadings are wrapped with <h2>. In addition, the first paragraph must be an introduction, no subheadings, packaging labels and symbols need to be included in the character count, and the article must be complete without truncation';
+        $default_writer = 'Please write a 2,000-character Chinese article (excluding HTML tags) with the title $prompt Each paragraph should have a subtitle, wrapped in <h2> tags, and the content of each paragraph should be wrapped in <p> tags. The first paragraph should be an introduction without a subtitle. The article must be complete and not truncated. Note: HTML tags, wrapping tags, and symbols should not be included in the character count.';
+
+        $writer = get_option('roleInstruction', $default_writer);
+
+        $request_text = strtr($writer, ['$prompt' => $prompt]);
 
         $ai_select = get_option('ai_select');
 
@@ -466,13 +470,14 @@ class Hotspot_Api
     }
 
     // 2.0 新增保存设置API
+    // 2.0.1 新增模型与创作指令保存
     public function save_settings($request)
     {
         // 获取请求参数
         $params = $request->get_params();
 
         // 验证必要字段
-        $required_fields = ['auth_signin_token', 'hotspot-switch', 'ai_select', 'custom_proxy', 'openai_key', 'seo-analysis', 'search-images', 'classic_editor_support_switch'];
+        $required_fields = ['auth_signin_token', 'hotspot-switch', 'ai_select', 'custom_proxy', 'openai_key', 'seo-analysis', 'search-images', 'roleInstruction', 'chatgptModel'];
         foreach ($required_fields as $field) {
             if (!isset($params[$field])) {
                 return rest_ensure_response(array(
@@ -490,7 +495,8 @@ class Hotspot_Api
         update_option('openai_key', sanitize_text_field($params['openai_key']));
         update_option('seo-analysis', sanitize_text_field($params['seo-analysis']));
         update_option('search-images', sanitize_text_field($params['search-images']));
-        update_option('classic_editor_support_switch', sanitize_text_field($params['classic_editor_support_switch']));
+        update_option('roleInstruction', $params['roleInstruction']);
+        update_option('chatgptModel', sanitize_text_field($params['chatgptModel']));
 
         // 返回成功响应
         return rest_ensure_response(array(
@@ -512,9 +518,12 @@ class Hotspot_Api
     }
 
     // 2.0 新增获取 设置API
+    // 2.0.1 新增模型与创作指令获取
     public function get_settings($request)
     {
         // 从数据库分别获取每个设置
+        $default_writer = 'Please write a 2,000-character Chinese article (excluding HTML tags) with the title $prompt Each paragraph should have a subtitle, wrapped in <h2> tags, and the content of each paragraph should be wrapped in <p> tags. The first paragraph should be an introduction without a subtitle. The article must be complete and not truncated. Note: HTML tags, wrapping tags, and symbols should not be included in the character count.';
+
         $settings = array(
             'auth_signin_token' => get_option('auth_signin_token', ''), // 默认值为空
             'hotspot-switch' => get_option('hotspot-switch', 'off'), // 默认值为 'off'
@@ -523,7 +532,9 @@ class Hotspot_Api
             'openai_key' => get_option('openai_key', ''), // 默认值为空
             'seo-analysis' => get_option('seo-analysis', 'off'), // 默认值为 'off'
             'search-images' => get_option('search-images', 'off'), // 默认值为 'off'
-            'classic_editor_support_switch' => get_option('classic_editor_support_switch', 'off'),
+            'chatgptModel' => get_option('chatgptModel', 'gpt-3.5-turbo'),
+            'roleInstruction' => get_option('roleInstruction', $default_writer),
+            'classic_editor_enabled' => is_classic_editor_enabled()
         );
 
         // 返回响应
