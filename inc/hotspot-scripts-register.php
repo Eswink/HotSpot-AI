@@ -84,7 +84,7 @@ function add_hotspot_admin_script()
 }
 add_action('admin_enqueue_scripts', 'add_hotspot_admin_script');
 
-// 2.0.1 2024年11月26日 修改古腾堡编辑器区块注册逻辑
+// 2.0.2 2024年12月1日 兼容旧版本至6.3
 function sidebar_plugin_register()
 {
     register_block_type( HOTSPOT_AI_DIR_PATH . '/blocks/build' );

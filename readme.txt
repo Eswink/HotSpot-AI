@@ -2,15 +2,15 @@
 
 Contributors: ersanwu
 
-Tags: hotspot,writer,ai,热点,创作,写作
+Tags: hotspot,writer,ai,热点,创作
 
-Requires at least: 5.8
+Requires at least: 6.3
 
-Tested up to: 6.7
+Tested up to: 6.7.1
 
 Requires PHP: 7.4
 
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 
 License: GNU General Public License v2.0 or later
 
@@ -40,7 +40,7 @@ Hotspot使用机器学习算法来分析全网热词，自动生成观点、标�
 == Frequently Asked Questions ==
 
 = 文章编辑页面为何没有出现"Hotspot AI Sidebar"选项？=
-请保证当前WordPress > 5.8 ，PHP > 7.4，且保证古腾堡编辑器处于启用状态，重新启用插件即可解决当前问题。目前已经支持经典编辑器，开启经典编辑器开关即可！
+请保证当前WordPress > 6.3 ，PHP > 7.4，且保证古腾堡编辑器处于启用状态，重新启用插件即可解决当前问题。目前已经支持经典编辑器，开启经典编辑器开关即可！
 2.0版本过后，将不再支持经典编辑器，请在后续版本发布后，务必保证古腾堡编辑器的启用！
 
 = 为何无法正常使用热词筛序功能？=
@@ -56,6 +56,11 @@ Hotspot使用机器学习算法来分析全网热词，自动生成观点、标�
    
 
 == Changelog ==
+
+= 2.0.2 =
+
+1. 兼容WP版本至6.3, WP 版本>6.3即可正常使用
+2. 兼容古腾堡启用判断
 
 = 2.0.1 =
 

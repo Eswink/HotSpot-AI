@@ -150,21 +150,16 @@ function is_rest_api_disabled()
     return false; // REST API可用
 }
 
-function is_classic_editor_enabled() {
-    // 方法1：检查经典编辑器插件是否启用
-    if( in_array('classic-editor/classic-editor.php', apply_filters('active_plugins', get_option('active_plugins')))){ 
-        return true;
-    }
 
-    // 方法2：检查经典编辑器的设置选项
+// 2.0.2 2024年12月1日 修改古腾堡判断逻辑
+function is_classic_editor_enabled() {
     $classic_editor_setting = get_option( 'classic-editor-replace' );
-    if ( $classic_editor_setting === 'editor' ) {
+    if ( $classic_editor_setting === 'classic' ) {
         return true; // 如果设置为经典编辑器，则返回 true
     }
 
-    // 方法3：检查当前用户是否启用了经典编辑器
     if ( current_user_can( 'use_classic_editor' ) ) {
-        return true; // 如果用户具有启用经典编辑器的权限，则返回 true
+        return true; 
     }
 
     // 如果以上都不满足，默认返回 false
